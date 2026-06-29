@@ -3,7 +3,7 @@ import { type User, onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
-export type UserRole = 'Super Admin' | 'State Admin' | 'Zone Admin' | 'Range Admin' | 'District Admin' | 'PNO Officer' | 'Data Entry Operator' | 'Viewer';
+export type UserRole = 'Super Admin' | 'State Admin' | 'Zone Admin' | 'Range Admin' | 'District Admin' | 'PNO Officer' | 'Data Entry Operator' | 'Viewer' | 'Constable' | 'SHO' | 'State HQ' | 'Officer';
 
 interface UserData {
   uid: string;
@@ -32,7 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const demoAuth = localStorage.getItem('demoAuth');
     if (demoAuth) {
       
-      let role = 'Officer';
+      let role: UserRole = 'Officer';
       let fullName = 'Demo Officer';
       
       switch(demoAuth) {

@@ -84,7 +84,7 @@ export const OfficerAvailability: React.FC = () => {
          <div className="flex items-center gap-3">
            <button 
              onClick={() => setIsManualEntryOpen(true)}
-             className="px-4 py-2 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-semibold dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 flex items-center gap-2"
+             className="px-4 py-2 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-semibold text-gray-800 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 flex items-center gap-2"
            >
               <Plus size={16} /> New Entry
            </button>

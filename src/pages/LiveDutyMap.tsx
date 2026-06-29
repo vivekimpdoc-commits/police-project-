@@ -76,42 +76,67 @@ export const LiveDutyMap: React.FC = () => {
          </div>
       </div>
 
-      {/* Map Container (Mocked with absolute positioning over a static map image) */}
-      <div className="absolute inset-0 z-0 bg-[#e5e3df] dark:bg-[#000a17]">
-         <div className="w-full h-full bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=Lucknow,UP&zoom=13&size=1920x1080&maptype=roadmap&style=feature:all|element:labels.text.fill|color:0x333333&style=feature:water|element:geometry|color:0x1b2c45&style=feature:landscape|element:geometry|color:0x000a17&sensor=false')] bg-cover bg-center opacity-80 mix-blend-luminosity"></div>
+      {/* Tactical Radar Map Container */}
+      <div className="absolute inset-0 z-0 bg-[#020d1a] overflow-hidden">
+         {/* Cyber Grid */}
+         <div className="absolute inset-0 opacity-30" 
+              style={{
+                backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.15) 1px, transparent 1px)`,
+                backgroundSize: '40px 40px'
+              }}>
+         </div>
          
-         {/* Map Overlay for Dark Mode */}
-         <div className="absolute inset-0 bg-gradient-to-t from-[#000a17] via-transparent to-[#000a17] opacity-60"></div>
+         {/* Glowing Ambient Orbs */}
+         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#FF9933]/10 rounded-full blur-[120px] pointer-events-none"></div>
+         
+         {/* Radar Concentric Circles */}
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-blue-500/10 rounded-full pointer-events-none"></div>
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-blue-500/15 rounded-full pointer-events-none"></div>
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-blue-500/20 rounded-full pointer-events-none bg-blue-500/5 shadow-[inset_0_0_50px_rgba(59,130,246,0.1)]"></div>
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] border border-blue-500/30 rounded-full pointer-events-none"></div>
+         
+         {/* Sweeping Radar Scanner */}
+         <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] rounded-tl-full origin-bottom-right bg-gradient-to-br from-blue-500/40 to-transparent animate-[spin_4s_linear_infinite] -ml-[400px] -mt-[400px] border-l-2 border-t-2 border-blue-400 pointer-events-none shadow-[0_0_30px_rgba(59,130,246,0.5)]"></div>
+         
+         {/* Vignette Overlay to darken edges */}
+         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,#020d1a_100%)] pointer-events-none"></div>
+         <div className="absolute inset-0 bg-black/20 pointer-events-none"></div>
 
-         {/* Markers */}
+         {/* Crosshair Center indicator */}
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-40 z-0">
+           <Crosshair size={40} className="text-blue-400" strokeWidth={1} />
+         </div>
+
+         {/* Map Markers */}
          {filteredMarkers.map(marker => (
            <div 
              key={marker.id} 
              onClick={() => setSelectedMarker(marker)}
-             className="absolute transform -translate-x-1/2 -translate-y-full cursor-pointer group z-10"
+             className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group z-10"
              style={{ top: marker.lat, left: marker.lng }}
            >
               {/* Tooltip on hover */}
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max px-3 py-1.5 bg-black/80 backdrop-blur-sm rounded-lg text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-max px-3 py-1.5 bg-[#001229]/95 backdrop-blur-md border border-[#FF9933]/40 rounded-lg text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none shadow-[0_4px_15px_rgba(0,0,0,0.5)] translate-y-2 group-hover:translate-y-0">
                 {marker.title}
+                <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#FF9933]/40"></div>
               </div>
               
-              {/* Pin */}
-              <div className={`w-10 h-10 rounded-full border-4 flex items-center justify-center shadow-lg transition-transform hover:scale-125 ${getMarkerColor(marker.type)}`}>
-                 <div className="bg-white dark:bg-[#001229] w-full h-full rounded-full flex items-center justify-center">
-                   {getMarkerIcon(marker.type)}
+              {/* Radar Ping Animation */}
+              <div className="relative flex items-center justify-center">
+                 {/* Ripple effect */}
+                 <div className={`absolute inset-0 rounded-full border-2 ${getMarkerColor(marker.type).split(' ')[0].replace('bg-', 'border-')} animate-ping opacity-60 scale-150`}></div>
+                 <div className={`absolute inset-0 rounded-full border-2 ${getMarkerColor(marker.type).split(' ')[0].replace('bg-', 'border-')} animate-pulse opacity-40 scale-[2]`}></div>
+                 
+                 {/* Solid Pin */}
+                 <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-transform duration-300 group-hover:scale-125 z-10 ${getMarkerColor(marker.type)}`}>
+                    <div className="bg-[#020d1a] w-[80%] h-[80%] rounded-full flex items-center justify-center shadow-inner">
+                      {getMarkerIcon(marker.type)}
+                    </div>
                  </div>
               </div>
-              {/* Pin Shadow/Stem */}
-              <div className="w-1 h-4 bg-gray-900/50 dark:bg-white/30 mx-auto -mt-1 rounded-full"></div>
-              <div className="w-4 h-1 bg-black/40 blur-[2px] mx-auto rounded-full mt-0.5"></div>
            </div>
          ))}
-      </div>
-
-      {/* Crosshair Center indicator */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-20 z-0">
-        <Crosshair size={100} className="text-gray-900 dark:text-white" strokeWidth={1} />
       </div>
 
       {/* Floating Controls Right */}

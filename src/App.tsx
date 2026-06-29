@@ -49,7 +49,7 @@ export const App = () => {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/police-project-/">
           <AppRoutes />
         </BrowserRouter>
       </AuthProvider>

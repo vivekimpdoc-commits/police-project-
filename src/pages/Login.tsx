@@ -421,6 +421,33 @@ export const Login: React.FC = () => {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg> Change Station
               </button>
             </form>
+
+            {/* Demo Credentials Box */}
+            <div className="mt-6 p-4 bg-black/20 backdrop-blur-md rounded-xl border border-[#FF9933]/30 text-white/80 text-xs stagger-4">
+               <h4 className="font-bold text-[#FF9933] mb-2 flex items-center gap-2">
+                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                 Demo Credentials
+               </h4>
+               <div className="grid grid-cols-2 gap-2">
+                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setEmail('admin@uppolice.gov.in'); setPassword('admin123');}}>
+                   <p className="font-bold text-white">HQ Admin</p>
+                   <p className="text-[10px]">admin@uppolice.gov.in</p>
+                 </div>
+                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setEmail('sho@uppolice.gov.in'); setPassword('sho123');}}>
+                   <p className="font-bold text-white">Station SHO</p>
+                   <p className="text-[10px]">sho@uppolice.gov.in</p>
+                 </div>
+                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setEmail('district@uppolice.gov.in'); setPassword('sp123');}}>
+                   <p className="font-bold text-white">District SP</p>
+                   <p className="text-[10px]">district@uppolice.gov.in</p>
+                 </div>
+                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setEmail('constable@uppolice.gov.in'); setPassword('pass123');}}>
+                   <p className="font-bold text-white">Constable</p>
+                   <p className="text-[10px]">constable@uppolice.gov.in</p>
+                 </div>
+               </div>
+               <p className="text-[10px] mt-2 text-white/50 text-center italic">Click any box to auto-fill credentials</p>
+            </div>
           </>
         )}
       </div>

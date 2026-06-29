@@ -52,12 +52,12 @@ export const Login: React.FC = () => {
           await signInWithEmailAndPassword(auth, email, password);
           navigate('/dashboard');
         } catch (firebaseErr: any) {
-          // DEMO BYPASS: Allow specific demo credentials if Firebase fails/not-setup
-          if (email === 'admin@uppolice.gov.in' && password === 'admin123') {
-             localStorage.setItem('demoAuth', 'admin');
-             navigate('/dashboard/duties');
-          } else if (email === 'officer@uppolice.gov.in' && password === 'officer123') {
-             localStorage.setItem('demoAuth', 'officer');
+          // DEMO BYPASS: Hierarchy Roles
+          const validRoles = ['constable', 'sho', 'district', 'hq', 'admin', 'officer'];
+          const userPrefix = email.split('@')[0];
+          
+          if (validRoles.includes(userPrefix) && password === `${userPrefix}123`) {
+             localStorage.setItem('demoAuth', userPrefix);
              navigate('/dashboard/duties');
           } else {
              setError(firebaseErr.message || 'Failed to login. Check credentials.');

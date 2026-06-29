@@ -31,12 +31,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const demoAuth = localStorage.getItem('demoAuth');
     if (demoAuth) {
+      
+      let role = 'Officer';
+      let fullName = 'Demo Officer';
+      
+      switch(demoAuth) {
+        case 'constable': role = 'Constable'; fullName = 'Constable Ramesh'; break;
+        case 'sho': role = 'SHO'; fullName = 'SHO Rajesh Kumar'; break;
+        case 'district': role = 'District Admin'; fullName = 'SP Lucknow'; break;
+        case 'hq': role = 'State HQ'; fullName = 'DGP Headquarters'; break;
+        case 'admin': role = 'Super Admin'; fullName = 'Control Room Admin'; break;
+      }
+
       setCurrentUser({ uid: `demo-${demoAuth}`, email: `${demoAuth}@uppolice.gov.in` } as User);
       setUserData({
         uid: `demo-${demoAuth}`,
         email: `${demoAuth}@uppolice.gov.in`,
-        role: demoAuth === 'admin' ? 'Super Admin' : 'PNO Officer',
-        fullName: demoAuth === 'admin' ? 'Control Room Admin' : 'Demo Officer'
+        role: role,
+        fullName: fullName
       });
       setLoading(false);
       return;

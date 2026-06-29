@@ -29,6 +29,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const demoAuth = localStorage.getItem('demoAuth');
+    if (demoAuth) {
+      setCurrentUser({ uid: `demo-${demoAuth}`, email: `${demoAuth}@uppolice.gov.in` } as User);
+      setUserData({
+        uid: `demo-${demoAuth}`,
+        email: `${demoAuth}@uppolice.gov.in`,
+        role: demoAuth === 'admin' ? 'Super Admin' : 'PNO Officer',
+        fullName: demoAuth === 'admin' ? 'Control Room Admin' : 'Demo Officer'
+      });
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       
@@ -68,6 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const logout = async () => {
+    localStorage.removeItem('demoAuth');
     try {
       await signOut(auth);
     } catch (error) {

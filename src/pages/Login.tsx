@@ -53,10 +53,11 @@ export const Login: React.FC = () => {
           navigate('/dashboard');
         } catch (firebaseErr: any) {
           // DEMO BYPASS: Allow specific demo credentials if Firebase fails/not-setup
-          if (
-            (email === 'admin@uppolice.gov.in' && password === 'admin123') ||
-            (email === 'officer@uppolice.gov.in' && password === 'officer123')
-          ) {
+          if (email === 'admin@uppolice.gov.in' && password === 'admin123') {
+             localStorage.setItem('demoAuth', 'admin');
+             navigate('/dashboard');
+          } else if (email === 'officer@uppolice.gov.in' && password === 'officer123') {
+             localStorage.setItem('demoAuth', 'officer');
              navigate('/dashboard');
           } else {
              setError(firebaseErr.message || 'Failed to login. Check credentials.');

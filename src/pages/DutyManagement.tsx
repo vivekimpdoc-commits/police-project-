@@ -12,6 +12,14 @@ const INITIAL_DUTIES = [
   { id: 'DTY-9022', category: 'Law & Order', name: 'Hazratganj Protest', date: '2026-06-29', shift: 'Evening', district: 'Lucknow', station: 'Hazratganj', staff: 12, status: 'Pending SHO', approvalStage: 1, priority: 'High' },
   { id: 'DTY-9023', category: 'Traffic Duty', name: 'Gomti Nagar Diversion', date: '2026-07-01', shift: 'Morning', district: 'Lucknow', station: 'Gomti Nagar', staff: 6, status: 'Pending District', approvalStage: 2, priority: 'Medium' },
   { id: 'DTY-9024', category: 'Night Patrol', name: 'Sector 4 Area Patrol', date: '2026-06-29', shift: 'Night', district: 'Lucknow', station: 'Gomti Nagar', staff: 6, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'Medium' },
+  { id: 'DTY-9025', category: 'Election Duty', name: 'Polling Booth Sec 12', date: '2026-07-05', shift: 'Morning', district: 'Lucknow', station: 'Indira Nagar', staff: 18, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
+  { id: 'DTY-9026', category: 'Court Duty', name: 'High Court Security', date: '2026-06-30', shift: 'Morning', district: 'Lucknow', station: 'Gomti Nagar', staff: 4, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'Medium' },
+  { id: 'DTY-9027', category: 'Festival Duty', name: 'Eid Procession Route', date: '2026-07-10', shift: 'Evening', district: 'Lucknow', station: 'Aminabad', staff: 45, status: 'Pending District', approvalStage: 2, priority: 'Critical' },
+  { id: 'DTY-9028', category: 'Emergency', name: 'Accident Response Highway', date: '2026-06-29', shift: 'Night', district: 'Lucknow', station: 'BBD Thana', staff: 8, status: 'Active (Approved)', approvalStage: 4, priority: 'Critical' },
+  { id: 'DTY-9029', category: 'VIP Duty', name: 'Governor House Guard', date: '2026-07-01', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 15, status: 'Pending SHO', approvalStage: 1, priority: 'High' },
+  { id: 'DTY-9030', category: 'Law & Order', name: 'University Strike Control', date: '2026-07-02', shift: 'Evening', district: 'Lucknow', station: 'Hasanganj', staff: 20, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
+  { id: 'DTY-9031', category: 'Night Patrol', name: 'Chowk Area Patrol', date: '2026-06-30', shift: 'Night', district: 'Lucknow', station: 'Chowk', staff: 5, status: 'Pending SHO', approvalStage: 1, priority: 'Low' },
+  { id: 'DTY-9032', category: 'Reserve Force', name: 'HQ QRT Standby', date: '2026-06-29', shift: 'Custom', district: 'Lucknow', station: 'Police Line', staff: 50, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'High' },
 ];
 
 export const DutyManagement: React.FC = () => {

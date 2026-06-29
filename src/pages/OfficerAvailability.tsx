@@ -11,6 +11,14 @@ const MOCK_OFFICERS = [
   { id: 'UP-8812', name: 'Suresh Tiwari', rank: 'Constable', station: 'Hazratganj', status: 'Available', duty: null, phone: '+91 9876543213' },
   { id: 'UP-3341', name: 'Ramesh Patel', rank: 'Constable', station: 'Gomti Nagar', status: 'In Training', duty: null, phone: '+91 9876543214' },
   { id: 'UP-9922', name: 'Anita Sharma', rank: 'Sub Inspector', station: 'Hazratganj', status: 'On Duty', duty: 'VIP Route Bandobast', phone: '+91 9876543215' },
+  { id: 'UP-1102', name: 'Manoj Bajpai', rank: 'Inspector', station: 'Gomti Nagar', status: 'On Duty', duty: 'High Court Security', phone: '+91 9876543216' },
+  { id: 'UP-2204', name: 'Deepika Singh', rank: 'Constable', station: 'Indira Nagar', status: 'Available', duty: null, phone: '+91 9876543217' },
+  { id: 'UP-4455', name: 'Rahul Verma', rank: 'Head Constable', station: 'Hazratganj', status: 'On Duty', duty: 'Night Patrol Route A', phone: '+91 9876543218' },
+  { id: 'UP-5566', name: 'Amitabh Bachchan', rank: 'Sub Inspector', station: 'Aminabad', status: 'On Leave', duty: null, phone: '+91 9876543219' },
+  { id: 'UP-7788', name: 'Priya Mishra', rank: 'Constable', station: 'Hazratganj', status: 'Available', duty: null, phone: '+91 9876543220' },
+  { id: 'UP-9900', name: 'Sunil Shetty', rank: 'Constable', station: 'Chowk', status: 'On Duty', duty: 'Traffic Management', phone: '+91 9876543221' },
+  { id: 'UP-1234', name: 'Ajay Devgn', rank: 'Inspector (SHO)', station: 'Indira Nagar', status: 'Available', duty: null, phone: '+91 9876543222' },
+  { id: 'UP-5678', name: 'Kareena Kapoor', rank: 'Sub Inspector', station: 'Gomti Nagar', status: 'In Training', duty: null, phone: '+91 9876543223' },
 ];
 
 export const OfficerAvailability: React.FC = () => {
@@ -180,7 +188,7 @@ export const OfficerAvailability: React.FC = () => {
                   <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden mb-4 border-4 border-white dark:border-[#001229] shadow-lg relative">
                      <img src={`https://api.dicebear.com/7.x/initials/svg?seed=${selectedOfficer.name}&backgroundColor=002147`} alt="Profile" className="w-full h-full object-cover" />
                   </div>
-                  <h2 className="text-xl font-bold dark:text-white">{selectedOfficer.name}</h2>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">{selectedOfficer.name}</h2>
                   <p className="text-sm text-gray-500 dark:text-white/60 mb-2">{selectedOfficer.rank} • {selectedOfficer.id}</p>
                   <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(selectedOfficer.status)}`}>
                     {selectedOfficer.status}
@@ -190,10 +198,10 @@ export const OfficerAvailability: React.FC = () => {
                 <div className="space-y-4">
                    <div className="p-4 bg-gray-50 dark:bg-black/20 rounded-xl border border-gray-100 dark:border-white/5">
                       <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Contact Info</h4>
-                      <div className="flex items-center gap-3 mb-2 text-sm dark:text-white/80">
+                      <div className="flex items-center gap-3 mb-2 text-sm text-gray-700 dark:text-white/80">
                         <Phone size={16} className="text-[#FF9933]" /> {selectedOfficer.phone}
                       </div>
-                      <div className="flex items-center gap-3 text-sm dark:text-white/80">
+                      <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-white/80">
                         <MapPin size={16} className="text-[#FF9933]" /> {selectedOfficer.station} Police Station
                       </div>
                    </div>
@@ -202,7 +210,7 @@ export const OfficerAvailability: React.FC = () => {
                       <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Current Assignment</h4>
                       {selectedOfficer.duty ? (
                         <div>
-                          <p className="font-bold text-sm dark:text-white mb-1 flex items-center gap-2">
+                          <p className="font-bold text-sm text-gray-800 dark:text-white mb-1 flex items-center gap-2">
                              <Briefcase size={16} className="text-blue-500" /> {selectedOfficer.duty}
                           </p>
                           <p className="text-xs text-gray-500">Active since 08:00 AM today.</p>

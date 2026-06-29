@@ -11,6 +11,11 @@ const MAP_MARKERS = [
   { id: '3', type: 'patrol', lat: '60%', lng: '70%', title: 'Gomti Nagar Patrol', status: 'Routine', officers: 4, vehicle: 'Interceptor 1' },
   { id: '4', type: 'traffic', lat: '50%', lng: '30%', title: 'Hazratganj Chauraha', status: 'Active', officers: 6, vehicle: 'Traffic Bike' },
   { id: '5', type: 'patrol', lat: '20%', lng: '60%', title: 'Sector 4 Beat', status: 'Routine', officers: 2, vehicle: 'Foot Patrol' },
+  { id: '6', type: 'vip', lat: '70%', lng: '50%', title: 'Governor House', status: 'Active', officers: 15, vehicle: 'Static Guard' },
+  { id: '7', type: 'emergency', lat: '80%', lng: '20%', title: 'Highway Accident', status: 'Critical', officers: 6, vehicle: 'Ambulance & PCR' },
+  { id: '8', type: 'patrol', lat: '10%', lng: '40%', title: 'Chowk Night Patrol', status: 'Routine', officers: 4, vehicle: 'PCR-112' },
+  { id: '9', type: 'traffic', lat: '85%', lng: '80%', title: 'BBD Checkpost', status: 'Active', officers: 8, vehicle: 'Interceptor 3' },
+  { id: '10', type: 'patrol', lat: '35%', lng: '85%', title: 'Indira Nagar Beat', status: 'Routine', officers: 2, vehicle: 'Foot Patrol' },
 ];
 
 export const LiveDutyMap: React.FC = () => {

@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ----------------------------------------------------
+// ENUMS
+// ----------------------------------------------------
+
+enum Role {
+  SUPER_ADMIN
+  STATE_HQ_ADMIN
+  ZONE_ADMIN
+  RANGE_ADMIN
+  DISTRICT_ADMIN
+  POLICE_LINE_ADMIN
+  CO
+  SHO
+  DUTY_OFFICER
+  HEAD_CONSTABLE
+  CONSTABLE
+}
+
+enum DutyCategory {
+  DAILY_DUTY
+  VIP_DUTY
+  LAW_AND_ORDER
+  FESTIVAL_DUTY
+  ELECTION_DUTY
+  TRAFFIC_DUTY
+  NIGHT_PATROL
+  BEAT_DUTY
+  COURT_DUTY
+  BANDOBAST
+  EMERGENCY
+  RESERVE_FORCE
+  TRAINING
+  ESCORT
+  PRISONER_ESCORT
+  ROUTE_BANDOBAST
+  VVIP_SECURITY
+  DISASTER_MANAGEMENT
+  SPECIAL_OPS
+}
+
+enum DutyStatus {
+  DRAFT
+  PENDING_SHO
+  PENDING_DISTRICT
+  MONITORING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+// ----------------------------------------------------
+// ADMINISTRATIVE HIERARCHY
+// ----------------------------------------------------
+
+model Zone {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  ranges    Range[]
+  users     User[]
+  createdAt DateTime @default(now())
+}
+
+model Range {
+  id        String     @id @default(uuid())
+  name      String
+  zoneId    String
+  zone      Zone       @relation(fields: [zoneId], references: [id])
+  districts District[]
+  users     User[]
+  createdAt DateTime   @default(now())
+}
+
+model District {
+  id        String   @id @default(uuid())
+  name      String
+  rangeId   String
+  range     Range    @relation(fields: [rangeId], references: [id])
+  circles   Circle[]
+  users     User[]
+  createdAt DateTime @default(now())
+}
+
+model Circle {
+  id         String          @id @default(uuid())
+  name       String
+  districtId String
+  district   District        @relation(fields: [districtId], references: [id])
+  stations   PoliceStation[]
+  users      User[]
+  createdAt  DateTime        @default(now())
+}
+
+model PoliceStation {
+  id         String   @id @default(uuid())
+  name       String
+  circleId   String
+  circle     Circle   @relation(fields: [circleId], references: [id])
+  users      User[]
+  duties     Duty[]
+  createdAt  DateTime @default(now())
+}
+
+// ----------------------------------------------------
+// USERS & ROLES
+// ----------------------------------------------------
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String
+  fullName     String
+  beltNumber   String?  @unique
+  role         Role     @default(CONSTABLE)
+
+  // Hierarchical Assignment (A user belongs to ONE specific level)
+  zoneId       String?
+  zone         Zone?          @relation(fields: [zoneId], references: [id])
+  rangeId      String?
+  range        Range?         @relation(fields: [rangeId], references: [id])
+  districtId   String?
+  district     District?      @relation(fields: [districtId], references: [id])
+  circleId     String?
+  circle       Circle?        @relation(fields: [circleId], references: [id])
+  stationId    String?
+  station      PoliceStation? @relation(fields: [stationId], references: [id])
+
+  // Duty Assignments
+  dutiesAssigned DutyAssignment[]
+  createdDuties  Duty[]           @relation("DutyCreator")
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ----------------------------------------------------
+// DUTY MANAGEMENT MODULE
+// ----------------------------------------------------
+
+model Duty {
+  id             String       @id @default(uuid())
+  dutyIdString   String       @unique // e.g., DTY-9021
+  name           String
+  category       DutyCategory
+  status         DutyStatus   @default(DRAFT)
+  priority       String       @default("Medium") // Low, Medium, High, Critical
+  
+  // Location and Time
+  stationId      String
+  station        PoliceStation @relation(fields: [stationId], references: [id])
+  locationDesc   String?
+  latitude       Float?
+  longitude      Float?
+  startDate      DateTime
+  endDate        DateTime?
+  shift          String       // Morning, Evening, Night
+  
+  // Requirements & Logic
+  requiredStaff  Int          @default(1)
+  creatorId      String
+  creator        User         @relation("DutyCreator", fields: [creatorId], references: [id])
+  
+  // Assignments
+  assignments    DutyAssignment[]
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model DutyAssignment {
+  id        String   @id @default(uuid())
+  dutyId    String
+  duty      Duty     @relation(fields: [dutyId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  isLeader  Boolean  @default(false)
+  
+  assignedAt DateTime @default(now())
+}

@@ -10,6 +10,8 @@ import {
 import { useNavigate, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { DashboardHome } from './DashboardHome';
 import { DutyManagement } from './DutyManagement';
+import { OfficerAvailability } from './OfficerAvailability';
+import { LiveDutyMap } from './LiveDutyMap';
 
 const ModulePlaceholder = ({ title }: { title: string }) => (
   <div className="flex-1 flex flex-col items-center justify-center p-8 h-full animate-fade-in text-center mt-20">
@@ -187,8 +189,8 @@ export const Dashboard: React.FC = () => {
         <Routes>
           <Route path="/" element={<DashboardHome />} />
           <Route path="/duties" element={<DutyManagement />} />
-          <Route path="/map" element={<ModulePlaceholder title="Live Duty Map" />} />
-          <Route path="/officers" element={<ModulePlaceholder title="Officer Availability" />} />
+          <Route path="/officers" element={<OfficerAvailability />} />
+          <Route path="/map" element={<LiveDutyMap />} />
           <Route path="/calendar" element={<ModulePlaceholder title="Duty Calendar" />} />
           <Route path="/attendance" element={<ModulePlaceholder title="Attendance & Check-in" />} />
           <Route path="/reports" element={<ModulePlaceholder title="Generate Reports" />} />

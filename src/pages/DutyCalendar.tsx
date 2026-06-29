@@ -6,14 +6,14 @@ import {
 
 // Demo Data for the Calendar
 const DEMO_EVENTS = [
-  { id: 1, date: 2, title: 'VIP Route Bandobast', type: 'vip', location: 'Airport Road', time: '08:00 AM - 04:00 PM', officers: 45 },
-  { id: 2, date: 5, title: 'CM Visit Security', type: 'vip', location: 'Hazratganj', time: '09:00 AM - 06:00 PM', officers: 120 },
-  { id: 3, date: 5, title: 'Night Patrol', type: 'patrol', location: 'Sector 4', time: '10:00 PM - 06:00 AM', officers: 8 },
-  { id: 4, date: 12, title: 'High Court Duty', type: 'court', location: 'High Court', time: '10:00 AM - 05:00 PM', officers: 15 },
-  { id: 5, date: 15, title: 'Traffic Diversion', type: 'traffic', location: 'Gomti Nagar', time: '07:00 AM - 11:00 AM', officers: 12 },
-  { id: 6, date: 18, title: 'Festival Deployment', type: 'festival', location: 'Aminabad', time: '04:00 PM - 11:00 PM', officers: 80 },
-  { id: 7, date: 22, title: 'Riot Mock Drill', type: 'training', location: 'Police Line', time: '08:00 AM - 12:00 PM', officers: 200 },
-  { id: 8, date: 28, title: 'Election Booth Security', type: 'election', location: 'Indira Nagar', time: '06:00 AM - 08:00 PM', officers: 35 },
+  { id: 1, date: 2, title: 'VIP Route Bandobast', type: 'vip', location: 'Ashok Marg', time: '08:00 AM - 04:00 PM', officers: 45 },
+  { id: 2, date: 5, title: 'CM Visit Security', type: 'vip', location: 'Hazratganj Chauraha', time: '09:00 AM - 06:00 PM', officers: 120 },
+  { id: 3, date: 5, title: 'Night Patrol', type: 'patrol', location: 'Park Road', time: '10:00 PM - 06:00 AM', officers: 8 },
+  { id: 4, date: 12, title: 'Secretariat Duty', type: 'court', location: 'Vidhan Sabha', time: '10:00 AM - 05:00 PM', officers: 15 },
+  { id: 5, date: 15, title: 'Traffic Diversion', type: 'traffic', location: 'GPO Crossing', time: '07:00 AM - 11:00 AM', officers: 12 },
+  { id: 6, date: 18, title: 'Protest Management', type: 'festival', location: 'Gandhi Pratima', time: '04:00 PM - 11:00 PM', officers: 80 },
+  { id: 7, date: 22, title: 'Riot Mock Drill', type: 'training', location: 'Hazratganj Police Lines', time: '08:00 AM - 12:00 PM', officers: 200 },
+  { id: 8, date: 28, title: 'Election Booth Security', type: 'election', location: 'St. Francis College Booth', time: '06:00 AM - 08:00 PM', officers: 35 },
 ];
 
 export const DutyCalendar: React.FC = () => {
@@ -188,7 +188,7 @@ export const DutyCalendar: React.FC = () => {
          {selectedDay && (
            <>
              <div className="p-6 border-b border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-black/20 shrink-0">
-               <h3 className="text-xl font-bold font-heading dark:text-white flex items-center gap-2">
+               <h3 className="text-xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2">
                  <CalendarIcon size={20} className="text-[#FF9933]" />
                  {monthNames[currentDate.getMonth()]} {selectedDay}, {currentDate.getFullYear()}
                </h3>

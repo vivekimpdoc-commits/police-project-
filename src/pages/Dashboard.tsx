@@ -13,6 +13,7 @@ import { DutyManagement } from './DutyManagement';
 import { OfficerAvailability } from './OfficerAvailability';
 import { LiveDutyMap } from './LiveDutyMap';
 import { DutyCalendar } from './DutyCalendar';
+import { AttendanceModule } from './AttendanceModule';
 
 const ModulePlaceholder = ({ title }: { title: string }) => (
   <div className="flex-1 flex flex-col items-center justify-center p-8 h-full animate-fade-in text-center mt-20">
@@ -86,7 +87,7 @@ export const Dashboard: React.FC = () => {
                <Shield size={22} className="text-[#001229]" />
             </div>
             <div>
-              <h1 className="font-heading font-extrabold tracking-wide text-lg leading-tight">PNO DUTY</h1>
+              <h1 className="font-heading font-extrabold tracking-wide text-lg leading-tight">UPCOP COMMAND</h1>
               <p className="text-[10px] text-white/50 tracking-widest font-semibold">UP POLICE PORTAL</p>
             </div>
           </div>
@@ -156,7 +157,9 @@ export const Dashboard: React.FC = () => {
             <div className="hidden md:flex items-center gap-2 text-gray-400 dark:text-white/40 text-sm font-medium">
                <span>Dashboard</span>
                <ChevronRightIcon size={14} />
-               <span className="text-gray-800 dark:text-white">Control Room Overview</span>
+               <span className="text-gray-800 dark:text-white font-bold text-[#FF9933]">
+                 {localStorage.getItem('demoThana') || 'Hazratganj'} Control Room
+               </span>
             </div>
           </div>
           
@@ -164,7 +167,7 @@ export const Dashboard: React.FC = () => {
             {/* Global Search */}
             <div className="relative hidden lg:block">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-              <input type="text" placeholder="Search officer, belt no, duty ID..." className="pl-10 pr-4 py-2.5 w-80 bg-gray-100 dark:bg-[#000a17] border-none rounded-xl text-sm focus:ring-2 focus:ring-[#FF9933]/50 outline-none dark:text-white transition-all" />
+              <input type="text" placeholder="Search officer, PNO no, duty ID..." className="pl-10 pr-4 py-2.5 w-80 bg-gray-100 dark:bg-[#000a17] border-none rounded-xl text-sm focus:ring-2 focus:ring-[#FF9933]/50 outline-none dark:text-white transition-all" />
               <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1">
                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-white/10 rounded text-[10px] text-gray-400 dark:text-white/40 font-mono">Ctrl</kbd>
                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-white/10 rounded text-[10px] text-gray-400 dark:text-white/40 font-mono">K</kbd>
@@ -193,7 +196,7 @@ export const Dashboard: React.FC = () => {
           <Route path="/officers" element={<OfficerAvailability />} />
           <Route path="/map" element={<LiveDutyMap />} />
           <Route path="/calendar" element={<DutyCalendar />} />
-          <Route path="/attendance" element={<ModulePlaceholder title="Attendance & Check-in" />} />
+          <Route path="/attendance" element={<AttendanceModule />} />
           <Route path="/reports" element={<ModulePlaceholder title="Generate Reports" />} />
           <Route path="/alerts" element={<ModulePlaceholder title="Alerts & Notifications" />} />
           <Route path="*" element={<ModulePlaceholder title="Requested" />} />

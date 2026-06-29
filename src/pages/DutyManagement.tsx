@@ -8,18 +8,18 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 
 const INITIAL_DUTIES = [
-  { id: 'DTY-9021', category: 'VIP Duty', name: 'CM Airport Escort', date: '2026-06-30', shift: 'Morning', district: 'Lucknow', station: 'Airport Thana', staff: 24, status: 'Active (Approved)', approvalStage: 4, priority: 'Critical' },
+  { id: 'DTY-9021', category: 'VIP Duty', name: 'CM Airport Escort', date: '2026-06-30', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 24, status: 'Active (Approved)', approvalStage: 4, priority: 'Critical' },
   { id: 'DTY-9022', category: 'Law & Order', name: 'Hazratganj Protest', date: '2026-06-29', shift: 'Evening', district: 'Lucknow', station: 'Hazratganj', staff: 12, status: 'Pending SHO', approvalStage: 1, priority: 'High' },
-  { id: 'DTY-9023', category: 'Traffic Duty', name: 'Gomti Nagar Diversion', date: '2026-07-01', shift: 'Morning', district: 'Lucknow', station: 'Gomti Nagar', staff: 6, status: 'Pending District', approvalStage: 2, priority: 'Medium' },
-  { id: 'DTY-9024', category: 'Night Patrol', name: 'Sector 4 Area Patrol', date: '2026-06-29', shift: 'Night', district: 'Lucknow', station: 'Gomti Nagar', staff: 6, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'Medium' },
-  { id: 'DTY-9025', category: 'Election Duty', name: 'Polling Booth Sec 12', date: '2026-07-05', shift: 'Morning', district: 'Lucknow', station: 'Indira Nagar', staff: 18, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
-  { id: 'DTY-9026', category: 'Court Duty', name: 'High Court Security', date: '2026-06-30', shift: 'Morning', district: 'Lucknow', station: 'Gomti Nagar', staff: 4, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'Medium' },
-  { id: 'DTY-9027', category: 'Festival Duty', name: 'Eid Procession Route', date: '2026-07-10', shift: 'Evening', district: 'Lucknow', station: 'Aminabad', staff: 45, status: 'Pending District', approvalStage: 2, priority: 'Critical' },
-  { id: 'DTY-9028', category: 'Emergency', name: 'Accident Response Highway', date: '2026-06-29', shift: 'Night', district: 'Lucknow', station: 'BBD Thana', staff: 8, status: 'Active (Approved)', approvalStage: 4, priority: 'Critical' },
+  { id: 'DTY-9023', category: 'Traffic Duty', name: 'Gomti Nagar Diversion', date: '2026-07-01', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 6, status: 'Pending District', approvalStage: 2, priority: 'Medium' },
+  { id: 'DTY-9024', category: 'Night Patrol', name: 'Sector 4 Area Patrol', date: '2026-06-29', shift: 'Night', district: 'Lucknow', station: 'Hazratganj', staff: 6, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'Medium' },
+  { id: 'DTY-9025', category: 'Election Duty', name: 'Polling Booth Sec 12', date: '2026-07-05', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 18, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
+  { id: 'DTY-9026', category: 'Court Duty', name: 'High Court Security', date: '2026-06-30', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 4, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'Medium' },
+  { id: 'DTY-9027', category: 'Festival Duty', name: 'Eid Procession Route', date: '2026-07-10', shift: 'Evening', district: 'Lucknow', station: 'Hazratganj', staff: 45, status: 'Pending District', approvalStage: 2, priority: 'Critical' },
+  { id: 'DTY-9028', category: 'Emergency', name: 'Accident Response Highway', date: '2026-06-29', shift: 'Night', district: 'Lucknow', station: 'Hazratganj', staff: 8, status: 'Active (Approved)', approvalStage: 4, priority: 'Critical' },
   { id: 'DTY-9029', category: 'VIP Duty', name: 'Governor House Guard', date: '2026-07-01', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 15, status: 'Pending SHO', approvalStage: 1, priority: 'High' },
-  { id: 'DTY-9030', category: 'Law & Order', name: 'University Strike Control', date: '2026-07-02', shift: 'Evening', district: 'Lucknow', station: 'Hasanganj', staff: 20, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
-  { id: 'DTY-9031', category: 'Night Patrol', name: 'Chowk Area Patrol', date: '2026-06-30', shift: 'Night', district: 'Lucknow', station: 'Chowk', staff: 5, status: 'Pending SHO', approvalStage: 1, priority: 'Low' },
-  { id: 'DTY-9032', category: 'Reserve Force', name: 'HQ QRT Standby', date: '2026-06-29', shift: 'Custom', district: 'Lucknow', station: 'Police Line', staff: 50, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'High' },
+  { id: 'DTY-9030', category: 'Law & Order', name: 'University Strike Control', date: '2026-07-02', shift: 'Evening', district: 'Lucknow', station: 'Hazratganj', staff: 20, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
+  { id: 'DTY-9031', category: 'Night Patrol', name: 'Chowk Area Patrol', date: '2026-06-30', shift: 'Night', district: 'Lucknow', station: 'Hazratganj', staff: 5, status: 'Pending SHO', approvalStage: 1, priority: 'Low' },
+  { id: 'DTY-9032', category: 'Reserve Force', name: 'HQ QRT Standby', date: '2026-06-29', shift: 'Custom', district: 'Lucknow', station: 'Hazratganj', staff: 50, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'High' },
 ];
 
 export const DutyManagement: React.FC = () => {
@@ -27,12 +27,20 @@ export const DutyManagement: React.FC = () => {
   const userRole = userData?.role || 'Constable';
 
   const [activeTab, setActiveTab] = useState('list'); // 'list' | 'create'
-  const [duties, setDuties] = useState(INITIAL_DUTIES);
+  const [duties, setDuties] = useState(() => {
+    const storedThana = localStorage.getItem('demoThana') || 'Hazratganj';
+    const storedDistrict = localStorage.getItem('demoDistrict') || 'Lucknow';
+    return INITIAL_DUTIES.map(d => ({...d, station: storedThana, district: storedDistrict}));
+  });
   
   // Wizard State
   const [wizardStep, setWizardStep] = useState(1);
   const [dutyCategory, setDutyCategory] = useState('Law & Order');
   const [expandedDuty, setExpandedDuty] = useState<string | null>(null);
+  
+  // Filtering State
+  const [activeCategory, setActiveCategory] = useState('Law & Order');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const getStatusBadge = (status: string) => {
     if (status.includes('Approved') || status.includes('Active')) return 'bg-green-500/10 text-green-500 border-green-500/20';
@@ -146,19 +154,63 @@ export const DutyManagement: React.FC = () => {
       {activeTab === 'list' && (
         <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm overflow-hidden animate-fade-in">
            {/* Filters */}
-           <div className="p-4 border-b border-gray-100 dark:border-white/10 flex flex-wrap gap-4 bg-gray-50/50 dark:bg-black/20 items-center justify-between">
-              <div className="flex items-center gap-4 flex-1">
-                 <div className="relative max-w-sm w-full">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                    <input type="text" placeholder="Search Duty ID, Name, Station..." className="w-full pl-9 pr-4 py-2 bg-white dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm focus:border-[#FF9933] outline-none dark:text-white transition-colors" />
+           {/* Main Content Area with Sidebar */}
+           <div className="flex flex-col md:flex-row min-h-[600px]">
+              
+              {/* Left Sub-Menu Sidebar (Dark Orange Theme) */}
+              <div className="w-full md:w-64 bg-[#001229] p-4 shrink-0 rounded-bl-2xl overflow-y-auto">
+                 <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-4 px-2">Duty Management</h3>
+                 <div className="space-y-2">
+                   {['Daily Duty', 'VIP Duty', 'Law & Order', 'Election Duty', 'Festival Duty', 'Traffic Duty', 'Night Patrol', 'Court Duty', 'Emergency Response', 'Reserve Force'].map(cat => {
+                      const isActive = activeCategory === cat;
+                      return (
+                        <button 
+                          key={cat}
+                          onClick={() => setActiveCategory(cat)}
+                          className={`w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition-all flex items-center justify-between group
+                            ${isActive 
+                              ? 'bg-black/40 text-[#FF9933] border border-[#FF9933]/50 shadow-[0_0_15px_rgba(255,153,51,0.15)]' 
+                              : 'bg-[#000a17] text-[#FF9933]/70 hover:bg-black/40 hover:text-[#FF9933] border border-[#FF9933]/10 hover:border-[#FF9933]/30'
+                            }`}
+                        >
+                          <span className="flex items-center gap-3">
+                            {cat === 'VIP Duty' && <Shield size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
+                            {cat === 'Law & Order' && <Target size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
+                            {cat === 'Traffic Duty' && <Car size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
+                            {cat === 'Night Patrol' && <Clock size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
+                            {cat === 'Election Duty' && <Users size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
+                            {cat === 'Festival Duty' && <Calendar size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
+                            {cat === 'Emergency Response' && <AlertTriangle size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
+                            {['Daily Duty', 'Court Duty', 'Reserve Force'].includes(cat) && <FileText size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
+                            
+                            {cat}
+                          </span>
+                          
+                          {cat === 'VIP Duty' && <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border ${isActive ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-red-500/10 text-red-500/70 border-red-500/20'}`}>HIGH</span>}
+                        </button>
+                      );
+                   })}
                  </div>
-                 <select className="px-4 py-2 bg-white dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm dark:text-white outline-none">
-                    <option>All Duty Types</option>
-                    <option>VIP Duty</option>
-                    <option>Traffic Duty</option>
-                 </select>
               </div>
-           </div>
+
+              {/* Right Side Table Area */}
+              <div className="flex-1 flex flex-col min-w-0">
+                 {/* Search & Top Filters */}
+                 <div className="p-4 border-b border-gray-100 dark:border-white/10 flex flex-wrap gap-4 bg-white dark:bg-transparent items-center justify-between">
+                    <div className="relative max-w-sm w-full">
+                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                       <input 
+                         type="text" 
+                         placeholder={`Search ${activeCategory === 'All' ? '' : activeCategory} duties...`}
+                         value={searchQuery}
+                         onChange={(e) => setSearchQuery(e.target.value)}
+                         className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm focus:border-[#FF9933] outline-none dark:text-white transition-colors" 
+                       />
+                    </div>
+                    <button className="px-4 py-2 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-semibold dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 flex items-center gap-2">
+                       <Filter size={16} /> Advanced Filter
+                    </button>
+                 </div>
 
            {/* Table */}
            <div className="overflow-x-auto">
@@ -174,7 +226,10 @@ export const DutyManagement: React.FC = () => {
                  </tr>
                </thead>
                <tbody className="text-sm divide-y divide-gray-100 dark:divide-white/5">
-                 {duties.map((duty) => (
+                 {duties
+                    .filter(d => activeCategory === 'All' || d.category === activeCategory)
+                    .filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase()) || d.id.toLowerCase().includes(searchQuery.toLowerCase()) || d.station.toLowerCase().includes(searchQuery.toLowerCase()))
+                    .map((duty) => (
                    <React.Fragment key={duty.id}>
                      <tr className={`hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer ${expandedDuty === duty.id ? 'bg-gray-50 dark:bg-white/5' : ''}`} onClick={() => setExpandedDuty(expandedDuty === duty.id ? null : duty.id)}>
                        <td className="p-4 text-gray-400">
@@ -241,8 +296,10 @@ export const DutyManagement: React.FC = () => {
                  ))}
                </tbody>
              </table>
+              </div>
            </div>
         </div>
+      </div>
       )}
 
       {/* CREATE TAB - Kept exact same wizard code */}
@@ -418,7 +475,7 @@ export const DutyManagement: React.FC = () => {
                              </div>
                              <div className="flex-1">
                                <p className="font-bold text-sm dark:text-white">Insp. Rajesh Kumar</p>
-                               <p className="text-xs text-gray-500">Belt: UP-9921 • Available</p>
+                               <p className="text-xs text-gray-500">PNO: UP-9921 • Available</p>
                              </div>
                              <button className="text-xs font-bold text-[#FF9933] bg-white dark:bg-[#001229] px-3 py-1.5 rounded-lg border border-[#FF9933]/20 shadow-sm hover:bg-[#FF9933] hover:text-white transition-colors">Change</button>
                            </div>

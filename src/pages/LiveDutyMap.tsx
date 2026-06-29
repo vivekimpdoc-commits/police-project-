@@ -7,20 +7,21 @@ import {
 // Mock data for map markers
 const MAP_MARKERS = [
   { id: '1', type: 'vip', lat: '45%', lng: '55%', title: 'CM Escort Route', status: 'Active', officers: 12, vehicle: 'PCR-442' },
-  { id: '2', type: 'emergency', lat: '30%', lng: '40%', title: 'Mob Gathered - Aminabad', status: 'Critical', officers: 8, vehicle: 'Riot Van 2' },
-  { id: '3', type: 'patrol', lat: '60%', lng: '70%', title: 'Gomti Nagar Patrol', status: 'Routine', officers: 4, vehicle: 'Interceptor 1' },
+  { id: '2', type: 'emergency', lat: '30%', lng: '40%', title: 'Mob Gathered - Hazratganj', status: 'Critical', officers: 8, vehicle: 'Riot Van 2' },
+  { id: '3', type: 'patrol', lat: '60%', lng: '70%', title: 'Park Road Patrol', status: 'Routine', officers: 4, vehicle: 'Interceptor 1' },
   { id: '4', type: 'traffic', lat: '50%', lng: '30%', title: 'Hazratganj Chauraha', status: 'Active', officers: 6, vehicle: 'Traffic Bike' },
-  { id: '5', type: 'patrol', lat: '20%', lng: '60%', title: 'Sector 4 Beat', status: 'Routine', officers: 2, vehicle: 'Foot Patrol' },
+  { id: '5', type: 'patrol', lat: '20%', lng: '60%', title: 'Janpath Market Beat', status: 'Routine', officers: 2, vehicle: 'Foot Patrol' },
   { id: '6', type: 'vip', lat: '70%', lng: '50%', title: 'Governor House', status: 'Active', officers: 15, vehicle: 'Static Guard' },
-  { id: '7', type: 'emergency', lat: '80%', lng: '20%', title: 'Highway Accident', status: 'Critical', officers: 6, vehicle: 'Ambulance & PCR' },
-  { id: '8', type: 'patrol', lat: '10%', lng: '40%', title: 'Chowk Night Patrol', status: 'Routine', officers: 4, vehicle: 'PCR-112' },
-  { id: '9', type: 'traffic', lat: '85%', lng: '80%', title: 'BBD Checkpost', status: 'Active', officers: 8, vehicle: 'Interceptor 3' },
-  { id: '10', type: 'patrol', lat: '35%', lng: '85%', title: 'Indira Nagar Beat', status: 'Routine', officers: 2, vehicle: 'Foot Patrol' },
+  { id: '7', type: 'emergency', lat: '80%', lng: '20%', title: 'Ashok Marg Accident', status: 'Critical', officers: 6, vehicle: 'Ambulance & PCR' },
+  { id: '8', type: 'patrol', lat: '10%', lng: '40%', title: 'Vidhan Sabha Patrol', status: 'Routine', officers: 4, vehicle: 'PCR-112' },
+  { id: '9', type: 'traffic', lat: '85%', lng: '80%', title: 'GPO Checkpost', status: 'Active', officers: 8, vehicle: 'Interceptor 3' },
+  { id: '10', type: 'patrol', lat: '35%', lng: '85%', title: 'Sikandar Bagh Beat', status: 'Routine', officers: 2, vehicle: 'Foot Patrol' },
 ];
 
 export const LiveDutyMap: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedMarker, setSelectedMarker] = useState<any>(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   const getMarkerIcon = (type: string) => {
     switch(type) {
@@ -134,7 +135,7 @@ export const LiveDutyMap: React.FC = () => {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 dark:text-white/50">{selectedMarker.type} DUTY</span>
-                  <h3 className="font-bold text-lg dark:text-white leading-tight">{selectedMarker.title}</h3>
+                  <h3 className="font-bold text-lg text-gray-900 dark:text-white leading-tight">{selectedMarker.title}</h3>
                 </div>
                 <button onClick={() => setSelectedMarker(null)} className="p-1.5 hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg text-gray-400">
                   <X size={18} />
@@ -143,28 +144,141 @@ export const LiveDutyMap: React.FC = () => {
 
               <div className="space-y-3 mb-6">
                  <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-black/20 rounded-xl">
-                    <div className="flex items-center gap-2 text-sm dark:text-white/80">
+                    <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-white/80">
                        <Users size={16} className="text-blue-500" /> Force Deployed
                     </div>
-                    <div className="font-bold dark:text-white">{selectedMarker.officers}</div>
+                    <div className="font-bold text-gray-900 dark:text-white">{selectedMarker.officers}</div>
                  </div>
                  <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-black/20 rounded-xl">
-                    <div className="flex items-center gap-2 text-sm dark:text-white/80">
+                    <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-white/80">
                        <Car size={16} className="text-amber-500" /> Vehicle
                     </div>
-                    <div className="font-bold font-mono text-xs dark:text-white">{selectedMarker.vehicle}</div>
+                    <div className="font-bold font-mono text-xs text-gray-900 dark:text-white">{selectedMarker.vehicle}</div>
                  </div>
                  <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-black/20 rounded-xl border border-red-500/20">
-                    <div className="flex items-center gap-2 text-sm dark:text-white/80">
+                    <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-white/80">
                        <AlertTriangle size={16} className={selectedMarker.type === 'emergency' ? 'text-red-500' : 'text-green-500'} /> Status
                     </div>
                     <div className={`font-bold text-xs ${selectedMarker.type === 'emergency' ? 'text-red-500' : 'text-green-500'}`}>{selectedMarker.status}</div>
                  </div>
               </div>
 
-              <button className="w-full py-3 bg-[#002147] dark:bg-white text-white dark:text-[#001229] rounded-xl text-sm font-bold shadow-lg transition-transform hover:scale-[1.02] flex items-center justify-center gap-2">
+              <button onClick={() => setShowDetailsModal(true)} className="w-full py-3 bg-[#002147] dark:bg-white text-white dark:text-[#001229] rounded-xl text-sm font-bold shadow-lg transition-transform hover:scale-[1.02] flex items-center justify-center gap-2">
                  View Duty Details <ChevronRight size={16} />
               </button>
+           </div>
+        </div>
+      )}
+
+      {/* Duty Details Full Modal */}
+      {showDetailsModal && selectedMarker && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowDetailsModal(false)}></div>
+           
+           <div className="relative w-full max-w-3xl bg-white dark:bg-[#001229] rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden flex flex-col max-h-full animate-scale-up">
+              
+              {/* Modal Header */}
+              <div className="p-6 border-b border-gray-100 dark:border-white/10 flex justify-between items-start bg-gray-50/50 dark:bg-white/5 shrink-0">
+                 <div>
+                   <div className="flex items-center gap-3 mb-2">
+                     <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border ${getMarkerColor(selectedMarker.type).replace('shadow', '')}`}>
+                       {selectedMarker.type} DUTY
+                     </span>
+                     <span className="text-xs font-mono font-bold text-gray-500 dark:text-white/40 border border-gray-200 dark:border-white/10 px-2 py-0.5 rounded bg-white dark:bg-black/20">
+                       ID: DTY-8{selectedMarker.id}42
+                     </span>
+                   </div>
+                   <h2 className="text-2xl font-bold font-heading text-gray-900 dark:text-white">{selectedMarker.title}</h2>
+                 </div>
+                 <button onClick={() => setShowDetailsModal(false)} className="p-2 hover:bg-gray-200 dark:hover:bg-white/10 rounded-xl text-gray-500 transition-colors">
+                   <X size={20} />
+                 </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="flex-1 overflow-y-auto p-6 custom-scrollbar space-y-6">
+                 
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="p-4 bg-blue-50 dark:bg-blue-500/10 rounded-xl border border-blue-100 dark:border-blue-500/20">
+                       <p className="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider mb-1">Commander In-Charge</p>
+                       <p className="font-bold text-blue-900 dark:text-white text-lg">Insp. R.K. Sharma</p>
+                       <p className="text-xs text-blue-700 dark:text-blue-300 mt-1 flex items-center gap-1">📞 +91 9876543210</p>
+                    </div>
+                    <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/10">
+                       <p className="text-xs text-gray-500 dark:text-white/40 font-bold uppercase tracking-wider mb-1">Time Window</p>
+                       <p className="font-bold text-gray-900 dark:text-white text-lg">08:00 - 18:00</p>
+                       <p className="text-xs text-gray-500 dark:text-white/50 mt-1">Today (10 Hours)</p>
+                    </div>
+                    <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/10">
+                       <p className="text-xs text-gray-500 dark:text-white/40 font-bold uppercase tracking-wider mb-1">Hierarchy Status</p>
+                       <p className="font-bold text-green-600 dark:text-green-400 text-lg flex items-center gap-2">Active</p>
+                       <p className="text-xs text-gray-500 dark:text-white/50 mt-1">Approved by HQ</p>
+                    </div>
+                 </div>
+
+                 <div className="border border-gray-100 dark:border-white/10 rounded-xl overflow-hidden">
+                    <div className="bg-gray-50 dark:bg-white/5 p-3 border-b border-gray-100 dark:border-white/10 font-bold text-sm text-gray-700 dark:text-white/80">
+                      Force Roster ({selectedMarker.officers} Personnel)
+                    </div>
+                    <div className="p-4 grid grid-cols-2 sm:grid-cols-3 gap-3 bg-white dark:bg-[#000a17]">
+                       {[...Array(selectedMarker.officers > 6 ? 6 : selectedMarker.officers)].map((_, i) => (
+                         <div key={i} className="flex items-center gap-2 p-2 rounded-lg border border-gray-100 dark:border-white/5">
+                            <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-800 shrink-0">
+                               <img src={`https://api.dicebear.com/7.x/initials/svg?seed=Officer${i}&backgroundColor=002147`} alt="Officer" className="w-full h-full object-cover rounded-full" />
+                            </div>
+                            <div className="overflow-hidden">
+                              <p className="text-xs font-bold text-gray-800 dark:text-white truncate">Constable {i+1}</p>
+                              <p className="text-[10px] text-gray-500 truncate">UP-{1000+i}</p>
+                            </div>
+                         </div>
+                       ))}
+                       {selectedMarker.officers > 6 && (
+                         <div className="flex items-center justify-center p-2 rounded-lg border border-dashed border-gray-300 dark:border-white/20 text-xs font-bold text-gray-500 dark:text-white/50">
+                           + {selectedMarker.officers - 6} More
+                         </div>
+                       )}
+                    </div>
+                 </div>
+                 
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                   <div>
+                     <h4 className="font-bold text-sm text-gray-900 dark:text-white mb-3 flex items-center gap-2 border-b border-gray-100 dark:border-white/10 pb-2">
+                       <Car size={16} className="text-[#FF9933]" /> Logistics Deployed
+                     </h4>
+                     <ul className="space-y-2 text-sm text-gray-600 dark:text-white/70">
+                        <li className="flex justify-between border-b border-dashed border-gray-200 dark:border-white/5 pb-1">
+                          <span>Primary Vehicle</span> <strong>{selectedMarker.vehicle}</strong>
+                        </li>
+                        <li className="flex justify-between border-b border-dashed border-gray-200 dark:border-white/5 pb-1">
+                          <span>Comms Sets</span> <strong>{Math.max(2, Math.floor(selectedMarker.officers/2))} Walkie-Talkies</strong>
+                        </li>
+                        <li className="flex justify-between border-b border-dashed border-gray-200 dark:border-white/5 pb-1">
+                          <span>Special Gear</span> <strong>Standard Kit</strong>
+                        </li>
+                     </ul>
+                   </div>
+                   
+                   <div>
+                     <h4 className="font-bold text-sm text-gray-900 dark:text-white mb-3 flex items-center gap-2 border-b border-gray-100 dark:border-white/10 pb-2">
+                       <AlertTriangle size={16} className="text-[#FF9933]" /> Special Instructions
+                     </h4>
+                     <p className="text-sm text-gray-600 dark:text-white/70 leading-relaxed bg-amber-50 dark:bg-amber-500/5 p-3 rounded-xl border border-amber-100 dark:border-amber-500/10 italic">
+                       Maintain strict vigilance. No unauthorized vehicles allowed in the perimeter. Report to control room every 2 hours via wireless set channel 4.
+                     </p>
+                   </div>
+                 </div>
+
+              </div>
+              
+              {/* Modal Footer */}
+              <div className="p-5 border-t border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 shrink-0 flex justify-end gap-3">
+                 <button className="px-5 py-2.5 rounded-xl font-bold text-gray-600 dark:text-white/70 bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors flex items-center gap-2">
+                    <Navigation size={16} /> Open in Navigation
+                 </button>
+                 <button className="px-5 py-2.5 rounded-xl font-bold text-white bg-[#002147] dark:bg-[#FF9933] dark:text-[#001229] shadow-lg hover:opacity-90 transition-opacity">
+                    Export Full Roster (PDF)
+                 </button>
+              </div>
            </div>
         </div>
       )}

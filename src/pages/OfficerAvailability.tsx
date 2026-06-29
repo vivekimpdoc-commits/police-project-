@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { 
   Search, Filter, Users, Shield, ShieldAlert, CheckCircle, 
-  MapPin, Clock, Briefcase, Phone, Mail, ChevronRight, X
+  MapPin, Clock, Briefcase, Phone, Mail, ChevronRight, X,
+  Plus, UploadCloud, Download, FileSpreadsheet, Cpu, Check
 } from 'lucide-react';
 
 const MOCK_OFFICERS = [
@@ -9,22 +10,38 @@ const MOCK_OFFICERS = [
   { id: 'UP-7732', name: 'Anil Singh', rank: 'Sub Inspector', station: 'Hazratganj', status: 'Available', duty: null, phone: '+91 9876543211' },
   { id: 'UP-5521', name: 'Vikram Yadav', rank: 'Head Constable', station: 'Hazratganj', status: 'On Leave', duty: null, phone: '+91 9876543212' },
   { id: 'UP-8812', name: 'Suresh Tiwari', rank: 'Constable', station: 'Hazratganj', status: 'Available', duty: null, phone: '+91 9876543213' },
-  { id: 'UP-3341', name: 'Ramesh Patel', rank: 'Constable', station: 'Gomti Nagar', status: 'In Training', duty: null, phone: '+91 9876543214' },
-  { id: 'UP-9922', name: 'Anita Sharma', rank: 'Sub Inspector', station: 'Hazratganj', status: 'On Duty', duty: 'VIP Route Bandobast', phone: '+91 9876543215' },
-  { id: 'UP-1102', name: 'Manoj Bajpai', rank: 'Inspector', station: 'Gomti Nagar', status: 'On Duty', duty: 'High Court Security', phone: '+91 9876543216' },
-  { id: 'UP-2204', name: 'Deepika Singh', rank: 'Constable', station: 'Indira Nagar', status: 'Available', duty: null, phone: '+91 9876543217' },
-  { id: 'UP-4455', name: 'Rahul Verma', rank: 'Head Constable', station: 'Hazratganj', status: 'On Duty', duty: 'Night Patrol Route A', phone: '+91 9876543218' },
-  { id: 'UP-5566', name: 'Amitabh Bachchan', rank: 'Sub Inspector', station: 'Aminabad', status: 'On Leave', duty: null, phone: '+91 9876543219' },
+  { id: 'UP-3341', name: 'Ramesh Patel', rank: 'Constable', station: 'Hazratganj', status: 'In Training', duty: null, phone: '+91 9876543214' },
+  { id: 'UP-9922', name: 'Anita Sharma', rank: 'Sub Inspector', station: 'Hazratganj', status: 'On Duty', duty: 'VIP Route Bandobast (GPO)', phone: '+91 9876543215' },
+  { id: 'UP-1102', name: 'Manoj Bajpai', rank: 'Inspector', station: 'Hazratganj', status: 'On Duty', duty: 'Janpath Market Security', phone: '+91 9876543216' },
+  { id: 'UP-2204', name: 'Deepika Singh', rank: 'Constable', station: 'Hazratganj', status: 'Available', duty: null, phone: '+91 9876543217' },
+  { id: 'UP-4455', name: 'Rahul Verma', rank: 'Head Constable', station: 'Hazratganj', status: 'On Duty', duty: 'Night Patrol Route A (Park Road)', phone: '+91 9876543218' },
+  { id: 'UP-5566', name: 'Amitabh Bachchan', rank: 'Sub Inspector', station: 'Hazratganj', status: 'On Leave', duty: null, phone: '+91 9876543219' },
   { id: 'UP-7788', name: 'Priya Mishra', rank: 'Constable', station: 'Hazratganj', status: 'Available', duty: null, phone: '+91 9876543220' },
-  { id: 'UP-9900', name: 'Sunil Shetty', rank: 'Constable', station: 'Chowk', status: 'On Duty', duty: 'Traffic Management', phone: '+91 9876543221' },
-  { id: 'UP-1234', name: 'Ajay Devgn', rank: 'Inspector (SHO)', station: 'Indira Nagar', status: 'Available', duty: null, phone: '+91 9876543222' },
-  { id: 'UP-5678', name: 'Kareena Kapoor', rank: 'Sub Inspector', station: 'Gomti Nagar', status: 'In Training', duty: null, phone: '+91 9876543223' },
+  { id: 'UP-9900', name: 'Sunil Shetty', rank: 'Constable', station: 'Hazratganj', status: 'On Duty', duty: 'Traffic Management (Atal Chowk)', phone: '+91 9876543221' },
+  { id: 'UP-1234', name: 'Ajay Devgn', rank: 'Sub Inspector', station: 'Hazratganj', status: 'Available', duty: null, phone: '+91 9876543222' },
+  { id: 'UP-5678', name: 'Kareena Kapoor', rank: 'Head Constable', station: 'Hazratganj', status: 'In Training', duty: null, phone: '+91 9876543223' },
 ];
 
 export const OfficerAvailability: React.FC = () => {
+  const storedThana = localStorage.getItem('demoThana') || 'Hazratganj';
+  const dynamicOfficers = MOCK_OFFICERS.map(o => ({...o, station: storedThana}));
+
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [selectedOfficer, setSelectedOfficer] = useState<any>(null);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isManualEntryOpen, setIsManualEntryOpen] = useState(false);
+  const [uploadStep, setUploadStep] = useState<'initial' | 'uploading' | 'ready' | 'processing' | 'success'>('initial');
+
+  const handleUploadSimulate = () => {
+    setUploadStep('uploading');
+    setTimeout(() => setUploadStep('ready'), 2000);
+  };
+
+  const handleAIRunSimulate = () => {
+    setUploadStep('processing');
+    setTimeout(() => setUploadStep('success'), 3000);
+  };
 
   const getStatusColor = (status: string) => {
     switch(status) {
@@ -36,9 +53,10 @@ export const OfficerAvailability: React.FC = () => {
     }
   };
 
-  const filteredOfficers = MOCK_OFFICERS.filter(off => {
-    const matchesSearch = off.name.toLowerCase().includes(searchTerm.toLowerCase()) || off.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'All' || off.status === statusFilter;
+  const filteredOfficers = dynamicOfficers.filter(officer => {
+    const matchesSearch = officer.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          officer.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'All' || officer.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
@@ -62,6 +80,20 @@ export const OfficerAvailability: React.FC = () => {
            <p className="text-gray-500 dark:text-white/60 text-sm mt-2">
              Real-time manpower status, deployment history, and resource allocation.
            </p>
+         </div>
+         <div className="flex items-center gap-3">
+           <button 
+             onClick={() => setIsManualEntryOpen(true)}
+             className="px-4 py-2 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-semibold dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 flex items-center gap-2"
+           >
+              <Plus size={16} /> New Entry
+           </button>
+           <button 
+             onClick={() => { setUploadStep('initial'); setIsUploadModalOpen(true); }}
+             className="px-5 py-2.5 bg-gradient-to-r from-[#002147] to-[#0d386b] dark:from-[#FF9933] dark:to-[#ffaa55] hover:opacity-90 text-white dark:text-[#001229] rounded-xl text-sm font-bold shadow-lg transition-all flex items-center gap-2"
+           >
+              <UploadCloud size={16} /> Excel Bulk Upload & AI
+           </button>
          </div>
       </div>
 
@@ -97,7 +129,7 @@ export const OfficerAvailability: React.FC = () => {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                     <input 
                       type="text" 
-                      placeholder="Search by Name or Belt Number (e.g. UP-9021)" 
+                      placeholder="Search by Name or PNO Number (e.g. UP-9021)" 
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="w-full pl-9 pr-4 py-2 bg-white dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm focus:border-[#FF9933] outline-none dark:text-white transition-colors" 
@@ -123,7 +155,7 @@ export const OfficerAvailability: React.FC = () => {
                <thead>
                  <tr className="text-xs uppercase text-gray-500 dark:text-white/40 bg-gray-50 dark:bg-transparent border-b border-gray-100 dark:border-white/5">
                    <th className="p-4 font-semibold">Officer Profile</th>
-                   <th className="p-4 font-semibold">Belt Number</th>
+                   <th className="p-4 font-semibold">PNO Number</th>
                    <th className="p-4 font-semibold">Station / Unit</th>
                    <th className="p-4 font-semibold">Current Status</th>
                    <th className="p-4 font-semibold text-right">Action</th>
@@ -237,6 +269,183 @@ export const OfficerAvailability: React.FC = () => {
         )}
 
       </div>
+
+      {/* Excel Upload & AI Assignment Modal */}
+      {isUploadModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-[#001229] w-full max-w-2xl rounded-2xl border border-gray-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col">
+            <div className="p-5 border-b border-gray-100 dark:border-white/10 flex justify-between items-center bg-gray-50 dark:bg-white/5">
+              <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+                <FileSpreadsheet className="text-[#FF9933]" size={20} /> Excel Roster Upload & AI Assignment
+              </h3>
+              <button onClick={() => setIsUploadModalOpen(false)} className="p-1 hover:bg-gray-200 dark:hover:bg-white/10 rounded-lg text-gray-500 transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-8">
+              {uploadStep === 'initial' && (
+                <div className="text-center animate-fade-in">
+                  <div className="mb-8">
+                    <button className="px-6 py-3 border-2 border-dashed border-gray-300 dark:border-white/20 rounded-xl text-gray-600 dark:text-white/70 hover:border-[#FF9933] hover:text-[#FF9933] transition-all flex items-center justify-center gap-2 mx-auto mb-4 w-full max-w-md">
+                      <Download size={18} /> Download Demo Excel Template
+                    </button>
+                    <p className="text-xs text-gray-500 dark:text-white/50">Fill the template with correct officer details (Name, PNO No, Preferences, Rank).</p>
+                  </div>
+                  
+                  <div 
+                    onClick={handleUploadSimulate}
+                    className="border-2 border-dashed border-gray-300 dark:border-white/20 rounded-2xl p-10 bg-gray-50 dark:bg-black/20 hover:border-[#FF9933] hover:bg-[#FF9933]/5 cursor-pointer transition-all flex flex-col items-center justify-center"
+                  >
+                    <UploadCloud size={48} className="text-gray-400 dark:text-white/30 mb-4" />
+                    <p className="font-bold text-gray-700 dark:text-white/80 mb-1">Click to Upload Roster Data (Excel/CSV)</p>
+                    <p className="text-xs text-gray-500">Supports .xlsx, .xls, .csv</p>
+                  </div>
+                </div>
+              )}
+
+              {uploadStep === 'uploading' && (
+                <div className="text-center py-12 animate-fade-in flex flex-col items-center">
+                  <div className="w-16 h-16 border-4 border-gray-200 dark:border-white/10 border-t-[#FF9933] rounded-full animate-spin mb-6"></div>
+                  <h3 className="font-bold text-lg dark:text-white mb-2">Parsing Excel Data...</h3>
+                  <p className="text-gray-500 dark:text-white/50 text-sm">Validating rows and extracting officer records.</p>
+                </div>
+              )}
+
+              {uploadStep === 'ready' && (
+                <div className="text-center py-8 animate-fade-in">
+                  <div className="w-20 h-20 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <FileSpreadsheet size={40} />
+                  </div>
+                  <h3 className="font-bold text-2xl text-gray-900 dark:text-white mb-2">Excel Data Extracted!</h3>
+                  <p className="text-gray-500 dark:text-white/60 mb-8">145 New Officer records found. 12 previous records updated.</p>
+                  
+                  <div className="p-5 bg-[#FF9933]/10 border border-[#FF9933]/30 rounded-xl mb-8 flex items-start gap-4 text-left">
+                    <Cpu className="text-[#FF9933] shrink-0 mt-1" size={24} />
+                    <div>
+                      <h4 className="font-bold text-[#FF9933] mb-1">AI Duty Allocation Engine Ready</h4>
+                      <p className="text-sm text-[#FF9933]/80">Run the AI module to automatically assign available officers to pending duties based on their rank, previous patrol history, and proximity.</p>
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={handleAIRunSimulate}
+                    className="w-full py-4 bg-gradient-to-r from-[#002147] to-[#0d386b] dark:from-[#FF9933] dark:to-[#ffaa55] hover:opacity-90 text-white dark:text-[#001229] rounded-xl font-black text-lg shadow-xl shadow-[#FF9933]/20 transition-all flex justify-center items-center gap-2 group"
+                  >
+                    <Cpu size={24} className="group-hover:rotate-12 transition-transform" /> RUN AI ALLOCATION
+                  </button>
+                </div>
+              )}
+
+              {uploadStep === 'processing' && (
+                <div className="text-center py-12 animate-fade-in flex flex-col items-center">
+                  <div className="relative mb-6">
+                    <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center">
+                       <Cpu size={40} className="text-blue-500 animate-pulse" />
+                    </div>
+                    <div className="absolute top-0 left-0 w-20 h-20 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
+                  </div>
+                  <h3 className="font-bold text-xl dark:text-white mb-2 text-blue-500">AI Module Processing...</h3>
+                  <div className="text-left max-w-sm mx-auto space-y-2 mt-4 text-sm text-gray-600 dark:text-white/60">
+                    <p className="flex items-center gap-2"><CheckCircle size={14} className="text-green-500" /> Analyzing VIP route requirements...</p>
+                    <p className="flex items-center gap-2 animate-pulse text-blue-500"><div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div> Matching officer availability & ranks...</p>
+                    <p className="flex items-center gap-2 text-gray-400"><div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div> Optimizing for minimum travel distance...</p>
+                  </div>
+                </div>
+              )}
+
+              {uploadStep === 'success' && (
+                <div className="text-center py-8 animate-fade-in">
+                  <div className="w-20 h-20 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
+                    <Check size={40} />
+                  </div>
+                  <h3 className="font-bold text-2xl text-gray-900 dark:text-white mb-2">AI Allocation Complete!</h3>
+                  <p className="text-gray-500 dark:text-white/60 mb-6">45 duties assigned. 120 officers deployed efficiently.</p>
+                  
+                  <div className="grid grid-cols-2 gap-4 mb-8 text-left">
+                     <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/10">
+                       <p className="text-xs text-gray-500 uppercase font-bold tracking-wide">Efficiency Gain</p>
+                       <p className="text-xl font-bold text-green-500 mt-1">+34% Coverage</p>
+                     </div>
+                     <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/10">
+                       <p className="text-xs text-gray-500 uppercase font-bold tracking-wide">Resource Util.</p>
+                       <p className="text-xl font-bold text-blue-500 mt-1">92% Optimal</p>
+                     </div>
+                  </div>
+
+                  <button 
+                    onClick={() => setIsUploadModalOpen(false)}
+                    className="w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-bold transition-all"
+                  >
+                    View Updated Roster
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Manual Entry Modal */}
+      {isManualEntryOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-[#001229] w-full max-w-lg rounded-2xl border border-gray-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col">
+            <div className="p-5 border-b border-gray-100 dark:border-white/10 flex justify-between items-center bg-gray-50 dark:bg-white/5">
+              <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+                <Users className="text-[#FF9933]" size={20} /> Register New Officer
+              </h3>
+              <button onClick={() => setIsManualEntryOpen(false)} className="p-1 hover:bg-gray-200 dark:hover:bg-white/10 rounded-lg text-gray-500 transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+               <div className="grid grid-cols-2 gap-4">
+                 <div>
+                   <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Officer Name</label>
+                   <input type="text" placeholder="e.g. Rahul Singh" className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] dark:text-white" />
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">PNO Number</label>
+                   <input type="text" placeholder="e.g. UP-1029" className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] dark:text-white" />
+                 </div>
+               </div>
+
+               <div className="grid grid-cols-2 gap-4">
+                 <div>
+                   <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Rank</label>
+                   <select className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] dark:text-white">
+                     <option>Constable</option>
+                     <option>Head Constable</option>
+                     <option>Sub Inspector</option>
+                     <option>Inspector</option>
+                   </select>
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Posting Station</label>
+                   <select className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] dark:text-white">
+                     <option>Hazratganj</option>
+                     <option>Gomti Nagar</option>
+                     <option>Chowk</option>
+                     <option>Alambagh</option>
+                     <option>Indira Nagar</option>
+                   </select>
+                 </div>
+               </div>
+
+               <div>
+                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Contact Number</label>
+                 <input type="tel" placeholder="+91 9999999999" className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] dark:text-white" />
+               </div>
+
+               <div className="pt-4 border-t border-gray-100 dark:border-white/10 flex justify-end gap-3">
+                 <button onClick={() => setIsManualEntryOpen(false)} className="px-5 py-2.5 rounded-xl font-bold text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/5 transition-all text-sm">Cancel</button>
+                 <button onClick={() => setIsManualEntryOpen(false)} className="px-5 py-2.5 bg-[#FF9933] hover:bg-[#ffaa55] text-[#001229] rounded-xl font-bold shadow-lg transition-all text-sm">Save Officer Profile</button>
+               </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

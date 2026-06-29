@@ -212,12 +212,12 @@ export const DashboardHome: React.FC = () => {
            <h2 className="text-3xl font-bold font-heading text-gray-900 dark:text-white mb-1 flex items-center gap-3">
              {role === 'Constable' && 'My Profile & Duties'}
              {role === 'SHO' && 'Police Station Control'}
-             {['Super Admin', 'State HQ', 'District Admin'].includes(role) && 'Live Control Room'}
+             {!['Constable', 'SHO'].includes(role) && 'Live Control Room'}
            </h2>
            <p className="text-gray-500 dark:text-white/60 text-sm">
              {role === 'Constable' && `Welcome back, ${userData?.fullName}`}
              {role === 'SHO' && 'Hazratganj Station • Monitoring'}
-             {['Super Admin', 'State HQ', 'District Admin'].includes(role) && `HQ Analytics • ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`}
+             {!['Constable', 'SHO'].includes(role) && `HQ Analytics • ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`}
            </p>
          </div>
          <div className="flex items-center gap-3">
@@ -232,7 +232,7 @@ export const DashboardHome: React.FC = () => {
       {/* Render Dashboard Based on Role */}
       {role === 'Constable' && <ConstableDashboard />}
       {role === 'SHO' && <SHODashboard navigate={navigate} />}
-      {['Super Admin', 'State HQ', 'District Admin'].includes(role) && <MacroDashboard navigate={navigate} />}
+      {!['Constable', 'SHO'].includes(role) && <MacroDashboard navigate={navigate} />}
       
       <div className="h-8"></div>
     </div>

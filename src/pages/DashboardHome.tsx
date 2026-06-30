@@ -303,13 +303,19 @@ export const DashboardHome: React.FC = () => {
              {!['Constable', 'SHO'].includes(role) && `HQ Analytics • ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`}
            </p>
          </div>
-         <div className="flex items-center gap-3">
-           {role !== 'Constable' && (
-             <button onClick={() => navigate('/dashboard/duties')} className="px-5 py-2.5 bg-gradient-to-r from-[#002147] to-[#0d386b] dark:from-[#FF9933] dark:to-[#ffaa55] hover:opacity-90 text-white dark:text-[#001229] rounded-xl text-sm font-bold shadow-lg transition-all flex items-center gap-2">
-               <Briefcase size={16} /> Manage Deployments
-             </button>
-           )}
-         </div>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => window.open(`${import.meta.env.BASE_URL}generate_ppt.html`, '_blank')} 
+              className="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 text-white rounded-xl text-sm font-bold shadow-lg transition-all flex items-center gap-2"
+            >
+              <FileText size={16} /> Download Project PPTX
+            </button>
+            {role !== 'Constable' && (
+              <button onClick={() => navigate('/dashboard/duties')} className="px-5 py-2.5 bg-gradient-to-r from-[#002147] to-[#0d386b] dark:from-[#FF9933] dark:to-[#ffaa55] hover:opacity-90 text-white dark:text-[#001229] rounded-xl text-sm font-bold shadow-lg transition-all flex items-center gap-2">
+                <Briefcase size={16} /> Manage Deployments
+              </button>
+            )}
+          </div>
       </div>
 
       {/* Render Dashboard Based on Role */}

@@ -36,9 +36,15 @@ export const Dashboard: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     'MAIN': true,
+    'DUTY MANAGEMENT': false,
+    'REPORTS & LOGS': true,
+    'STATION COMMAND': true,
+    'STATION DUTIES': false,
+    'STATION LOGS': true,
     'STATION CONTROL (थाना नियंत्रण)': true,
-    'DUTY TYPES (ड्यूटी श्रेणियां)': false,
-    'STATION RECORDS (थाना अभिलेख)': false
+    'DUTY MANAGEMENT (ड्यूटी)': true,
+    'PERSONNEL (कर्मचारी)': false,
+    'MY RECORDS (मेरा खाता)': true
   });
 
   const toggleGroup = (title: string) => {
@@ -54,40 +60,44 @@ export const Dashboard: React.FC = () => {
   };
 
   const getMenuGroups = () => {
-    if (userData?.role === 'SHO' || userData?.role === 'Constable') {
+    if (userData?.role === 'SHO') {
       return [
         {
-          title: 'STATION CONTROL (थाना नियंत्रण)',
+          title: 'STATION COMMAND',
           items: [
-            { icon: BarChart2, label: 'Station Dashboard (थाना डैशबोर्ड)', path: '/dashboard' },
-            { icon: Map, label: 'Live Patrol Map (लाइव गश्ती नक्शा)', path: '/dashboard/map' },
-            { icon: Users, label: 'Staff Availability (बल उपलब्धता)', path: '/dashboard/officers' },
-            { icon: CheckSquare, label: 'Attendance & Check-in (उपस्थिति)', path: '/dashboard/attendance' },
+            { icon: BarChart2, label: 'Station Dashboard', path: '/dashboard' },
+            { icon: Users, label: 'Station Force (Officers)', path: '/dashboard/officers' },
+            { icon: Calendar, label: 'Station Roster', path: '/dashboard/calendar' },
           ]
         },
         {
-          title: 'DUTY TYPES (ड्यूटी श्रेणियां)',
+          title: 'STATION DUTIES',
           categories: [
             {
-              name: 'Regular Deployments (नियमित तैनाती)',
+              name: 'Regular Deployments',
               items: [
                 { icon: Briefcase, label: 'Daily Beat Duty', path: '/dashboard/duties' },
                 { icon: Car, label: 'Traffic Points', path: '/dashboard/duties' },
                 { icon: Clock, label: 'Night Patrols', path: '/dashboard/duties' },
-                { icon: Users, label: 'Reserve Force', path: '/dashboard/duties' },
+                { icon: Users, label: 'Station Reserve', path: '/dashboard/duties' },
               ]
             },
             {
-              name: 'Special & Event (विशेष और कार्यक्रम)',
+              name: 'Security & Law',
               items: [
                 { icon: Shield, label: 'VIP Routes', badge: 'High', path: '/dashboard/duties' },
                 { icon: Target, label: 'Law & Order', path: '/dashboard/duties' },
-                { icon: Users, label: 'Election Duty', path: '/dashboard/duties' },
-                { icon: Calendar, label: 'Festival Duty', path: '/dashboard/duties' },
               ]
             },
             {
-              name: 'Legal & Emergency (कानूनी/आपातकालीन)',
+              name: 'Event Duties',
+              items: [
+                { icon: Users, label: 'Election Booths', path: '/dashboard/duties' },
+                { icon: Calendar, label: 'Local Festivals', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Legal/Emergency',
               items: [
                 { icon: FileText, label: 'Court Duty/Escort', path: '/dashboard/duties' },
                 { icon: ShieldAlert, label: 'Emergency Response', badge: 'Urgent', path: '/dashboard/duties' },
@@ -96,12 +106,90 @@ export const Dashboard: React.FC = () => {
           ]
         },
         {
-          title: 'STATION RECORDS (थाना अभिलेख)',
+          title: 'APPROVALS & REQUESTS',
           items: [
-            { icon: FileText, label: 'Daily Diary (GD) (रोजनामचा)', path: '/dashboard/reports' },
-            { icon: Bell, label: 'Station Alerts (थाना अलर्ट)', path: '/dashboard/alerts' },
-            { icon: FileText, label: 'Leave Applications (छुट्टी आवेदन)', badge: '2', path: '/dashboard/attendance' },
-            { icon: Briefcase, label: 'Duty Approvals (ड्यूटी अनुमोदन)', badge: '3', path: '/dashboard/duties' },
+            { icon: FileText, label: 'Leave Applications', badge: '2', path: '/dashboard/attendance' },
+            { icon: Briefcase, label: 'Duty Approvals', badge: '3', path: '/dashboard/duties' },
+          ]
+        },
+        {
+          title: 'STATION LOGS',
+          items: [
+            { icon: CheckSquare, label: 'Staff Attendance', path: '/dashboard/attendance' },
+            { icon: FileText, label: 'Daily Diary (GD)', path: '/dashboard/reports' },
+            { icon: Bell, label: 'Station Alerts', path: '/dashboard/alerts' },
+          ]
+        }
+      ];
+    } else if (userData?.role === 'Constable') {
+      return [
+        {
+          title: 'STATION CONTROL (थाना नियंत्रण)',
+          items: [
+            { icon: BarChart2, label: 'Station Dashboard', path: '/dashboard' },
+            { icon: Users, label: 'Station Force', path: '/dashboard/officers' },
+          ]
+        },
+        {
+          title: 'DUTY MANAGEMENT (ड्यूटी)',
+          categories: [
+            {
+              name: 'Regular Deployments',
+              items: [
+                { icon: Briefcase, label: 'Daily Beat Duty', path: '/dashboard/duties' },
+                { icon: Car, label: 'Traffic Points', path: '/dashboard/duties' },
+                { icon: Clock, label: 'Night Patrols', path: '/dashboard/duties' },
+                { icon: Users, label: 'Reserve Force', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Security & Law',
+              items: [
+                { icon: Shield, label: 'VIP Routes', badge: 'High', path: '/dashboard/duties' },
+                { icon: Target, label: 'Law & Order', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Event Duties',
+              items: [
+                { icon: Users, label: 'Election Duty', path: '/dashboard/duties' },
+                { icon: Calendar, label: 'Festival Duty', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Legal/Emergency',
+              items: [
+                { icon: FileText, label: 'Court Duty/Escort', path: '/dashboard/duties' },
+                { icon: ShieldAlert, label: 'Emergency Response', badge: 'Urgent', path: '/dashboard/duties' },
+              ]
+            }
+          ]
+        },
+        {
+          title: 'PERSONNEL (कर्मचारी)',
+          categories: [
+            {
+              name: 'Staff Management',
+              items: [
+                { icon: User, label: 'Add New Officer', path: '/dashboard/officers' },
+                { icon: Car, label: 'Transfer In/Out', path: '/dashboard/officers' },
+                { icon: FileText, label: 'Posting Orders', path: '/dashboard/officers' },
+              ]
+            },
+            {
+              name: 'Records & Training',
+              items: [
+                { icon: CheckSquare, label: 'Training Records', path: '/dashboard/officers' },
+                { icon: BarChart2, label: 'Performance Log', path: '/dashboard/officers' },
+              ]
+            }
+          ]
+        },
+        {
+          title: 'MY RECORDS (मेरा खाता)',
+          items: [
+            { icon: Calendar, label: 'My Duty Schedule', path: '/dashboard/my-duties' },
+            { icon: CheckSquare, label: 'My Attendance', path: '/dashboard/attendance' },
           ]
         }
       ];

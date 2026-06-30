@@ -14,6 +14,7 @@ import { OfficerAvailability } from './OfficerAvailability';
 import { LiveDutyMap } from './LiveDutyMap';
 import { DutyCalendar } from './DutyCalendar';
 import { AttendanceModule } from './AttendanceModule';
+import { GenerateReports } from './GenerateReports';
 
 const ModulePlaceholder = ({ title }: { title: string }) => (
   <div className="flex-1 flex flex-col items-center justify-center p-8 h-full animate-fade-in text-center mt-20">
@@ -197,7 +198,7 @@ export const Dashboard: React.FC = () => {
           <Route path="/map" element={<LiveDutyMap />} />
           <Route path="/calendar" element={<DutyCalendar />} />
           <Route path="/attendance" element={<AttendanceModule />} />
-          <Route path="/reports" element={<ModulePlaceholder title="Generate Reports" />} />
+          <Route path="/reports" element={<GenerateReports />} />
           <Route path="/alerts" element={<ModulePlaceholder title="Alerts & Notifications" />} />
           <Route path="*" element={<ModulePlaceholder title="Requested" />} />
         </Routes>

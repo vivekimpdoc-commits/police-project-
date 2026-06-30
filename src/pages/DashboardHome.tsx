@@ -140,16 +140,20 @@ const MacroDashboard = ({ navigate }: { navigate: any }) => (
 );
 
 // ----------------------------------------------------
-// SHO DASHBOARD (Police Station)
+// STATION DASHBOARD (SHO & Constable)
 // ----------------------------------------------------
-const SHODashboard = ({ navigate, stats }: { navigate: any, stats: any }) => (
+const SHODashboard = ({ navigate, stats, isConstable }: { navigate: any, stats: any, isConstable?: boolean }) => (
   <>
-    {/* SHO Metrics */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8 animate-fade-in">
+    {/* Station Metrics */}
+    <div className={`grid grid-cols-1 sm:grid-cols-2 ${isConstable ? 'lg:grid-cols-2' : 'lg:grid-cols-4'} gap-4 lg:gap-6 mb-8 animate-fade-in`}>
       <WidgetCard title="Station Strength" value={stats.strength} subtext="Officers Available" icon={Users} colorClass="from-blue-500 to-blue-700" />
       <WidgetCard title="Beat Deployment" value={stats.beat} subtext="Active Patrolling" icon={Map} colorClass="from-emerald-500 to-emerald-700" />
-      <WidgetCard title="Pending Approvals" value={stats.pending} subtext="Awaiting your review" icon={Clock} colorClass="from-amber-500 to-amber-700" />
-      <WidgetCard title="Leave Requests" value={stats.leave} subtext="Action required" icon={FileText} colorClass="from-purple-500 to-purple-700" />
+      {!isConstable && (
+        <>
+          <WidgetCard title="Pending Approvals" value={stats.pending} subtext="Awaiting your review" icon={Clock} colorClass="from-amber-500 to-amber-700" />
+          <WidgetCard title="Leave Requests" value={stats.leave} subtext="Action required" icon={FileText} colorClass="from-purple-500 to-purple-700" />
+        </>
+      )}
     </div>
 
     {/* Quick Action Banner for Duty Assignment */}
@@ -159,35 +163,41 @@ const SHODashboard = ({ navigate, stats }: { navigate: any, stats: any }) => (
           <Briefcase className="text-[#FF9933]" size={28} />
         </div>
         <div>
-          <h3 className="text-xl font-bold font-heading text-white">Daily Duty Roster (ड्यूटी लगाएँ)</h3>
-          <p className="text-sm text-gray-400 mt-1">Assign personnel to beats, traffic points, and active deployments.</p>
+          <h3 className="text-xl font-bold font-heading text-white">Daily Duty Roster {isConstable ? '(आज की ड्यूटी)' : '(ड्यूटी लगाएँ)'}</h3>
+          <p className="text-sm text-gray-400 mt-1">
+            {isConstable ? 'View personnel assignments for beats and traffic points.' : 'Assign personnel to beats, traffic points, and active deployments.'}
+          </p>
         </div>
       </div>
       <div className="flex flex-wrap gap-3 w-full md:w-auto">
         <button onClick={() => navigate('/dashboard/duties')} className="flex-1 md:flex-none px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
           <Calendar size={16} /> View Roster
         </button>
-        <button onClick={() => navigate('/dashboard/duties')} className="flex-1 md:flex-none px-6 py-2.5 bg-gradient-to-r from-[#FF9933] to-[#ffaa55] hover:scale-105 text-[#001229] rounded-xl text-sm font-extrabold shadow-[0_0_20px_rgba(255,153,51,0.3)] transition-all flex items-center justify-center gap-2">
-          <Users size={18} /> Assign Duty Force
-        </button>
+        {!isConstable && (
+          <button onClick={() => navigate('/dashboard/duties')} className="flex-1 md:flex-none px-6 py-2.5 bg-gradient-to-r from-[#FF9933] to-[#ffaa55] hover:scale-105 text-[#001229] rounded-xl text-sm font-extrabold shadow-[0_0_20px_rgba(255,153,51,0.3)] transition-all flex items-center justify-center gap-2">
+            <Users size={18} /> Assign Duty Force
+          </button>
+        )}
       </div>
     </div>
 
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 animate-fade-in" style={{animationDelay: '100ms'}}>
-      <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6">
-         <h3 className="font-bold font-heading text-lg text-gray-900 dark:text-white mb-4">Pending Approvals Action Center</h3>
-         <div className="space-y-3">
-           {stats.duties.map((d: any) => (
-             <div key={d.id} className="flex justify-between items-center p-4 bg-gray-50 dark:bg-black/20 rounded-xl border border-gray-100 dark:border-white/5">
-                <div>
-                  <h4 className="font-bold text-sm text-gray-900 dark:text-white">{d.title}</h4>
-                  <p className="text-xs text-gray-500 mt-1">Requested by: {d.req}</p>
-                </div>
-                <button onClick={() => navigate('/dashboard/duties')} className="px-4 py-1.5 bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-white rounded-lg text-xs font-bold transition-colors">Review</button>
-             </div>
-           ))}
-         </div>
-      </div>
+    <div className={`grid grid-cols-1 ${!isConstable ? 'lg:grid-cols-2' : ''} gap-6 mb-8 animate-fade-in`} style={{animationDelay: '100ms'}}>
+      {!isConstable && (
+        <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6">
+           <h3 className="font-bold font-heading text-lg text-gray-900 dark:text-white mb-4">Pending Approvals Action Center</h3>
+           <div className="space-y-3">
+             {stats.duties.map((d: any) => (
+               <div key={d.id} className="flex justify-between items-center p-4 bg-gray-50 dark:bg-black/20 rounded-xl border border-gray-100 dark:border-white/5">
+                  <div>
+                    <h4 className="font-bold text-sm text-gray-900 dark:text-white">{d.title}</h4>
+                    <p className="text-xs text-gray-500 mt-1">Requested by: {d.req}</p>
+                  </div>
+                  <button onClick={() => navigate('/dashboard/duties')} className="px-4 py-1.5 bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-white rounded-lg text-xs font-bold transition-colors">Review</button>
+               </div>
+             ))}
+           </div>
+        </div>
+      )}
       
       <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6">
          <h3 className="font-bold font-heading text-lg text-gray-900 dark:text-white mb-4">Station Resources</h3>
@@ -206,115 +216,55 @@ const SHODashboard = ({ navigate, stats }: { navigate: any, stats: any }) => (
       </div>
     </div>
 
-    {/* Leave Approvals Panel */}
-    <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6 mb-8 animate-fade-in" style={{animationDelay: '150ms'}}>
-       <h3 className="font-bold font-heading text-lg text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-         <FileText className="text-purple-500" /> 
-         Leave Requests (Pending Approval)
-       </h3>
-       <div className="overflow-x-auto">
-         <table className="w-full text-left text-sm">
-           <thead>
-             <tr className="text-xs uppercase text-gray-500 border-b border-gray-100 dark:border-white/10">
-               <th className="pb-3 px-4">Officer</th>
-               <th className="pb-3 px-4">Leave Type</th>
-               <th className="pb-3 px-4">Duration</th>
-               <th className="pb-3 px-4 text-right">Action</th>
-             </tr>
-           </thead>
-           <tbody>
-             {stats.leave === '0' || !stats.leave ? (
-               <tr><td colSpan={4} className="py-6 text-center text-gray-500">No pending leave requests.</td></tr>
-             ) : (
-               <>
-                 <tr className="border-b border-gray-50 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                   <td className="py-3 px-4 font-bold text-gray-900 dark:text-white">Constable Suresh</td>
-                   <td className="py-3 px-4 text-blue-500 font-medium">Casual Leave</td>
-                   <td className="py-3 px-4 text-gray-500">3 Days (03-Jul to 05-Jul)</td>
-                   <td className="py-3 px-4 flex gap-2 justify-end">
-                     <button className="px-3 py-1 bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500 hover:text-white rounded text-xs font-bold transition-colors">Approve</button>
-                     <button className="px-3 py-1 bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500 hover:text-white rounded text-xs font-bold transition-colors">Deny</button>
-                   </td>
-                 </tr>
-                 {parseInt(stats.leave) > 1 && (
+    {!isConstable && (
+      {/* Leave Approvals Panel */}
+      <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6 mb-8 animate-fade-in" style={{animationDelay: '150ms'}}>
+         <h3 className="font-bold font-heading text-lg text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+           <FileText className="text-purple-500" /> 
+           Leave Requests (Pending Approval)
+         </h3>
+         <div className="overflow-x-auto">
+           <table className="w-full text-left text-sm">
+             <thead>
+               <tr className="text-xs uppercase text-gray-500 border-b border-gray-100 dark:border-white/10">
+                 <th className="pb-3 px-4">Officer</th>
+                 <th className="pb-3 px-4">Leave Type</th>
+                 <th className="pb-3 px-4">Duration</th>
+                 <th className="pb-3 px-4 text-right">Action</th>
+               </tr>
+             </thead>
+             <tbody>
+               {stats.leave === '0' || !stats.leave ? (
+                 <tr><td colSpan={4} className="py-6 text-center text-gray-500">No pending leave requests.</td></tr>
+               ) : (
+                 <>
                    <tr className="border-b border-gray-50 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                     <td className="py-3 px-4 font-bold text-gray-900 dark:text-white">Sub Inspector Amit</td>
-                     <td className="py-3 px-4 text-purple-500 font-medium">Earned Leave</td>
-                     <td className="py-3 px-4 text-gray-500">7 Days (05-Jul to 11-Jul)</td>
+                     <td className="py-3 px-4 font-bold text-gray-900 dark:text-white">Constable Suresh</td>
+                     <td className="py-3 px-4 text-blue-500 font-medium">Casual Leave</td>
+                     <td className="py-3 px-4 text-gray-500">3 Days (03-Jul to 05-Jul)</td>
                      <td className="py-3 px-4 flex gap-2 justify-end">
                        <button className="px-3 py-1 bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500 hover:text-white rounded text-xs font-bold transition-colors">Approve</button>
                        <button className="px-3 py-1 bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500 hover:text-white rounded text-xs font-bold transition-colors">Deny</button>
                      </td>
                    </tr>
-                 )}
-               </>
-             )}
-           </tbody>
-         </table>
-       </div>
-    </div>
-  </>
-);
-
-// ----------------------------------------------------
-// CONSTABLE DASHBOARD (Personal View)
-// ----------------------------------------------------
-const ConstableDashboard = () => (
-  <>
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 mb-8 animate-fade-in">
-      <WidgetCard title="Upcoming Duty" value="Night Patrol" subtext="Today, 22:00 - 06:00" icon={Briefcase} colorClass="from-[#FF9933] to-[#ffaa55]" />
-      <WidgetCard title="Leave Balance" value="12 Days" subtext="Casual & Earned Leave" icon={Calendar} colorClass="from-blue-500 to-blue-700" />
-      <WidgetCard title="Warnings/Alerts" value="0" subtext="Clean Record" icon={CheckCircle} colorClass="from-green-500 to-green-700" />
-    </div>
-
-    <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6 animate-fade-in" style={{animationDelay: '100ms'}}>
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="font-bold font-heading text-lg text-gray-900 dark:text-white">My Duty Schedule</h3>
-        <button className="px-4 py-2 bg-[#001229] dark:bg-white text-white dark:text-[#001229] rounded-lg text-sm font-bold shadow-md hover:opacity-90 transition-all flex items-center gap-2">
-          <Calendar size={16} /> Request Leave
-        </button>
+                   {parseInt(stats.leave) > 1 && (
+                     <tr className="border-b border-gray-50 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                       <td className="py-3 px-4 font-bold text-gray-900 dark:text-white">Sub Inspector Amit</td>
+                       <td className="py-3 px-4 text-purple-500 font-medium">Earned Leave</td>
+                       <td className="py-3 px-4 text-gray-500">7 Days (05-Jul to 11-Jul)</td>
+                       <td className="py-3 px-4 flex gap-2 justify-end">
+                         <button className="px-3 py-1 bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500 hover:text-white rounded text-xs font-bold transition-colors">Approve</button>
+                         <button className="px-3 py-1 bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500 hover:text-white rounded text-xs font-bold transition-colors">Deny</button>
+                       </td>
+                     </tr>
+                   )}
+                 </>
+               )}
+             </tbody>
+           </table>
+         </div>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full text-left">
-           <thead>
-             <tr className="text-xs uppercase text-gray-500 border-b border-gray-100 dark:border-white/10">
-               <th className="pb-3 px-2">Date</th>
-               <th className="pb-3 px-2">Duty Name</th>
-               <th className="pb-3 px-2">Location</th>
-               <th className="pb-3 px-2">Timing</th>
-               <th className="pb-3 px-2">Status</th>
-               <th className="pb-3 px-2 text-right">Action</th>
-             </tr>
-           </thead>
-           <tbody className="text-sm">
-             <tr className="border-b border-gray-50 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-               <td className="py-4 px-2 text-gray-900 dark:text-white font-medium">Today</td>
-               <td className="py-4 px-2 font-bold text-gray-900 dark:text-white">Sector 4 Night Patrol</td>
-               <td className="py-4 px-2 text-gray-600 dark:text-gray-400">Gomti Nagar</td>
-               <td className="py-4 px-2 text-gray-900 dark:text-white">22:00 - 06:00</td>
-               <td className="py-4 px-2"><span className="px-2 py-1 bg-green-500/10 text-green-600 dark:text-green-400 rounded text-xs font-bold border border-green-500/20">Upcoming</span></td>
-               <td className="py-4 px-2 flex justify-end">
-                 <button className="px-4 py-1.5 bg-[#FF9933] text-[#001229] hover:bg-[#ffaa55] rounded-lg text-xs font-bold shadow-md transition-colors flex items-center gap-2">
-                   <MapPin size={14} /> Report & Check-in
-                 </button>
-               </td>
-             </tr>
-             <tr className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-               <td className="py-4 px-2 text-gray-900 dark:text-white font-medium">Tomorrow</td>
-               <td className="py-4 px-2 font-bold text-gray-900 dark:text-white">VIP Escort Reserve</td>
-               <td className="py-4 px-2 text-gray-600 dark:text-gray-400">Police Line</td>
-               <td className="py-4 px-2 text-gray-900 dark:text-white">08:00 - 16:00</td>
-               <td className="py-4 px-2"><span className="px-2 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded text-xs font-bold border border-blue-500/20">Assigned</span></td>
-               <td className="py-4 px-2 flex justify-end">
-                 <button className="px-4 py-1.5 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/70 hover:bg-gray-200 dark:hover:bg-white/20 rounded-lg text-xs font-bold transition-colors flex items-center gap-2">
-                   <CheckCircle size={14} /> Acknowledge
-                 </button>
-               </td>
-             </tr>
-           </tbody>
-        </table>
-      </div>
-    </div>
+    )}
   </>
 );
 
@@ -363,7 +313,7 @@ export const DashboardHome: React.FC = () => {
       </div>
 
       {/* Render Dashboard Based on Role */}
-      {role === 'Constable' && <ConstableDashboard />}
+      {role === 'Constable' && <SHODashboard navigate={navigate} stats={thanaStats} isConstable={true} />}
       {role === 'SHO' && <SHODashboard navigate={navigate} stats={thanaStats} />}
       {!['Constable', 'SHO'].includes(role) && <MacroDashboard navigate={navigate} />}
       

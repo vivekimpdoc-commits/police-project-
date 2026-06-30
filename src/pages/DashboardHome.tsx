@@ -320,28 +320,8 @@ export const DashboardHome: React.FC = () => {
           </div>
       </div>
 
-      {/* Constable Tab Navigation */}
-      {role === 'Constable' && (
-        <div className="flex border-b border-gray-100 dark:border-white/10 mb-6 gap-6">
-          <button 
-            onClick={() => setConstableTab('my-duties')}
-            className={`pb-3 text-sm font-bold transition-all border-b-2 ${constableTab === 'my-duties' ? 'border-[#FF9933] text-[#FF9933]' : 'border-transparent text-gray-400 dark:text-white/40 hover:text-gray-700 dark:hover:text-white'}`}
-          >
-            My Duty & Profile (मेरी ड्यूटी)
-          </button>
-          <button 
-            onClick={() => setConstableTab('station')}
-            className={`pb-3 text-sm font-bold transition-all border-b-2 ${constableTab === 'station' ? 'border-[#FF9933] text-[#FF9933]' : 'border-transparent text-gray-400 dark:text-white/40 hover:text-gray-700 dark:hover:text-white'}`}
-          >
-            Station Overview (थाना सिंहावलोकन)
-          </button>
-        </div>
-      )}
-
       {/* Render Dashboard Based on Role */}
-      {role === 'Constable' && (
-        constableTab === 'my-duties' ? <PersonalDuties /> : <SHODashboard navigate={navigate} stats={thanaStats} isConstable={true} />
-      )}
+      {role === 'Constable' && <PersonalDuties />}
       {role === 'SHO' && <SHODashboard navigate={navigate} stats={thanaStats} />}
       {!['Constable', 'SHO'].includes(role) && <MacroDashboard navigate={navigate} />}
       

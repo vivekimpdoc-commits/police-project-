@@ -276,12 +276,12 @@ export const DashboardHome: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
           <h2 className="text-3xl font-bold font-heading text-gray-900 dark:text-white mb-1 flex items-center gap-3">
-            {role === 'Constable' && 'My Profile & Duties'}
+            {role === 'Constable' && 'Station Overview (थाना सिंहावलोकन)'}
             {role === 'SHO' && 'Police Station Control'}
             {!['Constable', 'SHO'].includes(role) && 'Live Control Room'}
           </h2>
           <p className="text-gray-500 dark:text-white/60 text-sm">
-            {role === 'Constable' && `Welcome back, ${userData?.fullName}`}
+            {role === 'Constable' && `Hazratganj Station • Overview`}
             {role === 'SHO' && `${storedThana} Station • Monitoring`}
             {!['Constable', 'SHO'].includes(role) && `HQ Analytics • ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`}
           </p>
@@ -301,29 +301,8 @@ export const DashboardHome: React.FC = () => {
         </div>
       </div>
 
-      {/* Constable Tab Navigation */}
-      {role === 'Constable' && (
-        <div className="flex border-b border-gray-100 dark:border-white/10 mb-6 gap-6">
-          <button
-            onClick={() => setConstableTab('my-duties')}
-            className={`pb-3 text-sm font-bold transition-all border-b-2 ${constableTab === 'my-duties' ? 'border-[#FF9933] text-[#FF9933]' : 'border-transparent text-gray-400 dark:text-white/40 hover:text-gray-700 dark:hover:text-white'}`}
-          >
-            My Duty & Profile (मेरी ड्यूटी)
-          </button>
-          <button
-            onClick={() => setConstableTab('station')}
-            className={`pb-3 text-sm font-bold transition-all border-b-2 ${constableTab === 'station' ? 'border-[#FF9933] text-[#FF9933]' : 'border-transparent text-gray-400 dark:text-white/40 hover:text-gray-700 dark:hover:text-white'}`}
-          >
-            Station Overview (थाना सिंहावलोकन)
-          </button>
-        </div>
-      )}
-
       {/* Render Dashboard Based on Role */}
-      {role === 'Constable' && (
-        constableTab === 'my-duties' ? <PersonalDuties hideHeader /> : <SHODashboard navigate={navigate} stats={thanaStats} isConstable={true} />
-      )}
-      {role === 'SHO' && <SHODashboard navigate={navigate} stats={thanaStats} />}
+      {(role === 'Constable' || role === 'SHO') && <SHODashboard navigate={navigate} stats={thanaStats} isConstable={role === 'Constable'} />}
       {!['Constable', 'SHO'].includes(role) && <MacroDashboard navigate={navigate} />}
 
       <div className="h-8"></div>

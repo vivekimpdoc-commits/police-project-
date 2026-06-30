@@ -590,7 +590,7 @@ export const DutyManagement: React.FC = () => {
                               className={`flex-1 py-2 border rounded-xl text-xs font-bold transition-all ${
                                 planShift === shift 
                                   ? 'bg-[#FF9933] border-[#FF9933] text-[#001229] shadow-md shadow-[#FF9933]/10' 
-                                  : 'border-gray-250 dark:border-white/10 text-gray-650 dark:text-white/60 hover:bg-white/5'
+                                  : 'border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/60 hover:bg-gray-50 dark:hover:bg-white/5'
                               }`}
                             >
                               {shift}

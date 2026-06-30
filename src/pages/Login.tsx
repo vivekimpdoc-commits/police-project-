@@ -473,24 +473,28 @@ export const Login: React.FC = () => {
                  Demo Credentials
                </h4>
                <div className="grid grid-cols-2 gap-2">
-                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setEmail('admin@uppolice.gov.in'); setPassword('admin123');}}>
+                  <div className="bg-[#FF9933]/10 border border-[#FF9933]/40 p-2 rounded cursor-pointer hover:bg-[#FF9933]/20 transition-colors col-span-2" onClick={() => {setLoginMethod('pno'); setEmail('UPP-4421');}}>
+                    <p className="font-bold text-[#FF9933] flex items-center gap-1">👮 Quick PNO Demo (Const. Ramesh)</p>
+                    <p className="text-[10px] text-white/90">Autofills PNO: UPP-4421 (No password/OTP needed)</p>
+                  </div>
+                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setLoginMethod('password'); setEmail('admin@uppolice.gov.in'); setPassword('admin123');}}>
                    <p className="font-bold text-white">HQ Admin</p>
                    <p className="text-[10px]">admin@uppolice.gov.in</p>
                  </div>
-                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setEmail('sho@uppolice.gov.in'); setPassword('sho123');}}>
+                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setLoginMethod('password'); setEmail('sho@uppolice.gov.in'); setPassword('sho123');}}>
                    <p className="font-bold text-white">Station SHO</p>
                    <p className="text-[10px]">sho@uppolice.gov.in</p>
                  </div>
-                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setEmail('district@uppolice.gov.in'); setPassword('sp123');}}>
+                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setLoginMethod('password'); setEmail('district@uppolice.gov.in'); setPassword('sp123');}}>
                    <p className="font-bold text-white">District SP</p>
                    <p className="text-[10px]">district@uppolice.gov.in</p>
                  </div>
-                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setEmail('constable@uppolice.gov.in'); setPassword('pass123');}}>
+                 <div className="bg-white/5 p-2 rounded cursor-pointer hover:bg-white/10 transition-colors" onClick={() => {setLoginMethod('password'); setEmail('constable@uppolice.gov.in'); setPassword('pass123');}}>
                    <p className="font-bold text-white">Constable</p>
                    <p className="text-[10px]">constable@uppolice.gov.in</p>
                  </div>
                </div>
-               <p className="text-[10px] mt-2 text-white/50 text-center italic">Click any box to auto-fill credentials</p>
+               <p className="text-[10px] mt-2 text-white/50 text-center italic">Click any box to auto-fill credentials & set login mode</p>
             </div>
           </>
         )}

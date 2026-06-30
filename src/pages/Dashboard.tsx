@@ -65,7 +65,6 @@ export const Dashboard: React.FC = () => {
         {
           title: 'STATION CONTROL (थाना नियंत्रण)',
           items: [
-            { icon: BarChart2, label: 'Station Dashboard (थाना डैशबोर्ड)', path: '/dashboard' },
             { icon: Briefcase, label: 'Duty Allocation (ड्यूटी आवंटन)', path: '/dashboard/duties' },
             { icon: Map, label: 'Live Patrol Map (लाइव गश्ती नक्शा)', path: '/dashboard/map' },
             { icon: Users, label: 'Staff Availability (बल उपलब्धता)', path: '/dashboard/officers' },

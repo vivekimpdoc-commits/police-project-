@@ -42,7 +42,7 @@ export const Dashboard: React.FC = () => {
     'STATION DUTIES': false,
     'STATION LOGS': true,
     'STATION CONTROL (थाना नियंत्रण)': true,
-    'DUTY MANAGEMENT (ड्यूटी)': true,
+    'DUTY MANAGEMENT (ड्यूटी)': false,
     'PERSONNEL (कर्मचारी)': false,
     'MY RECORDS (मेरा खाता)': true
   });

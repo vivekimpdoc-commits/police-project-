@@ -29,7 +29,7 @@ export const PersonalDuties: React.FC = () => {
               <Briefcase size={20} />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-[#001229] dark:text-white relative">Night Patrol</h3>
+          <h3 className="text-2xl font-bold text-[#001229] dark:text-white relative">Sector 4 Night Patrol</h3>
           <p className="text-xs text-gray-500 mt-4 relative">Today, 22:00 - 06:00</p>
         </div>
 
@@ -58,65 +58,114 @@ export const PersonalDuties: React.FC = () => {
         </div>
       </div>
 
-      {/* Table Section */}
-      <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm overflow-hidden pb-4">
-        <div className="p-6 flex justify-between items-center border-b border-gray-100 dark:border-white/5">
-          <h3 className="text-lg font-bold text-[#001229] dark:text-white">My Duty Schedule</h3>
-          <button className="px-5 py-2.5 bg-[#001229] dark:bg-white text-white dark:text-[#001229] rounded-xl text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
-            <Calendar size={16} /> Request Leave
-          </button>
+      {/* Main Grid: Schedule & Duty Map Locator */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Left Column: Schedule Table */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm overflow-hidden pb-4">
+            <div className="p-6 flex justify-between items-center border-b border-gray-100 dark:border-white/5">
+              <h3 className="text-lg font-bold text-[#001229] dark:text-white">My Duty Schedule</h3>
+              <button className="px-5 py-2.5 bg-[#001229] dark:bg-white text-white dark:text-[#001229] rounded-xl text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
+                <Calendar size={16} /> Request Leave
+              </button>
+            </div>
+
+            <div className="overflow-x-auto mt-2">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="text-[10px] uppercase text-gray-500 dark:text-white/40 border-b border-gray-100 dark:border-white/5">
+                    <th className="p-4 pl-6 font-bold tracking-wider">Date</th>
+                    <th className="p-4 font-bold tracking-wider">Duty Name</th>
+                    <th className="p-4 font-bold tracking-wider">Location</th>
+                    <th className="p-4 font-bold tracking-wider">Timing</th>
+                    <th className="p-4 font-bold tracking-wider">Status</th>
+                    <th className="p-4 pr-6 font-bold tracking-wider text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50 dark:divide-white/5">
+                  
+                  <tr className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                    <td className="p-4 pl-6 text-gray-600 dark:text-white/70">Today</td>
+                    <td className="p-4 font-bold text-[#001229] dark:text-white">Sector 4 Night Patrol</td>
+                    <td className="p-4 text-gray-600 dark:text-white/70">Gomti Nagar</td>
+                    <td className="p-4 text-gray-600 dark:text-white/70">22:00 - 06:00</td>
+                    <td className="p-4">
+                      <span className="px-3 py-1 bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400 border border-green-200 dark:border-green-500/20 rounded text-[11px] font-bold">
+                        Upcoming
+                      </span>
+                    </td>
+                    <td className="p-4 pr-6 text-right">
+                      <button className="px-4 py-2 bg-[#FF9933] text-[#001229] hover:bg-[#ffaa55] rounded text-xs font-bold transition-colors inline-flex items-center gap-1.5 shadow-sm">
+                        <ShieldAlert size={14} /> Report & Check-in
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                    <td className="p-4 pl-6 text-gray-600 dark:text-white/70">Tomorrow</td>
+                    <td className="p-4 font-bold text-[#001229] dark:text-white">VIP Escort Reserve</td>
+                    <td className="p-4 text-gray-600 dark:text-white/70">Police Line</td>
+                    <td className="p-4 text-gray-600 dark:text-white/70">08:00 - 16:00</td>
+                    <td className="p-4">
+                      <span className="px-3 py-1 bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 border border-blue-100 dark:border-blue-500/20 rounded text-[11px] font-bold">
+                        Assigned
+                      </span>
+                    </td>
+                    <td className="p-4 pr-6 text-right">
+                      <button className="px-4 py-2 bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-white/60 hover:bg-gray-200 dark:hover:bg-white/20 rounded text-xs font-bold transition-colors inline-flex items-center gap-1.5 border border-gray-200 dark:border-white/10">
+                        <Check size={14} /> Acknowledge
+                      </button>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
-        <div className="overflow-x-auto mt-2">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="text-[10px] uppercase text-gray-500 dark:text-white/40 border-b border-gray-100 dark:border-white/5">
-                <th className="p-4 pl-6 font-bold tracking-wider">Date</th>
-                <th className="p-4 font-bold tracking-wider">Duty Name</th>
-                <th className="p-4 font-bold tracking-wider">Location</th>
-                <th className="p-4 font-bold tracking-wider">Timing</th>
-                <th className="p-4 font-bold tracking-wider">Status</th>
-                <th className="p-4 pr-6 font-bold tracking-wider text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50 dark:divide-white/5">
+        {/* Right Column: Live Duty Location Map Preview */}
+        <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6 flex flex-col relative overflow-hidden group">
+          <div className="absolute inset-0 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=26.8467,80.9462&zoom=14&size=400x400&maptype=roadmap&sensor=false&markers=color:red%7C26.8467,80.9462')] bg-cover opacity-15 mix-blend-luminosity"></div>
+          <div className="absolute inset-0 bg-blue-900/10 dark:bg-black/40"></div>
+          
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div>
+              <div className="flex justify-between items-start mb-4">
+                <span className="px-3 py-1 bg-[#FF9933]/15 text-[#FF9933] border border-[#FF9933]/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                  Active Duty Locator
+                </span>
+                <span className="flex items-center gap-1.5 text-xs text-green-500 font-bold bg-green-500/10 border border-green-500/20 px-2.5 py-1 rounded-full">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping"></span> GPS ACTIVE
+                </span>
+              </div>
               
-              <tr className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                <td className="p-4 pl-6 text-gray-600 dark:text-white/70">Today</td>
-                <td className="p-4 font-bold text-[#001229] dark:text-white">Sector 4 Night Patrol</td>
-                <td className="p-4 text-gray-600 dark:text-white/70">Gomti Nagar</td>
-                <td className="p-4 text-gray-600 dark:text-white/70">22:00 - 06:00</td>
-                <td className="p-4">
-                  <span className="px-3 py-1 bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400 border border-green-200 dark:border-green-500/20 rounded text-[11px] font-bold">
-                    Upcoming
-                  </span>
-                </td>
-                <td className="p-4 pr-6 text-right">
-                  <button className="px-4 py-2 bg-[#FF9933] text-[#001229] hover:bg-[#ffaa55] rounded text-xs font-bold transition-colors inline-flex items-center gap-1.5 shadow-sm">
-                    <ShieldAlert size={14} /> Report & Check-in
-                  </button>
-                </td>
-              </tr>
+              <h4 className="text-xl font-bold font-heading text-gray-800 dark:text-white mb-1">Gomti Nagar (Sector 4)</h4>
+              <p className="text-xs text-gray-400 mb-6 flex items-center gap-1">
+                📍 Coordinates: 26.8467° N, 80.9462° E
+              </p>
 
-              <tr className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                <td className="p-4 pl-6 text-gray-600 dark:text-white/70">Tomorrow</td>
-                <td className="p-4 font-bold text-[#001229] dark:text-white">VIP Escort Reserve</td>
-                <td className="p-4 text-gray-600 dark:text-white/70">Police Line</td>
-                <td className="p-4 text-gray-600 dark:text-white/70">08:00 - 16:00</td>
-                <td className="p-4">
-                  <span className="px-3 py-1 bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 border border-blue-100 dark:border-blue-500/20 rounded text-[11px] font-bold">
-                    Assigned
-                  </span>
-                </td>
-                <td className="p-4 pr-6 text-right">
-                  <button className="px-4 py-2 bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-white/60 hover:bg-gray-200 dark:hover:bg-white/20 rounded text-xs font-bold transition-colors inline-flex items-center gap-1.5 border border-gray-200 dark:border-white/10">
-                    <Check size={14} /> Acknowledge
-                  </button>
-                </td>
-              </tr>
+              <div className="space-y-4 mb-6">
+                <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/10">
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">Assigned PCR Vehicle</p>
+                  <p className="text-sm font-bold text-gray-800 dark:text-white">PCR Van UP-32-G-1102</p>
+                </div>
+                <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/10">
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">Assigned Weapon / Gear</p>
+                  <p className="text-sm font-bold text-gray-800 dark:text-white">INSAS Rifle (#402) + Riot Shield</p>
+                </div>
+                <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/10">
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">Reporting Officer (In-charge)</p>
+                  <p className="text-sm font-bold text-gray-800 dark:text-white">Sub Inspector Kavita Rani</p>
+                </div>
+              </div>
+            </div>
 
-            </tbody>
-          </table>
+            <button className="w-full py-3 bg-gradient-to-r from-[#FF9933] to-[#FF6600] text-white hover:opacity-95 rounded-xl text-sm font-bold shadow-lg shadow-[#FF9933]/20 flex items-center justify-center gap-2 transition-all">
+              🧭 Open In Navigation Map
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { useAuth } from '../contexts/AuthContext';
 
 const DEMO_ATTENDANCE = [
+  // Hazratganj
   { id: 'UPP-1042', name: 'Inspector Rajeev Kumar', station: 'Hazratganj', shift: '08:00 - 16:00', checkIn: '07:45 AM', status: 'On Time', location: 'Station HQ', method: 'Biometric' },
   { id: 'UPP-2055', name: 'Sub Inspector Amit Singh', station: 'Hazratganj', shift: '08:00 - 16:00', checkIn: '08:15 AM', status: 'Late', location: 'Sector 4 Beat', method: 'GPS App' },
   { id: 'UPP-3190', name: 'Head Constable Sunil', station: 'Hazratganj', shift: 'Night Patrol', checkIn: '--:--', status: 'Absent', location: 'Unknown', method: '-' },
@@ -16,6 +17,20 @@ const DEMO_ATTENDANCE = [
   { id: 'UPP-5102', name: 'Traffic SI Anil Yadav', station: 'Hazratganj', shift: '10:00 - 18:00', checkIn: '09:40 AM', status: 'On Time', location: 'Atal Chowk', method: 'GPS App' },
   { id: 'UPP-6701', name: 'Constable Priya', station: 'Hazratganj', shift: '08:00 - 16:00', checkIn: '--:--', status: 'On Leave', location: '-', method: '-' },
   { id: 'UPP-7023', name: 'Inspector Sanjay', station: 'Hazratganj', shift: '08:00 - 16:00', checkIn: '08:30 AM', status: 'Late', location: 'Station HQ', method: 'Biometric' },
+
+  // Gomti Nagar
+  { id: 'UPP-2244', name: 'Inspector Ravi Verma', station: 'Gomti Nagar', shift: '08:00 - 16:00', checkIn: '07:50 AM', status: 'On Time', location: 'Station HQ', method: 'Biometric' },
+  { id: 'UPP-3355', name: 'SI Meera Singh', station: 'Gomti Nagar', shift: '10:00 - 18:00', checkIn: '09:55 AM', status: 'On Time', location: 'Marine Drive Beat', method: 'GPS App' },
+  { id: 'UPP-4466', name: 'Constable Ankur', station: 'Gomti Nagar', shift: '08:00 - 16:00', checkIn: '08:20 AM', status: 'Late', location: 'Station HQ', method: 'Biometric' },
+  { id: 'UPP-5577', name: 'Constable Deepak', station: 'Gomti Nagar', shift: 'Night Patrol', checkIn: '--:--', status: 'On Leave', location: '-', method: '-' },
+
+  // Chowk
+  { id: 'UPP-8899', name: 'Inspector Tariq', station: 'Chowk', shift: '08:00 - 16:00', checkIn: '07:58 AM', status: 'On Time', location: 'Station HQ', method: 'Biometric' },
+  { id: 'UPP-9900', name: 'Constable Sameer', station: 'Chowk', shift: '08:00 - 16:00', checkIn: '08:10 AM', status: 'Late', location: 'Nakhhas Beat', method: 'GPS App' },
+  
+  // Alambagh
+  { id: 'UPP-1122', name: 'Inspector Vikas', station: 'Alambagh', shift: '08:00 - 16:00', checkIn: '07:45 AM', status: 'On Time', location: 'Station HQ', method: 'Biometric' },
+  { id: 'UPP-2233', name: 'Constable Mohit', station: 'Alambagh', shift: 'Night Patrol', checkIn: '--:--', status: 'Absent', location: 'Unknown', method: '-' },
 ];
 
 const checkinTrendData = [
@@ -29,7 +44,8 @@ const checkinTrendData = [
 
 export const AttendanceModule: React.FC = () => {
   const storedThana = localStorage.getItem('demoThana') || 'Hazratganj';
-  const dynamicAttendance = DEMO_ATTENDANCE.map(a => ({...a, station: storedThana}));
+  // TRUE FILTERING: Only show attendance for officers of the logged-in Thana
+  const dynamicAttendance = DEMO_ATTENDANCE.filter(a => a.station === storedThana);
 
   const { userData } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');

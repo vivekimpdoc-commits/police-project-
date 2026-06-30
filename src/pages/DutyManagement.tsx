@@ -8,29 +8,39 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 
 const INITIAL_DUTIES = [
+  // Hazratganj
   { id: 'DTY-9021', category: 'VIP Duty', name: 'CM Airport Escort', date: '2026-06-30', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 24, status: 'Active (Approved)', approvalStage: 4, priority: 'Critical' },
   { id: 'DTY-9022', category: 'Law & Order', name: 'Hazratganj Protest', date: '2026-06-29', shift: 'Evening', district: 'Lucknow', station: 'Hazratganj', staff: 12, status: 'Pending SHO', approvalStage: 1, priority: 'High' },
-  { id: 'DTY-9023', category: 'Traffic Duty', name: 'Gomti Nagar Diversion', date: '2026-07-01', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 6, status: 'Pending District', approvalStage: 2, priority: 'Medium' },
+  { id: 'DTY-9023', category: 'Traffic Duty', name: 'Hazratganj Chauraha Check', date: '2026-07-01', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 6, status: 'Pending District', approvalStage: 2, priority: 'Medium' },
   { id: 'DTY-9024', category: 'Night Patrol', name: 'Sector 4 Area Patrol', date: '2026-06-29', shift: 'Night', district: 'Lucknow', station: 'Hazratganj', staff: 6, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'Medium' },
-  { id: 'DTY-9025', category: 'Election Duty', name: 'Polling Booth Sec 12', date: '2026-07-05', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 18, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
   { id: 'DTY-9026', category: 'Court Duty', name: 'High Court Security', date: '2026-06-30', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 4, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'Medium' },
-  { id: 'DTY-9027', category: 'Festival Duty', name: 'Eid Procession Route', date: '2026-07-10', shift: 'Evening', district: 'Lucknow', station: 'Hazratganj', staff: 45, status: 'Pending District', approvalStage: 2, priority: 'Critical' },
-  { id: 'DTY-9028', category: 'Emergency', name: 'Accident Response Highway', date: '2026-06-29', shift: 'Night', district: 'Lucknow', station: 'Hazratganj', staff: 8, status: 'Active (Approved)', approvalStage: 4, priority: 'Critical' },
   { id: 'DTY-9029', category: 'VIP Duty', name: 'Governor House Guard', date: '2026-07-01', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 15, status: 'Pending SHO', approvalStage: 1, priority: 'High' },
-  { id: 'DTY-9030', category: 'Law & Order', name: 'University Strike Control', date: '2026-07-02', shift: 'Evening', district: 'Lucknow', station: 'Hazratganj', staff: 20, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
-  { id: 'DTY-9031', category: 'Night Patrol', name: 'Chowk Area Patrol', date: '2026-06-30', shift: 'Night', district: 'Lucknow', station: 'Hazratganj', staff: 5, status: 'Pending SHO', approvalStage: 1, priority: 'Low' },
-  { id: 'DTY-9032', category: 'Reserve Force', name: 'HQ QRT Standby', date: '2026-06-29', shift: 'Custom', district: 'Lucknow', station: 'Hazratganj', staff: 50, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'High' },
+  
+  // Gomti Nagar
+  { id: 'DTY-8011', category: 'Traffic Duty', name: 'Marine Drive Diversion', date: '2026-07-01', shift: 'Evening', district: 'Lucknow', station: 'Gomti Nagar', staff: 8, status: 'Active (Approved)', approvalStage: 4, priority: 'Medium' },
+  { id: 'DTY-8012', category: 'VIP Duty', name: 'Minister Residence Security', date: '2026-06-29', shift: 'Morning', district: 'Lucknow', station: 'Gomti Nagar', staff: 12, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
+  { id: 'DTY-8013', category: 'Night Patrol', name: 'Vikas Khand Patrol', date: '2026-06-30', shift: 'Night', district: 'Lucknow', station: 'Gomti Nagar', staff: 4, status: 'Pending SHO', approvalStage: 1, priority: 'Low' },
+  
+  // Chowk
+  { id: 'DTY-7011', category: 'Law & Order', name: 'Old City Strike Control', date: '2026-07-02', shift: 'Evening', district: 'Lucknow', station: 'Chowk', staff: 20, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
+  { id: 'DTY-7012', category: 'Festival Duty', name: 'Procession Route Security', date: '2026-07-10', shift: 'Evening', district: 'Lucknow', station: 'Chowk', staff: 45, status: 'Pending District', approvalStage: 2, priority: 'Critical' },
+  
+  // Alambagh
+  { id: 'DTY-6011', category: 'Emergency', name: 'Highway Accident Response', date: '2026-06-29', shift: 'Night', district: 'Lucknow', station: 'Alambagh', staff: 8, status: 'Active (Approved)', approvalStage: 4, priority: 'Critical' },
+  { id: 'DTY-6012', category: 'Reserve Force', name: 'Bus Stand QRT', date: '2026-06-30', shift: 'Custom', district: 'Lucknow', station: 'Alambagh', staff: 25, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'High' },
 ];
 
 export const DutyManagement: React.FC = () => {
   const { userData } = useAuth();
   const userRole = userData?.role || 'Constable';
 
+  const storedThana = localStorage.getItem('demoThana') || 'Hazratganj';
+  const storedDistrict = localStorage.getItem('demoDistrict') || 'Lucknow';
+
   const [activeTab, setActiveTab] = useState('list'); // 'list' | 'create'
   const [duties, setDuties] = useState(() => {
-    const storedThana = localStorage.getItem('demoThana') || 'Hazratganj';
-    const storedDistrict = localStorage.getItem('demoDistrict') || 'Lucknow';
-    return INITIAL_DUTIES.map(d => ({...d, station: storedThana, district: storedDistrict}));
+    // TRUE FILTERING: Only show duties assigned to the logged-in Thana
+    return INITIAL_DUTIES.filter(d => d.station === storedThana).map(d => ({...d, district: storedDistrict}));
   });
   
   // Wizard State
@@ -317,6 +327,43 @@ export const DutyManagement: React.FC = () => {
                                     </button>
                                 </div>
                               )}
+                              
+                              {/* Force Assignment Section for SHO */}
+                              {userRole === 'SHO' && duty.status.includes('Active') && (
+                                <div className="mt-8 border-t border-gray-200 dark:border-white/10 pt-6 text-left animate-fade-in" style={{animationDelay: '150ms'}}>
+                                  <h5 className="font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4">
+                                    <Users size={18} className="text-[#FF9933]" />
+                                    Assign Personnel to this Deployment
+                                  </h5>
+                                  <div className="bg-white dark:bg-[#001229] rounded-xl p-5 border border-gray-200 dark:border-white/10">
+                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                                      <p className="text-sm text-gray-500 dark:text-white/60">
+                                        You need to deploy <strong className="text-gray-900 dark:text-white">{duty.staff}</strong> officers. Select available officers from your Thana:
+                                      </p>
+                                      <span className="px-3 py-1 bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 rounded-md text-xs font-bold">
+                                        1/{duty.staff} Assigned
+                                      </span>
+                                    </div>
+                                    <div className="flex gap-2">
+                                      <select className="flex-1 px-4 py-2.5 bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-lg text-sm outline-none text-gray-900 dark:text-white">
+                                        <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">Select Officer...</option>
+                                        <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">Constable Rahul Singh</option>
+                                        <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">Constable Amit Kumar</option>
+                                        <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">Sub Inspector Vikram</option>
+                                      </select>
+                                      <button className="px-6 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-[#001229] rounded-lg text-sm font-bold shadow-md hover:opacity-90 transition-all flex items-center gap-2 shrink-0">
+                                        <Plus size={16} /> Add to Duty
+                                      </button>
+                                    </div>
+                                    <div className="mt-5 flex gap-2 flex-wrap">
+                                      {/* Assigned officers chips */}
+                                      <span className="px-3 py-1.5 bg-[#FF9933]/10 border border-[#FF9933]/20 text-[#FF9933] rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-[#FF9933]/20 transition-colors cursor-pointer group">
+                                        Constable Ramesh <X size={12} className="opacity-50 group-hover:opacity-100 transition-opacity" />
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
                            </div>
                          </td>
                        </tr>
@@ -405,15 +452,15 @@ export const DutyManagement: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                       <div>
                         <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-2 block">Duty Name / Code Name</label>
-                        <input type="text" placeholder="e.g., Operation Sunrise" className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-[#FF9933]/50 outline-none dark:text-white transition-all" />
+                        <input type="text" placeholder="e.g., Operation Sunrise" className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-[#FF9933]/50 outline-none text-gray-900 dark:text-white transition-all" />
                       </div>
                       <div>
                         <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-2 block">Priority Level</label>
-                        <select className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-[#FF9933]/50 outline-none dark:text-white transition-all appearance-none">
-                          <option>🟢 Low Priority</option>
-                          <option>🟡 Medium Priority</option>
-                          <option>🟠 High Priority</option>
-                          <option>🔴 CRITICAL EMERGENCY</option>
+                        <select className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-[#FF9933]/50 outline-none text-gray-900 dark:text-white transition-all appearance-none">
+                          <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">🟢 Low Priority</option>
+                          <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">🟡 Medium Priority</option>
+                          <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">🟠 High Priority</option>
+                          <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">🔴 CRITICAL EMERGENCY</option>
                         </select>
                       </div>
                     </div>
@@ -430,21 +477,17 @@ export const DutyManagement: React.FC = () => {
                          <div>
                            <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-2 block">District & Police Station</label>
                            <div className="flex gap-4">
-                             <select className="flex-1 px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none dark:text-white">
-                               <option>Lucknow Central</option>
-                               <option>Lucknow North</option>
-                               <option>Lucknow East</option>
-                             </select>
-                             <input type="text" placeholder="Thana Name" className="flex-1 px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none dark:text-white" />
+                             <input disabled value={storedDistrict} type="text" className="flex-1 px-4 py-3 bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-500 dark:text-white/50 cursor-not-allowed" />
+                             <input disabled value={storedThana} type="text" className="flex-1 px-4 py-3 bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-500 dark:text-white/50 cursor-not-allowed" />
                            </div>
                          </div>
                          
                          <div>
                            <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-2 block">Schedule Dates</label>
                            <div className="flex items-center gap-4">
-                             <input type="date" className="flex-1 px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none dark:text-white" />
+                             <input type="date" className="flex-1 px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-900 dark:text-white" />
                              <span className="text-gray-400">to</span>
-                             <input type="date" className="flex-1 px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none dark:text-white" />
+                             <input type="date" className="flex-1 px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-900 dark:text-white" />
                            </div>
                          </div>
 
@@ -452,7 +495,7 @@ export const DutyManagement: React.FC = () => {
                            <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-2 block">Shift Timing</label>
                            <div className="flex gap-2">
                              {['Morning', 'Evening', 'Night Patrol', 'Custom'].map(shift => (
-                               <button key={shift} className="px-4 py-2 border border-gray-200 dark:border-white/10 rounded-lg text-sm font-semibold dark:text-white/70 hover:bg-[#FF9933]/10 hover:text-[#FF9933] hover:border-[#FF9933] transition-colors">{shift}</button>
+                               <button key={shift} className="px-4 py-2 border border-gray-200 dark:border-white/10 rounded-lg text-sm font-semibold text-gray-700 dark:text-white/70 hover:bg-[#FF9933]/10 hover:text-[#FF9933] hover:border-[#FF9933] transition-colors">{shift}</button>
                              ))}
                            </div>
                          </div>
@@ -577,7 +620,7 @@ export const DutyManagement: React.FC = () => {
                         </div>
                         <div className="flex justify-between items-center border-b border-gray-200 dark:border-white/5 pb-3">
                           <span className="text-sm text-gray-500 font-semibold">Location</span>
-                          <span className="font-bold dark:text-white text-right">Lucknow Central<br/><span className="text-xs font-normal text-gray-400">Map Pin Verified</span></span>
+                          <span className="font-bold dark:text-white text-right">{storedDistrict} - {storedThana}<br/><span className="text-xs font-normal text-gray-400">Map Pin Verified</span></span>
                         </div>
                         <div className="flex justify-between items-center pb-1">
                           <span className="text-sm text-gray-500 font-semibold">Next Step in Hierarchy</span>
@@ -605,7 +648,7 @@ export const DutyManagement: React.FC = () => {
                   <button onClick={() => { 
                       setActiveTab('list'); 
                       setWizardStep(1); 
-                      setDuties([{ id: 'DTY-9099', category: dutyCategory, name: 'New Request', date: '2026-07-02', shift: 'Morning', district: 'Lucknow', station: 'Central', staff: 5, status: 'Pending SHO', approvalStage: 1, priority: 'High' }, ...duties]);
+                      setDuties([{ id: 'DTY-9099', category: dutyCategory, name: 'New Request', date: '2026-07-02', shift: 'Morning', district: storedDistrict, station: storedThana, staff: 5, status: 'Pending SHO', approvalStage: 1, priority: 'High' }, ...duties]);
                   }} className="px-10 py-3 bg-gradient-to-r from-[#FF9933] to-[#ffaa55] text-[#001229] rounded-xl text-sm font-extrabold shadow-[0_0_20px_rgba(255,153,51,0.4)] hover:scale-105 transition-all flex items-center gap-2 animate-pulse">
                     <CheckCircle size={18} /> Send to SHO for Approval
                   </button>

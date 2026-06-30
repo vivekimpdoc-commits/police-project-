@@ -36,7 +36,11 @@ export const Dashboard: React.FC = () => {
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     'MAIN': true,
     'DUTY MANAGEMENT': false,
-    'REPORTS & LOGS': true
+    'REPORTS & LOGS': true,
+    'STATION COMMAND': true,
+    'STATION DUTIES': false,
+    'STATION LOGS': true,
+    'MY DASHBOARD': true
   });
 
   const toggleGroup = (title: string) => {
@@ -51,60 +55,139 @@ export const Dashboard: React.FC = () => {
     navigate('/login');
   };
 
-  const menuGroups = [
-    {
-      title: 'MAIN',
-      items: [
-        { icon: BarChart2, label: 'Control Room Overview', path: '/dashboard' },
-        { icon: Map, label: 'Live Duty Map', path: '/dashboard/map' },
-        { icon: Users, label: 'Officer Availability', path: '/dashboard/officers' },
-        { icon: Calendar, label: 'Duty Calendar', path: '/dashboard/calendar' },
-      ]
-    },
-    {
-      title: 'DUTY MANAGEMENT',
-      categories: [
+  const getMenuGroups = () => {
+    if (userData?.role === 'SHO') {
+      return [
         {
-          name: 'Regular Duties',
+          title: 'STATION COMMAND',
           items: [
-            { icon: Briefcase, label: 'Daily Duty', path: '/dashboard/duties' },
-            { icon: Car, label: 'Traffic Duty', path: '/dashboard/duties' },
-            { icon: Clock, label: 'Night Patrol', path: '/dashboard/duties' },
-            { icon: Users, label: 'Reserve Force', path: '/dashboard/duties' },
+            { icon: BarChart2, label: 'Station Dashboard', path: '/dashboard' },
+            { icon: Map, label: 'Jurisdiction Map', path: '/dashboard/map' },
+            { icon: Users, label: 'Station Force (Officers)', path: '/dashboard/officers' },
+            { icon: Calendar, label: 'Station Roster', path: '/dashboard/calendar' },
           ]
         },
         {
-          name: 'Security & Law',
-          items: [
-            { icon: Shield, label: 'VIP Duty', badge: 'High', path: '/dashboard/duties' },
-            { icon: Target, label: 'Law & Order', path: '/dashboard/duties' },
+          title: 'STATION DUTIES',
+          categories: [
+            {
+              name: 'Regular Deployments',
+              items: [
+                { icon: Briefcase, label: 'Daily Beat Duty', path: '/dashboard/duties' },
+                { icon: Car, label: 'Traffic Points', path: '/dashboard/duties' },
+                { icon: Clock, label: 'Night Patrols', path: '/dashboard/duties' },
+                { icon: Users, label: 'Station Reserve', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Security & Law',
+              items: [
+                { icon: Shield, label: 'VIP Routes', badge: 'High', path: '/dashboard/duties' },
+                { icon: Target, label: 'Law & Order', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Event Duties',
+              items: [
+                { icon: Users, label: 'Election Booths', path: '/dashboard/duties' },
+                { icon: Calendar, label: 'Local Festivals', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Legal/Emergency',
+              items: [
+                { icon: FileText, label: 'Court Duty/Escort', path: '/dashboard/duties' },
+                { icon: ShieldAlert, label: 'Emergency Response', badge: 'Urgent', path: '/dashboard/duties' },
+              ]
+            }
           ]
         },
         {
-          name: 'Event Duties',
+          title: 'APPROVALS & REQUESTS',
           items: [
-            { icon: Users, label: 'Election Duty', path: '/dashboard/duties' },
-            { icon: Calendar, label: 'Festival Duty', path: '/dashboard/duties' },
+            { icon: FileText, label: 'Leave Applications', badge: '2', path: '/dashboard/attendance' },
+            { icon: Briefcase, label: 'Duty Approvals', badge: '3', path: '/dashboard/duties' },
           ]
         },
         {
-          name: 'Legal/Emergency Services',
+          title: 'STATION LOGS',
           items: [
-            { icon: FileText, label: 'Court Duty', path: '/dashboard/duties' },
-            { icon: ShieldAlert, label: 'Emergency Response', badge: 'Urgent', path: '/dashboard/duties' },
+            { icon: CheckSquare, label: 'Staff Attendance', path: '/dashboard/attendance' },
+            { icon: FileText, label: 'Daily Diary (GD)', path: '/dashboard/reports' },
+            { icon: Bell, label: 'Station Alerts', path: '/dashboard/alerts' },
           ]
         }
-      ]
-    },
-    {
-      title: 'REPORTS & LOGS',
-      items: [
-        { icon: CheckSquare, label: 'Attendance & Check-in', path: '/dashboard/attendance' },
-        { icon: FileText, label: 'Generate Reports', path: '/dashboard/reports' },
-        { icon: Bell, label: 'Alerts & Notifications', path: '/dashboard/alerts' },
-      ]
+      ];
+    } else if (userData?.role === 'Constable') {
+      return [
+        {
+          title: 'MY DASHBOARD',
+          items: [
+            { icon: BarChart2, label: 'My Overview', path: '/dashboard' },
+            { icon: Calendar, label: 'My Schedule', path: '/dashboard/calendar' },
+            { icon: CheckSquare, label: 'My Attendance', path: '/dashboard/attendance' },
+          ]
+        }
+      ];
+    } else {
+      return [
+        {
+          title: 'MAIN',
+          items: [
+            { icon: BarChart2, label: 'Control Room Overview', path: '/dashboard' },
+            { icon: Map, label: 'Live Duty Map', path: '/dashboard/map' },
+            { icon: Users, label: 'Officer Availability', path: '/dashboard/officers' },
+            { icon: Calendar, label: 'Duty Calendar', path: '/dashboard/calendar' },
+          ]
+        },
+        {
+          title: 'DUTY MANAGEMENT',
+          categories: [
+            {
+              name: 'Regular Duties',
+              items: [
+                { icon: Briefcase, label: 'Daily Duty', path: '/dashboard/duties' },
+                { icon: Car, label: 'Traffic Duty', path: '/dashboard/duties' },
+                { icon: Clock, label: 'Night Patrol', path: '/dashboard/duties' },
+                { icon: Users, label: 'Reserve Force', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Security & Law',
+              items: [
+                { icon: Shield, label: 'VIP Duty', badge: 'High', path: '/dashboard/duties' },
+                { icon: Target, label: 'Law & Order', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Event Duties',
+              items: [
+                { icon: Users, label: 'Election Duty', path: '/dashboard/duties' },
+                { icon: Calendar, label: 'Festival Duty', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Legal/Emergency Services',
+              items: [
+                { icon: FileText, label: 'Court Duty', path: '/dashboard/duties' },
+                { icon: ShieldAlert, label: 'Emergency Response', badge: 'Urgent', path: '/dashboard/duties' },
+              ]
+            }
+          ]
+        },
+        {
+          title: 'REPORTS & LOGS',
+          items: [
+            { icon: CheckSquare, label: 'Attendance & Check-in', path: '/dashboard/attendance' },
+            { icon: FileText, label: 'Generate Reports', path: '/dashboard/reports' },
+            { icon: Bell, label: 'Alerts & Notifications', path: '/dashboard/alerts' },
+          ]
+        }
+      ];
     }
-  ];
+  };
+
+  const menuGroups = getMenuGroups();
 
   const location = useLocation();
 

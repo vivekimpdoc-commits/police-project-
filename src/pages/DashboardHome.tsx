@@ -142,27 +142,45 @@ const MacroDashboard = ({ navigate }: { navigate: any }) => (
 // ----------------------------------------------------
 // SHO DASHBOARD (Police Station)
 // ----------------------------------------------------
-const SHODashboard = ({ navigate }: { navigate: any }) => (
+const SHODashboard = ({ navigate, stats }: { navigate: any, stats: any }) => (
   <>
     {/* SHO Metrics */}
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8 animate-fade-in">
-      <WidgetCard title="Station Strength" value="84 / 90" subtext="Officers Available" icon={Users} colorClass="from-blue-500 to-blue-700" />
-      <WidgetCard title="Beat Deployment" value="12" subtext="Active Patrolling" icon={Map} colorClass="from-emerald-500 to-emerald-700" />
-      <WidgetCard title="Pending Approvals" value="3" subtext="Awaiting your review" icon={Clock} colorClass="from-amber-500 to-amber-700" />
-      <WidgetCard title="Leave Requests" value="2" subtext="Action required" icon={FileText} colorClass="from-purple-500 to-purple-700" />
+      <WidgetCard title="Station Strength" value={stats.strength} subtext="Officers Available" icon={Users} colorClass="from-blue-500 to-blue-700" />
+      <WidgetCard title="Beat Deployment" value={stats.beat} subtext="Active Patrolling" icon={Map} colorClass="from-emerald-500 to-emerald-700" />
+      <WidgetCard title="Pending Approvals" value={stats.pending} subtext="Awaiting your review" icon={Clock} colorClass="from-amber-500 to-amber-700" />
+      <WidgetCard title="Leave Requests" value={stats.leave} subtext="Action required" icon={FileText} colorClass="from-purple-500 to-purple-700" />
+    </div>
+
+    {/* Quick Action Banner for Duty Assignment */}
+    <div className="bg-gradient-to-r from-[#001229] to-[#0a2342] dark:from-[#001229]/80 dark:to-[#0a2342]/80 rounded-2xl p-6 mb-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg border border-gray-800 dark:border-white/10 animate-fade-in" style={{animationDelay: '50ms'}}>
+      <div className="flex items-center gap-4">
+        <div className="w-14 h-14 bg-[#FF9933]/20 border border-[#FF9933]/30 rounded-full flex items-center justify-center shrink-0">
+          <Briefcase className="text-[#FF9933]" size={28} />
+        </div>
+        <div>
+          <h3 className="text-xl font-bold font-heading text-white">Daily Duty Roster (ड्यूटी लगाएँ)</h3>
+          <p className="text-sm text-gray-400 mt-1">Assign personnel to beats, traffic points, and active deployments.</p>
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-3 w-full md:w-auto">
+        <button onClick={() => navigate('/dashboard/duties')} className="flex-1 md:flex-none px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
+          <Calendar size={16} /> View Roster
+        </button>
+        <button onClick={() => navigate('/dashboard/duties')} className="flex-1 md:flex-none px-6 py-2.5 bg-gradient-to-r from-[#FF9933] to-[#ffaa55] hover:scale-105 text-[#001229] rounded-xl text-sm font-extrabold shadow-[0_0_20px_rgba(255,153,51,0.3)] transition-all flex items-center justify-center gap-2">
+          <Users size={18} /> Assign Duty Force
+        </button>
+      </div>
     </div>
 
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 animate-fade-in" style={{animationDelay: '100ms'}}>
       <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6">
-         <h3 className="font-bold font-heading text-lg dark:text-white mb-4">Pending Approvals Action Center</h3>
+         <h3 className="font-bold font-heading text-lg text-gray-900 dark:text-white mb-4">Pending Approvals Action Center</h3>
          <div className="space-y-3">
-           {[
-             { id: 'DTY-9022', title: 'Hazratganj Protest (Law & Order)', req: 'Constable Ramesh' },
-             { id: 'DTY-9025', title: 'Night Patrol Route B', req: 'Duty Officer Anil' }
-           ].map(d => (
+           {stats.duties.map((d: any) => (
              <div key={d.id} className="flex justify-between items-center p-4 bg-gray-50 dark:bg-black/20 rounded-xl border border-gray-100 dark:border-white/5">
                 <div>
-                  <h4 className="font-bold text-sm dark:text-white">{d.title}</h4>
+                  <h4 className="font-bold text-sm text-gray-900 dark:text-white">{d.title}</h4>
                   <p className="text-xs text-gray-500 mt-1">Requested by: {d.req}</p>
                 </div>
                 <button onClick={() => navigate('/dashboard/duties')} className="px-4 py-1.5 bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-white rounded-lg text-xs font-bold transition-colors">Review</button>
@@ -172,20 +190,68 @@ const SHODashboard = ({ navigate }: { navigate: any }) => (
       </div>
       
       <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6">
-         <h3 className="font-bold font-heading text-lg dark:text-white mb-4">Station Resources</h3>
+         <h3 className="font-bold font-heading text-lg text-gray-900 dark:text-white mb-4">Station Resources</h3>
          <div className="grid grid-cols-2 gap-4">
             <div className="p-4 bg-gray-50 dark:bg-black/20 rounded-xl text-center">
               <Car className="mx-auto text-gray-400 mb-2" size={24} />
-              <div className="font-bold text-xl dark:text-white">12/15</div>
+              <div className="font-bold text-xl text-gray-900 dark:text-white">{stats.pcr}</div>
               <div className="text-xs text-gray-500">PCR Vans Active</div>
             </div>
             <div className="p-4 bg-gray-50 dark:bg-black/20 rounded-xl text-center">
               <Sword className="mx-auto text-gray-400 mb-2" size={24} />
-              <div className="font-bold text-xl dark:text-white">45</div>
+              <div className="font-bold text-xl text-gray-900 dark:text-white">{stats.weapons}</div>
               <div className="text-xs text-gray-500">Weapons Issued</div>
             </div>
          </div>
       </div>
+    </div>
+
+    {/* Leave Approvals Panel */}
+    <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6 mb-8 animate-fade-in" style={{animationDelay: '150ms'}}>
+       <h3 className="font-bold font-heading text-lg text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+         <FileText className="text-purple-500" /> 
+         Leave Requests (Pending Approval)
+       </h3>
+       <div className="overflow-x-auto">
+         <table className="w-full text-left text-sm">
+           <thead>
+             <tr className="text-xs uppercase text-gray-500 border-b border-gray-100 dark:border-white/10">
+               <th className="pb-3 px-4">Officer</th>
+               <th className="pb-3 px-4">Leave Type</th>
+               <th className="pb-3 px-4">Duration</th>
+               <th className="pb-3 px-4 text-right">Action</th>
+             </tr>
+           </thead>
+           <tbody>
+             {stats.leave === '0' || !stats.leave ? (
+               <tr><td colSpan={4} className="py-6 text-center text-gray-500">No pending leave requests.</td></tr>
+             ) : (
+               <>
+                 <tr className="border-b border-gray-50 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                   <td className="py-3 px-4 font-bold text-gray-900 dark:text-white">Constable Suresh</td>
+                   <td className="py-3 px-4 text-blue-500 font-medium">Casual Leave</td>
+                   <td className="py-3 px-4 text-gray-500">3 Days (03-Jul to 05-Jul)</td>
+                   <td className="py-3 px-4 flex gap-2 justify-end">
+                     <button className="px-3 py-1 bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500 hover:text-white rounded text-xs font-bold transition-colors">Approve</button>
+                     <button className="px-3 py-1 bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500 hover:text-white rounded text-xs font-bold transition-colors">Deny</button>
+                   </td>
+                 </tr>
+                 {parseInt(stats.leave) > 1 && (
+                   <tr className="border-b border-gray-50 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                     <td className="py-3 px-4 font-bold text-gray-900 dark:text-white">Sub Inspector Amit</td>
+                     <td className="py-3 px-4 text-purple-500 font-medium">Earned Leave</td>
+                     <td className="py-3 px-4 text-gray-500">7 Days (05-Jul to 11-Jul)</td>
+                     <td className="py-3 px-4 flex gap-2 justify-end">
+                       <button className="px-3 py-1 bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500 hover:text-white rounded text-xs font-bold transition-colors">Approve</button>
+                       <button className="px-3 py-1 bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500 hover:text-white rounded text-xs font-bold transition-colors">Deny</button>
+                     </td>
+                   </tr>
+                 )}
+               </>
+             )}
+           </tbody>
+         </table>
+       </div>
     </div>
   </>
 );
@@ -202,32 +268,48 @@ const ConstableDashboard = () => (
     </div>
 
     <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6 animate-fade-in" style={{animationDelay: '100ms'}}>
-      <h3 className="font-bold font-heading text-lg dark:text-white mb-4">My Duty Schedule</h3>
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="font-bold font-heading text-lg text-gray-900 dark:text-white">My Duty Schedule</h3>
+        <button className="px-4 py-2 bg-[#001229] dark:bg-white text-white dark:text-[#001229] rounded-lg text-sm font-bold shadow-md hover:opacity-90 transition-all flex items-center gap-2">
+          <Calendar size={16} /> Request Leave
+        </button>
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full text-left">
            <thead>
              <tr className="text-xs uppercase text-gray-500 border-b border-gray-100 dark:border-white/10">
-               <th className="pb-3">Date</th>
-               <th className="pb-3">Duty Name</th>
-               <th className="pb-3">Location</th>
-               <th className="pb-3">Timing</th>
-               <th className="pb-3">Status</th>
+               <th className="pb-3 px-2">Date</th>
+               <th className="pb-3 px-2">Duty Name</th>
+               <th className="pb-3 px-2">Location</th>
+               <th className="pb-3 px-2">Timing</th>
+               <th className="pb-3 px-2">Status</th>
+               <th className="pb-3 px-2 text-right">Action</th>
              </tr>
            </thead>
            <tbody className="text-sm">
-             <tr className="border-b border-gray-50 dark:border-white/5">
-               <td className="py-4 dark:text-white font-medium">Today</td>
-               <td className="py-4 font-bold dark:text-white">Sector 4 Night Patrol</td>
-               <td className="py-4 text-gray-500">Gomti Nagar</td>
-               <td className="py-4 dark:text-white">22:00 - 06:00</td>
-               <td className="py-4"><span className="px-2 py-1 bg-green-500/10 text-green-500 rounded text-xs font-bold">Upcoming</span></td>
+             <tr className="border-b border-gray-50 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+               <td className="py-4 px-2 text-gray-900 dark:text-white font-medium">Today</td>
+               <td className="py-4 px-2 font-bold text-gray-900 dark:text-white">Sector 4 Night Patrol</td>
+               <td className="py-4 px-2 text-gray-600 dark:text-gray-400">Gomti Nagar</td>
+               <td className="py-4 px-2 text-gray-900 dark:text-white">22:00 - 06:00</td>
+               <td className="py-4 px-2"><span className="px-2 py-1 bg-green-500/10 text-green-600 dark:text-green-400 rounded text-xs font-bold border border-green-500/20">Upcoming</span></td>
+               <td className="py-4 px-2 flex justify-end">
+                 <button className="px-4 py-1.5 bg-[#FF9933] text-[#001229] hover:bg-[#ffaa55] rounded-lg text-xs font-bold shadow-md transition-colors flex items-center gap-2">
+                   <MapPin size={14} /> Report & Check-in
+                 </button>
+               </td>
              </tr>
-             <tr>
-               <td className="py-4 dark:text-white font-medium">Tomorrow</td>
-               <td className="py-4 font-bold dark:text-white">VIP Escort Reserve</td>
-               <td className="py-4 text-gray-500">Police Line</td>
-               <td className="py-4 dark:text-white">08:00 - 16:00</td>
-               <td className="py-4"><span className="px-2 py-1 bg-blue-500/10 text-blue-500 rounded text-xs font-bold">Assigned</span></td>
+             <tr className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+               <td className="py-4 px-2 text-gray-900 dark:text-white font-medium">Tomorrow</td>
+               <td className="py-4 px-2 font-bold text-gray-900 dark:text-white">VIP Escort Reserve</td>
+               <td className="py-4 px-2 text-gray-600 dark:text-gray-400">Police Line</td>
+               <td className="py-4 px-2 text-gray-900 dark:text-white">08:00 - 16:00</td>
+               <td className="py-4 px-2"><span className="px-2 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded text-xs font-bold border border-blue-500/20">Assigned</span></td>
+               <td className="py-4 px-2 flex justify-end">
+                 <button className="px-4 py-1.5 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/70 hover:bg-gray-200 dark:hover:bg-white/20 rounded-lg text-xs font-bold transition-colors flex items-center gap-2">
+                   <CheckCircle size={14} /> Acknowledge
+                 </button>
+               </td>
              </tr>
            </tbody>
         </table>
@@ -243,6 +325,17 @@ export const DashboardHome: React.FC = () => {
   const navigate = useNavigate();
   const { userData } = useAuth();
   const role = userData?.role || 'Constable';
+  const storedThana = localStorage.getItem('demoThana') || 'Hazratganj';
+
+  const getThanaStats = (thana: string) => {
+    switch (thana) {
+      case 'Gomti Nagar': return { strength: '65 / 70', beat: '8', pending: '1', leave: '3', pcr: '8/10', weapons: '32', duties: [{ id: 'DTY-8013', title: 'Marine Drive Patrol', req: 'SI Meera' }] };
+      case 'Chowk': return { strength: '50 / 55', beat: '6', pending: '4', leave: '1', pcr: '5/6', weapons: '28', duties: [{ id: 'DTY-7011', title: 'Old City Strike Control', req: 'Inspector Tariq' }] };
+      case 'Alambagh': return { strength: '42 / 45', beat: '5', pending: '2', leave: '0', pcr: '4/5', weapons: '20', duties: [{ id: 'DTY-6011', title: 'Highway Accident Response', req: 'Constable Mohit' }] };
+      default: return { strength: '84 / 90', beat: '12', pending: '3', leave: '2', pcr: '12/15', weapons: '45', duties: [ { id: 'DTY-9022', title: 'Hazratganj Protest', req: 'Constable Ramesh' }, { id: 'DTY-9025', title: 'Night Patrol Route B', req: 'Duty Officer Anil' } ] };
+    }
+  };
+  const thanaStats = getThanaStats(storedThana);
 
   return (
     <div className="flex-1 overflow-y-auto p-4 lg:p-8 custom-scrollbar">
@@ -256,7 +349,7 @@ export const DashboardHome: React.FC = () => {
            </h2>
            <p className="text-gray-500 dark:text-white/60 text-sm">
              {role === 'Constable' && `Welcome back, ${userData?.fullName}`}
-             {role === 'SHO' && 'Hazratganj Station • Monitoring'}
+             {role === 'SHO' && `${storedThana} Station • Monitoring`}
              {!['Constable', 'SHO'].includes(role) && `HQ Analytics • ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`}
            </p>
          </div>
@@ -271,7 +364,7 @@ export const DashboardHome: React.FC = () => {
 
       {/* Render Dashboard Based on Role */}
       {role === 'Constable' && <ConstableDashboard />}
-      {role === 'SHO' && <SHODashboard navigate={navigate} />}
+      {role === 'SHO' && <SHODashboard navigate={navigate} stats={thanaStats} />}
       {!['Constable', 'SHO'].includes(role) && <MacroDashboard navigate={navigate} />}
       
       <div className="h-8"></div>

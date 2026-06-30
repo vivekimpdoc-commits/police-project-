@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 
 const MOCK_OFFICERS = [
+  // Hazratganj
   { id: 'UP-9021', name: 'Rajesh Kumar', rank: 'Inspector (SHO)', station: 'Hazratganj', status: 'On Duty', duty: 'Hazratganj Protest (Law & Order)', phone: '+91 9876543210' },
   { id: 'UP-7732', name: 'Anil Singh', rank: 'Sub Inspector', station: 'Hazratganj', status: 'Available', duty: null, phone: '+91 9876543211' },
   { id: 'UP-5521', name: 'Vikram Yadav', rank: 'Head Constable', station: 'Hazratganj', status: 'On Leave', duty: null, phone: '+91 9876543212' },
@@ -14,17 +15,28 @@ const MOCK_OFFICERS = [
   { id: 'UP-9922', name: 'Anita Sharma', rank: 'Sub Inspector', station: 'Hazratganj', status: 'On Duty', duty: 'VIP Route Bandobast (GPO)', phone: '+91 9876543215' },
   { id: 'UP-1102', name: 'Manoj Bajpai', rank: 'Inspector', station: 'Hazratganj', status: 'On Duty', duty: 'Janpath Market Security', phone: '+91 9876543216' },
   { id: 'UP-2204', name: 'Deepika Singh', rank: 'Constable', station: 'Hazratganj', status: 'Available', duty: null, phone: '+91 9876543217' },
-  { id: 'UP-4455', name: 'Rahul Verma', rank: 'Head Constable', station: 'Hazratganj', status: 'On Duty', duty: 'Night Patrol Route A (Park Road)', phone: '+91 9876543218' },
-  { id: 'UP-5566', name: 'Amitabh Bachchan', rank: 'Sub Inspector', station: 'Hazratganj', status: 'On Leave', duty: null, phone: '+91 9876543219' },
-  { id: 'UP-7788', name: 'Priya Mishra', rank: 'Constable', station: 'Hazratganj', status: 'Available', duty: null, phone: '+91 9876543220' },
-  { id: 'UP-9900', name: 'Sunil Shetty', rank: 'Constable', station: 'Hazratganj', status: 'On Duty', duty: 'Traffic Management (Atal Chowk)', phone: '+91 9876543221' },
-  { id: 'UP-1234', name: 'Ajay Devgn', rank: 'Sub Inspector', station: 'Hazratganj', status: 'Available', duty: null, phone: '+91 9876543222' },
-  { id: 'UP-5678', name: 'Kareena Kapoor', rank: 'Head Constable', station: 'Hazratganj', status: 'In Training', duty: null, phone: '+91 9876543223' },
+  
+  // Gomti Nagar
+  { id: 'UP-4455', name: 'Rahul Verma', rank: 'Inspector (SHO)', station: 'Gomti Nagar', status: 'On Duty', duty: 'Marine Drive Patrol', phone: '+91 9876543218' },
+  { id: 'UP-5566', name: 'Amitabh Bachchan', rank: 'Sub Inspector', station: 'Gomti Nagar', status: 'On Leave', duty: null, phone: '+91 9876543219' },
+  { id: 'UP-7788', name: 'Priya Mishra', rank: 'Constable', station: 'Gomti Nagar', status: 'Available', duty: null, phone: '+91 9876543220' },
+  { id: 'UP-9900', name: 'Sunil Shetty', rank: 'Constable', station: 'Gomti Nagar', status: 'On Duty', duty: '1090 Chauraha Traffic', phone: '+91 9876543221' },
+  { id: 'UP-1234', name: 'Ajay Devgn', rank: 'Head Constable', station: 'Gomti Nagar', status: 'Available', duty: null, phone: '+91 9876543222' },
+  
+  // Chowk
+  { id: 'UP-5678', name: 'Kareena Kapoor', rank: 'Sub Inspector', station: 'Chowk', status: 'In Training', duty: null, phone: '+91 9876543223' },
+  { id: 'UP-6677', name: 'Salman Khan', rank: 'Inspector (SHO)', station: 'Chowk', status: 'On Duty', duty: 'Old City Area Security', phone: '+91 9876543224' },
+  { id: 'UP-8899', name: 'Aamir Khan', rank: 'Constable', station: 'Chowk', status: 'Available', duty: null, phone: '+91 9876543225' },
+  
+  // Alambagh
+  { id: 'UP-2345', name: 'Akshay Kumar', rank: 'Inspector (SHO)', station: 'Alambagh', status: 'Available', duty: null, phone: '+91 9876543226' },
+  { id: 'UP-3456', name: 'Katrina Kaif', rank: 'Sub Inspector', station: 'Alambagh', status: 'On Duty', duty: 'Bus Stand Patrol', phone: '+91 9876543227' },
 ];
 
 export const OfficerAvailability: React.FC = () => {
   const storedThana = localStorage.getItem('demoThana') || 'Hazratganj';
-  const dynamicOfficers = MOCK_OFFICERS.map(o => ({...o, station: storedThana}));
+  // TRUE FILTERING: Only show officers belonging to the logged-in Thana
+  const dynamicOfficers = MOCK_OFFICERS.filter(o => o.station === storedThana);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -61,10 +73,10 @@ export const OfficerAvailability: React.FC = () => {
   });
 
   const stats = {
-    total: MOCK_OFFICERS.length,
-    available: MOCK_OFFICERS.filter(o => o.status === 'Available').length,
-    onDuty: MOCK_OFFICERS.filter(o => o.status === 'On Duty').length,
-    onLeave: MOCK_OFFICERS.filter(o => o.status === 'On Leave').length,
+    total: dynamicOfficers.length,
+    available: dynamicOfficers.filter(o => o.status === 'Available').length,
+    onDuty: dynamicOfficers.filter(o => o.status === 'On Duty').length,
+    onLeave: dynamicOfficers.filter(o => o.status === 'On Leave').length,
   };
 
   return (
@@ -423,12 +435,8 @@ export const OfficerAvailability: React.FC = () => {
                  </div>
                  <div>
                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Posting Station</label>
-                   <select className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] text-gray-900 dark:text-white">
-                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Hazratganj</option>
-                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Gomti Nagar</option>
-                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Chowk</option>
-                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Alambagh</option>
-                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Indira Nagar</option>
+                   <select disabled className="w-full p-3 bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] text-gray-500 dark:text-white/50 cursor-not-allowed">
+                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">{storedThana}</option>
                    </select>
                  </div>
                </div>

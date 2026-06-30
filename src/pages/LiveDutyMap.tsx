@@ -6,16 +6,25 @@ import {
 
 // Mock data for map markers
 const MAP_MARKERS = [
-  { id: '1', type: 'vip', lat: '45%', lng: '55%', title: 'CM Escort Route', status: 'Active', officers: 12, vehicle: 'PCR-442' },
-  { id: '2', type: 'emergency', lat: '30%', lng: '40%', title: 'Mob Gathered - Hazratganj', status: 'Critical', officers: 8, vehicle: 'Riot Van 2' },
-  { id: '3', type: 'patrol', lat: '60%', lng: '70%', title: 'Park Road Patrol', status: 'Routine', officers: 4, vehicle: 'Interceptor 1' },
-  { id: '4', type: 'traffic', lat: '50%', lng: '30%', title: 'Hazratganj Chauraha', status: 'Active', officers: 6, vehicle: 'Traffic Bike' },
-  { id: '5', type: 'patrol', lat: '20%', lng: '60%', title: 'Janpath Market Beat', status: 'Routine', officers: 2, vehicle: 'Foot Patrol' },
-  { id: '6', type: 'vip', lat: '70%', lng: '50%', title: 'Governor House', status: 'Active', officers: 15, vehicle: 'Static Guard' },
-  { id: '7', type: 'emergency', lat: '80%', lng: '20%', title: 'Ashok Marg Accident', status: 'Critical', officers: 6, vehicle: 'Ambulance & PCR' },
-  { id: '8', type: 'patrol', lat: '10%', lng: '40%', title: 'Vidhan Sabha Patrol', status: 'Routine', officers: 4, vehicle: 'PCR-112' },
-  { id: '9', type: 'traffic', lat: '85%', lng: '80%', title: 'GPO Checkpost', status: 'Active', officers: 8, vehicle: 'Interceptor 3' },
-  { id: '10', type: 'patrol', lat: '35%', lng: '85%', title: 'Sikandar Bagh Beat', status: 'Routine', officers: 2, vehicle: 'Foot Patrol' },
+  // Hazratganj
+  { id: '1', type: 'vip', lat: '45%', lng: '55%', title: 'CM Escort Route', status: 'Active', officers: 12, vehicle: 'PCR-442', station: 'Hazratganj' },
+  { id: '2', type: 'emergency', lat: '30%', lng: '40%', title: 'Mob Gathered - Hazratganj', status: 'Critical', officers: 8, vehicle: 'Riot Van 2', station: 'Hazratganj' },
+  { id: '3', type: 'patrol', lat: '60%', lng: '70%', title: 'Park Road Patrol', status: 'Routine', officers: 4, vehicle: 'Interceptor 1', station: 'Hazratganj' },
+  { id: '4', type: 'traffic', lat: '50%', lng: '30%', title: 'Hazratganj Chauraha', status: 'Active', officers: 6, vehicle: 'Traffic Bike', station: 'Hazratganj' },
+  { id: '5', type: 'patrol', lat: '20%', lng: '60%', title: 'Janpath Market Beat', status: 'Routine', officers: 2, vehicle: 'Foot Patrol', station: 'Hazratganj' },
+  
+  // Gomti Nagar
+  { id: '6', type: 'vip', lat: '70%', lng: '50%', title: 'Minister Route Security', status: 'Active', officers: 15, vehicle: 'Static Guard', station: 'Gomti Nagar' },
+  { id: '7', type: 'emergency', lat: '80%', lng: '20%', title: 'Marine Drive Accident', status: 'Critical', officers: 6, vehicle: 'Ambulance & PCR', station: 'Gomti Nagar' },
+  { id: '8', type: 'patrol', lat: '10%', lng: '40%', title: '1090 Chauraha Patrol', status: 'Routine', officers: 4, vehicle: 'PCR-112', station: 'Gomti Nagar' },
+  
+  // Chowk
+  { id: '9', type: 'traffic', lat: '85%', lng: '80%', title: 'Old City Checkpost', status: 'Active', officers: 8, vehicle: 'Interceptor 3', station: 'Chowk' },
+  { id: '10', type: 'patrol', lat: '35%', lng: '85%', title: 'Ghanta Ghar Beat', status: 'Routine', officers: 2, vehicle: 'Foot Patrol', station: 'Chowk' },
+  
+  // Alambagh
+  { id: '11', type: 'emergency', lat: '45%', lng: '20%', title: 'Highway Collision', status: 'Critical', officers: 8, vehicle: 'PCR-200', station: 'Alambagh' },
+  { id: '12', type: 'patrol', lat: '65%', lng: '80%', title: 'Bus Stand Patrol', status: 'Routine', officers: 6, vehicle: 'Interceptor 5', station: 'Alambagh' },
 ];
 
 export const LiveDutyMap: React.FC = () => {
@@ -41,7 +50,11 @@ export const LiveDutyMap: React.FC = () => {
     }
   };
 
-  const filteredMarkers = MAP_MARKERS.filter(m => activeFilter === 'all' || m.type === activeFilter);
+  const storedThana = localStorage.getItem('demoThana') || 'Hazratganj';
+  // TRUE FILTERING: Only show markers for the logged-in Thana
+  const filteredMarkers = MAP_MARKERS.filter(m => 
+    m.station === storedThana && (activeFilter === 'all' || m.type === activeFilter)
+  );
 
   return (
     <div className="flex-1 w-full h-full flex flex-col p-4 md:p-6 overflow-hidden">
@@ -55,7 +68,7 @@ export const LiveDutyMap: React.FC = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold font-heading text-white leading-tight">Live Deployment Map</h1>
-              <p className="text-[11px] text-[#FF9933] font-bold tracking-wider mt-1 uppercase">Lucknow District • Real-time Tracking</p>
+              <p className="text-[11px] text-[#FF9933] font-bold tracking-wider mt-1 uppercase">{storedThana} • Real-time Tracking</p>
             </div>
          </div>
          

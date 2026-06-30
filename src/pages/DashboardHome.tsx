@@ -216,8 +216,8 @@ const SHODashboard = ({ navigate, stats, isConstable }: { navigate: any, stats: 
       </div>
     </div>
 
+    {/* Leave Approvals Panel */}
     {!isConstable && (
-      {/* Leave Approvals Panel */}
       <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm p-6 mb-8 animate-fade-in" style={{animationDelay: '150ms'}}>
          <h3 className="font-bold font-heading text-lg text-gray-900 dark:text-white mb-4 flex items-center gap-2">
            <FileText className="text-purple-500" /> 

@@ -65,218 +65,308 @@
 <body>
   <div class="card">
     <h1>KARTAVYA PPTX Generator</h1>
-    <p>Click the button below to generate and download a professional PowerPoint presentation highlighting the project achievements.</p>
-    <button class="btn" onclick="generatePPTX()">Download PPTX Presentation</button>
-    <div id="status" class="status">✓ Presentation generated and downloading!</div>
+    <p>Click the button below to download the highly polished, professional PowerPoint presentation for KARTAVYA.</p>
+    <button class="btn" onclick="generatePPTX()">Download Premium PPTX</button>
+    <div id="status" class="status">✓ Premium Presentation generated! Downloading...</div>
   </div>
 
   <script>
     function generatePPTX() {
-      // 1. Create a new Presentation
       let pptx = new PptxGenJS();
       pptx.layout = 'LAYOUT_16x9';
 
-      // Define color palette
+      // Define Color Palette
       const colors = {
-        navy: '002147',   // UP Police Navy Blue
-        orange: 'FF9933', // Orange branding
-        bgDark: '0F172A', // Dark Slide background
-        textLight: 'F8FAFC',
-        textMuted: '94A3B8'
+        bgDark: '0F172A',      // Slate 900
+        cardBg: '1E293B',      // Slate 800
+        cardBorder: '334155',  // Slate 700
+        orange: 'F97316',      // Premium Orange
+        navy: '0F2942',        // Deep Navy
+        textLight: 'F8FAFC',   // Off-white
+        textMuted: '94A3B8',   // Cool gray
+        accentBlue: '3B82F6',  // Tech Blue
+        accentGreen: '10B981'  // Emerald Green
       };
 
-      // Add a slide helper with a clean dark theme
-      function addCustomSlide(titleText) {
+      // Helper function to add a standard premium slide
+      function addPremiumSlide(titleText, categoryText) {
         let slide = pptx.addSlide();
-        // Set dark background
         slide.background = { fill: colors.bgDark };
-        
-        // Add header orange line
+
+        // Top Orange Highlight Bar
         slide.addShape(pptx.ShapeType.rect, {
           x: 0, y: 0, w: '100%', h: 0.15, fill: { color: colors.orange }
         });
 
-        // Add Header Title
+        // Category Tag
+        if (categoryText) {
+          slide.addText(categoryText.toUpperCase(), {
+            x: 0.8, y: 0.4, w: 10, h: 0.3,
+            fontSize: 10, fontFace: 'Segoe UI',
+            bold: true, color: colors.accentBlue,
+            letterSpacing: 2
+          });
+        }
+
+        // Main Header Title
         slide.addText(titleText, {
-          x: 0.8, y: 0.6, w: 10, h: 0.8,
-          fontSize: 32, fontFace: 'Trebuchet MS',
-          bold: true, color: colors.orange
+          x: 0.8, y: 0.6, w: 11, h: 0.6,
+          fontSize: 28, fontFace: 'Trebuchet MS',
+          bold: true, color: colors.textLight
+        });
+
+        // Bottom Footer
+        slide.addText("KARTAVYA Smart System", {
+          x: 0.8, y: 7.0, w: 5, h: 0.3,
+          fontSize: 10, fontFace: 'Segoe UI', color: colors.textMuted
         });
 
         return slide;
       }
 
       // ----------------------------------------------------
-      // SLIDE 1: Title Slide (Cover)
+      // SLIDE 1: Premium Cover Slide
       // ----------------------------------------------------
       let s1 = pptx.addSlide();
       s1.background = { fill: colors.navy };
-      
-      // Top Orange Line
-      s1.addShape(pptx.ShapeType.rect, {
-        x: 0, y: 0, w: '100%', h: 0.25, fill: { color: colors.orange }
+
+      // Diagonal background shape for premium look
+      s1.addShape(pptx.ShapeType.rtTriangle, {
+        x: 6.5, y: 0, w: 6.8, h: 7.5,
+        fill: { color: '001229' },
+        flipH: true
       });
 
-      // App Name
+      // Cover Top Bar
+      s1.addShape(pptx.ShapeType.rect, {
+        x: 0, y: 0, w: '100%', h: 0.2, fill: { color: colors.orange }
+      });
+
+      // Glowing Badge Icon (Represented by nested Hexagons)
+      s1.addShape(pptx.ShapeType.hexagon, {
+        x: 1.0, y: 1.2, w: 1.2, h: 1.2,
+        fill: { color: colors.orange },
+        line: { color: colors.textLight, width: 2 }
+      });
+      s1.addText("K", {
+        x: 1.0, y: 1.2, w: 1.2, h: 1.2,
+        fontSize: 36, fontFace: 'Trebuchet MS', bold: true, color: colors.textLight, align: 'center', valign: 'middle'
+      });
+
+      // Main Brand Title
       s1.addText("KARTAVYA", {
-        x: 1.0, y: 2.2, w: 11.3, h: 1.2,
-        fontSize: 64, fontFace: 'Trebuchet MS',
-        bold: true, color: colors.orange,
+        x: 1.0, y: 2.8, w: 10, h: 1.0,
+        fontSize: 60, fontFace: 'Trebuchet MS', bold: true, color: colors.textLight,
         letterSpacing: 2
       });
 
-      // Subtitle
-      s1.addText("Next-Gen Smart Police Management System", {
-        x: 1.0, y: 3.5, w: 11.3, h: 0.6,
-        fontSize: 24, fontFace: 'Segoe UI',
-        color: colors.textLight,
-        italic: true
+      // System Tagline
+      s1.addText("Next-Generation Smart Police Management & Duty Allocation System", {
+        x: 1.0, y: 3.8, w: 8.5, h: 0.8,
+        fontSize: 20, fontFace: 'Segoe UI', color: colors.orange,
+        bold: true
       });
 
-      // Separation Line
+      // Division Line
       s1.addShape(pptx.ShapeType.line, {
-        x: 1.0, y: 4.3, w: 6.0, h: 0,
+        x: 1.0, y: 4.8, w: 4.5, h: 0,
         line: { color: colors.orange, width: 2 }
       });
 
-      // Footer
-      s1.addText("Project Development Journey & Feature Presentation", {
-        x: 1.0, y: 4.8, w: 11.3, h: 0.5,
-        fontSize: 14, fontFace: 'Segoe UI',
-        color: '94A3B8'
+      // Metadata / Author Info
+      s1.addText("Uttar Pradesh Police Station Automation\nDeployment & Features Showcase", {
+        x: 1.0, y: 5.2, w: 8, h: 0.8,
+        fontSize: 13, fontFace: 'Segoe UI', color: colors.textMuted,
+        lineSpacing: 18
       });
 
 
       // ----------------------------------------------------
-      // SLIDE 2: UI/UX & Design Philosophy
+      // SLIDE 2: Core Vision & Problems Solved
       // ----------------------------------------------------
-      let s2 = addCustomSlide("UI/UX & Design Philosophy");
+      let s2 = addPremiumSlide("Modernizing Station Operations", "System Vision");
       
-      s2.addText("A modern, premium experience built for law enforcement.", {
-        x: 0.8, y: 1.3, w: 10, h: 0.4,
-        fontSize: 16, fontFace: 'Segoe UI', color: colors.textMuted, italic: true
-      });
+      // Card 1
+      s2.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 1.8, w: 3.6, h: 4.5, fill: { color: colors.cardBg }, line: { color: colors.cardBorder, width: 1 } });
+      s2.addText("Manual Roster Delays", { x: 1.1, y: 2.1, w: 3.0, h: 0.5, fontSize: 18, bold: true, color: colors.orange });
+      s2.addText("Traditional paper rosters took hours to configure and caused communication delays among officers.", { x: 1.1, y: 2.8, w: 3.0, h: 1.5, fontSize: 13, color: colors.textLight });
+      s2.addText("❌ OLD WAY", { x: 1.1, y: 5.5, w: 3.0, h: 0.4, fontSize: 12, bold: true, color: 'EF4444' });
 
-      // Point 1 Card
-      s2.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 2.0, w: 5.2, h: 1.8, fill: { color: '1E293B' }, line: { color: '334155', width: 1 } });
-      s2.addText("Glassmorphism & Aesthetics", { x: 1.1, y: 2.2, w: 4.6, h: 0.4, fontSize: 18, bold: true, color: colors.textLight });
-      s2.addText("Semi-transparent frosted elements, glowing active borders, and responsive desktop/mobile components.", { x: 1.1, y: 2.7, w: 4.6, h: 0.9, fontSize: 13, color: colors.textMuted });
+      // Card 2
+      s2.addShape(pptx.ShapeType.roundRect, { x: 4.8, y: 1.8, w: 3.6, h: 4.5, fill: { color: colors.cardBg }, line: { color: colors.cardBorder, width: 1 } });
+      s2.addText("Real-Time Allocation", { x: 5.1, y: 2.1, w: 3.0, h: 0.5, fontSize: 18, bold: true, color: colors.accentBlue });
+      s2.addText("KARTAVYA automates duty allocation, generating dynamic rosters instantaneously with local access.", { x: 5.1, y: 2.8, w: 3.0, h: 1.5, fontSize: 13, color: colors.textLight });
+      s2.addText("⚡ NEW WAY", { x: 5.1, y: 5.5, w: 3.0, h: 0.4, fontSize: 12, bold: true, color: colors.accentGreen });
 
-      // Point 2 Card
-      s2.addShape(pptx.ShapeType.roundRect, { x: 6.5, y: 2.0, w: 5.2, h: 1.8, fill: { color: '1E293B' }, line: { color: '334155', width: 1 } });
-      s2.addText("Premium Dark Mode", { x: 6.8, y: 2.2, w: 4.6, h: 0.4, fontSize: 18, bold: true, color: colors.textLight });
-      s2.addText("Engineered with an ultra-clean deep dark palette (#001229) to reduce strain during night-shift operations.", { x: 6.8, y: 2.7, w: 4.6, h: 0.9, fontSize: 13, color: colors.textMuted });
-
-
-      // ----------------------------------------------------
-      // SLIDE 3: Role-Based Dashboards
-      // ----------------------------------------------------
-      let s3 = addCustomSlide("Role-Based Dashboard Integration");
-      s3.addText("Different interface profiles customized automatically for various levels of force.", {
-        x: 0.8, y: 1.3, w: 10, h: 0.4,
-        fontSize: 16, fontFace: 'Segoe UI', color: colors.textMuted, italic: true
-      });
-
-      // Left: SHO Dashboard
-      s3.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 2.0, w: 5.2, h: 3.2, fill: { color: '1E293B' }, line: { color: '334155', width: 1 } });
-      s3.addText("SHO / Admin Dashboard", { x: 1.1, y: 2.2, w: 4.6, h: 0.4, fontSize: 18, bold: true, color: colors.orange });
-      s3.addText("• Full Station Strength overview\n• Daily Duty Roster & live status updates\n• Interactive pending leave approvals list\n• Add or modify force availability", {
-        x: 1.1, y: 2.8, w: 4.6, h: 2.0, fontSize: 14, color: colors.textLight, lineSpacing: 26
-      });
-
-      // Right: Constable Dashboard
-      s3.addShape(pptx.ShapeType.roundRect, { x: 6.5, y: 2.0, w: 5.2, h: 3.2, fill: { color: '1E293B' }, line: { color: '334155', width: 1 } });
-      s3.addText("Constable / Officer Dashboard", { x: 6.8, y: 2.2, w: 4.6, h: 0.4, fontSize: 18, bold: true, color: colors.orange });
-      s3.addText("• Focused 'My Duty Schedule' view\n• Station status and resource summaries\n• Actionable buttons restricted (Approve/Reject actions hidden for security)\n• Easy profile checks", {
-        x: 6.8, y: 2.8, w: 4.6, h: 2.0, fontSize: 14, color: colors.textLight, lineSpacing: 26
-      });
+      // Card 3
+      s2.addShape(pptx.ShapeType.roundRect, { x: 8.8, y: 1.8, w: 3.6, h: 4.5, fill: { color: colors.cardBg }, line: { color: colors.cardBorder, width: 1 } });
+      s2.addText("Resource Mismatch", { x: 9.1, y: 2.1, w: 3.0, h: 0.5, fontSize: 18, bold: true, color: colors.orange });
+      s2.addText("Forces were deployed without accurate tracking of weapons, vehicles, and active personnel availability.", { x: 9.1, y: 2.8, w: 3.0, h: 1.5, fontSize: 13, color: colors.textLight });
+      s2.addText("⚠️ SOLVED", { x: 9.1, y: 5.5, w: 3.0, h: 0.4, fontSize: 12, bold: true, color: 'F59E0B' });
 
 
       // ----------------------------------------------------
-      // SLIDE 4: Interactive Duty Wizard
+      // SLIDE 3: UI Design & Theme System
       // ----------------------------------------------------
-      let s4 = addCustomSlide("Duty Management & Dynamic Wizard");
-      s4.addText("Deploying forces is now a structured, dynamic 3-step process.", {
-        x: 0.8, y: 1.3, w: 10, h: 0.4,
-        fontSize: 16, fontFace: 'Segoe UI', color: colors.textMuted, italic: true
-      });
-
-      // Step 1
-      s4.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 2.0, w: 3.6, h: 3.2, fill: { color: '1E293B' } });
-      s4.addText("Step 1: Details", { x: 1.0, y: 2.2, w: 3.2, h: 0.4, fontSize: 16, bold: true, color: colors.orange });
-      s4.addText("Input basic duty info, location, date, time, and severity category.", { x: 1.0, y: 2.8, w: 3.2, h: 2.0, fontSize: 13, color: colors.textLight });
-
-      // Step 2
-      s4.addShape(pptx.ShapeType.roundRect, { x: 4.7, y: 2.0, w: 3.6, h: 3.2, fill: { color: '1E293B' } });
-      s4.addText("Step 2: AI Suggestion", { x: 4.9, y: 2.2, w: 3.2, h: 0.4, fontSize: 16, bold: true, color: colors.orange });
-      s4.addText("Get intelligent recommendations for needed force strength and logistics based on the event scale.", { x: 4.9, y: 2.8, w: 3.2, h: 2.0, fontSize: 13, color: colors.textLight });
-
-      // Step 3
-      s4.addShape(pptx.ShapeType.roundRect, { x: 8.6, y: 2.0, w: 3.6, h: 3.2, fill: { color: '1E293B' } });
-      s4.addText("Step 3: Assignments", { x: 8.8, y: 2.2, w: 3.2, h: 0.4, fontSize: 16, bold: true, color: colors.orange });
-      s4.addText("Fully interactive inputs to select team leader, force count, and custom numbers of vehicles and specialized gears dynamically.", { x: 8.8, y: 2.8, w: 3.2, h: 2.0, fontSize: 13, color: colors.textLight });
-
-
-      // ----------------------------------------------------
-      // SLIDE 5: Excel Bulk Upload
-      // ----------------------------------------------------
-      let s5 = addCustomSlide("Officer Management & Excel Upload");
-      s5.addText("Managing police strength made easy with real-time checks.", {
-        x: 0.8, y: 1.3, w: 10, h: 0.4,
-        fontSize: 16, fontFace: 'Segoe UI', color: colors.textMuted, italic: true
-      });
-
-      s5.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 2.0, w: 10.9, h: 3.2, fill: { color: '1E293B' }, line: { color: '334155', width: 1 } });
+      let s3 = addPremiumSlide("Premium Glassmorphism Interface", "Aesthetic Design");
       
-      s5.addText("Bulk Import Features & Validation Rules", { x: 1.2, y: 2.2, w: 10, h: 0.4, fontSize: 20, bold: true, color: colors.orange });
+      // Column Left: Text & Specs
+      s3.addText("Designed to look state-of-the-art while maintaining robust visibility.", {
+        x: 0.8, y: 1.5, w: 5.0, h: 0.8, fontSize: 16, color: colors.textMuted, fontFace: 'Segoe UI'
+      });
+
+      s3.addText("• Dark Navy Base (#001229):\n  Reduces eye fatigue during high-stress night shifts.\n" +
+                "• Frosted Glass Panels:\n  Combines sleek translucent backdrops with thin border highlights.\n" +
+                "• Glowing Accents:\n  Leverages bright orange borders to signal active alerts and updates.", {
+        x: 0.8, y: 2.5, w: 5.0, h: 4.0, fontSize: 14, color: colors.textLight, lineSpacing: 22
+      });
+
+      // Column Right: Design mockup box
+      s3.addShape(pptx.ShapeType.roundRect, { x: 6.5, y: 1.8, w: 5.9, h: 4.5, fill: { color: '020617' }, line: { color: colors.orange, width: 2 } });
+      s3.addShape(pptx.ShapeType.rect, { x: 6.9, y: 2.2, w: 5.1, h: 0.6, fill: { color: colors.cardBg } });
+      s3.addText("✦ STATION CONTROL DASHBOARD", { x: 7.1, y: 2.3, w: 4.0, h: 0.4, fontSize: 14, bold: true, color: colors.orange });
       
-      s5.addText("• Excel Format Support: Upload spreadsheet containing Name, Rank, PNO/Belt ID, and Mobile.\n" +
-                "• PNO Validation: Automatic checks to ensure PNO numbers are unique and prevent duplicate entries.\n" +
-                "• Live Feedback: Error preview lists specific rows that fail validation (e.g. missing values or formats).\n" +
-                "• Interactive Roster: Instantly filter active strength by Available, On Leave, or On Duty statuses.", {
-        x: 1.2, y: 2.8, w: 10, h: 2.0, fontSize: 15, color: colors.textLight, lineSpacing: 30
+      s3.addShape(pptx.ShapeType.roundRect, { x: 6.9, y: 3.1, w: 2.4, h: 1.2, fill: { color: '1e293b' } });
+      s3.addText("Total Strength\n90 Officers", { x: 7.1, y: 3.3, w: 2.0, h: 0.8, fontSize: 13, bold: true, color: colors.textLight, align: 'center' });
+
+      s3.addShape(pptx.ShapeType.roundRect, { x: 9.6, y: 3.1, w: 2.4, h: 1.2, fill: { color: '1e293b' } });
+      s3.addText("Active Beat\n12 Areas", { x: 9.8, y: 3.3, w: 2.0, h: 0.8, fontSize: 13, bold: true, color: colors.accentBlue, align: 'center' });
+
+
+      // ----------------------------------------------------
+      // SLIDE 4: Role-Based Separated Dashboards
+      // ----------------------------------------------------
+      let s4 = addPremiumSlide("Two-Way Access Control Layout", "Roles & Authorization");
+
+      s4.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 1.8, w: 5.4, h: 4.5, fill: { color: colors.cardBg }, line: { color: colors.cardBorder, width: 1 } });
+      s4.addText("SHO / ADMIN INTERFACE", { x: 1.1, y: 2.1, w: 4.8, h: 0.4, fontSize: 16, bold: true, color: colors.orange });
+      s4.addText("Designed for commanders needing macro-level station monitoring:\n\n" +
+                "✔ Deploy & edit dynamic force structures\n" +
+                "✔ View live PCR active statuses and weapon logs\n" +
+                "✔ Approve/deny pending leave requests\n" +
+                "✔ Bulk upload rosters using spreadsheets", {
+        x: 1.1, y: 2.7, w: 4.8, h: 3.2, fontSize: 13, color: colors.textLight, lineSpacing: 22
+      });
+
+      s4.addShape(pptx.ShapeType.roundRect, { x: 7.0, y: 1.8, w: 5.4, h: 4.5, fill: { color: colors.cardBg }, line: { color: colors.cardBorder, width: 1 } });
+      s4.addText("CONSTABLE / OFFICER INTERFACE", { x: 7.3, y: 2.1, w: 4.8, h: 0.4, fontSize: 16, bold: true, color: colors.accentBlue });
+      s4.addText("Designed for individual task accountability and security:\n\n" +
+                "✔ View personalized 'My Duty Schedule' page\n" +
+                "✔ View read-only station resource counters\n" +
+                "🚫 Protected commands: Duty wizard is blocked\n" +
+                "🚫 Management actions like leave approvals are hidden", {
+        x: 7.3, y: 2.7, w: 4.8, h: 3.2, fontSize: 13, color: colors.textLight, lineSpacing: 22
       });
 
 
       // ----------------------------------------------------
-      // SLIDE 6: Branding & Localization
+      // SLIDE 5: Interactive Duty Wizard (3-Step)
       // ----------------------------------------------------
-      let s6 = addCustomSlide("Identity: KARTAVYA");
-      s6.addText("Evolving the system to match official state police standards.", {
-        x: 0.8, y: 1.3, w: 10, h: 0.4,
-        fontSize: 16, fontFace: 'Segoe UI', color: colors.textMuted, italic: true
+      let s5 = addPremiumSlide("Deploying Force Step-by-Step", "Duty Management Wizard");
+
+      s5.addText("Interactive deployment flows that eliminate hardcoded inputs.", {
+        x: 0.8, y: 1.3, w: 10, h: 0.4, fontSize: 15, color: colors.textMuted, italic: true
       });
 
-      // Left
-      s6.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 2.0, w: 5.2, h: 3.2, fill: { color: '1E293B' } });
-      s6.addText("Rebranding from PNO", { x: 1.1, y: 2.2, w: 4.6, h: 0.4, fontSize: 18, bold: true, color: colors.orange });
-      s6.addText("Migrated all generic application references from 'PNO' (Police Network Office) to the custom-branded 'KARTAVYA' title to emphasize duty and dedication.", { x: 1.1, y: 2.8, w: 4.6, h: 2.0, fontSize: 14, color: colors.textLight, lineSpacing: 24 });
+      // 3 Steps
+      const steps = [
+        { num: "01", title: "Duty Parameters", desc: "Commanders enter the duty title, precise location, dates, times, and select severity category." },
+        { num: "02", title: "AI-Suggested Staffing", desc: "System dynamically calculates and displays recommended squad size and safety gears." },
+        { num: "03", title: "Interactive Selection", desc: "Select team leaders, input custom force numbers, and manually specify PCR vehicles and weapons." }
+      ];
 
-      // Right
-      s6.addShape(pptx.ShapeType.roundRect, { x: 6.5, y: 2.0, w: 5.2, h: 3.2, fill: { color: '1E293B' } });
-      s6.addText("Uttar Pradesh Police Styling", { x: 6.8, y: 2.2, w: 4.6, h: 0.4, fontSize: 18, bold: true, color: colors.orange });
-      s6.addText("Integrated localization hooks (i18n) for future Hindi translation and customized login layouts with the official UP Police gradient styling (#FF9933 and #002147).", { x: 6.8, y: 2.8, w: 4.6, h: 2.0, fontSize: 14, color: colors.textLight, lineSpacing: 24 });
-
-
-      // ----------------------------------------------------
-      // SLIDE 7: DevOps & Automation
-      // ----------------------------------------------------
-      let s7 = addCustomSlide("DevOps & Automated Deployment");
-      s7.addText("Ensuring maximum uptime and continuous integration.", {
-        x: 0.8, y: 1.3, w: 10, h: 0.4,
-        fontSize: 16, fontFace: 'Segoe UI', color: colors.textMuted, italic: true
+      steps.forEach((step, idx) => {
+        let xPos = 0.8 + (idx * 3.9);
+        s5.addShape(pptx.ShapeType.roundRect, { x: xPos, y: 1.9, w: 3.6, h: 4.4, fill: { color: colors.cardBg }, line: { color: colors.cardBorder, width: 1 } });
+        
+        // Large Step Number
+        s5.addText(step.num, { x: xPos + 0.3, y: 2.1, w: 1.0, h: 0.5, fontSize: 32, bold: true, color: colors.orange });
+        
+        // Step Title
+        s5.addText(step.title, { x: xPos + 0.3, y: 2.8, w: 3.0, h: 0.5, fontSize: 16, bold: true, color: colors.textLight });
+        
+        // Step Description
+        s5.addText(step.desc, { x: xPos + 0.3, y: 3.4, w: 3.0, h: 2.5, fontSize: 13, color: colors.textMuted, lineSpacing: 20 });
       });
 
-      // Icon placeholder / graphic block
-      s7.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 2.0, w: 4.0, h: 3.2, fill: { color: '1E293B' }, line: { color: colors.orange, width: 2 } });
-      s7.addText("CI/CD PIPELINE", { x: 1.0, y: 3.2, w: 3.6, h: 0.8, fontSize: 24, bold: true, color: colors.orange, align: 'center' });
 
-      // Text block
-      s7.addText("• Strict TypeScript Checks: Prevents deployment of buggy files and runtime syntax exceptions.\n" +
-                "• GitHub Actions Integration: Triggers build on push to 'main' branch automatically.\n" +
-                "• GitHub Pages Auto-Deploy: Pushes compiled Vite production bundles directly to live servers.\n" +
-                "• Global Reach: Immediate update propagation to all field tablets and monitors.", {
-        x: 5.2, y: 2.0, w: 6.5, h: 3.2, fontSize: 14, color: colors.textLight, lineSpacing: 28
+      // ----------------------------------------------------
+      // SLIDE 6: Excel Bulk Import & Verification
+      // ----------------------------------------------------
+      let s6 = addPremiumSlide("Roster Management via Excel Upload", "Data Import System");
+
+      // Left Column: Features
+      s6.addText("Import hundreds of officers in a single click with built-in validation.", {
+        x: 0.8, y: 1.3, w: 5.5, h: 0.5, fontSize: 15, color: colors.textMuted, italic: true
+      });
+
+      s6.addText("• Full Excel Structure Support:\n  Name, Rank, PNO Number, and Mobile fields mapped.\n" +
+                "• Strict Duplicate Checks:\n  The system scans the database to ensure PNO numbers (Belt Numbers) do not conflict.\n" +
+                "• Live Error Log Table:\n  Highlight rows instantly that contain empty values or wrong format.\n" +
+                "• Roster Sync:\n  Automatically refreshes the live station control list after upload.", {
+        x: 0.8, y: 2.0, w: 5.5, h: 4.5, fontSize: 14, color: colors.textLight, lineSpacing: 24
+      });
+
+      // Right Column: visual card
+      s6.addShape(pptx.ShapeType.roundRect, { x: 6.8, y: 1.8, w: 5.6, h: 4.5, fill: { color: colors.cardBg }, line: { color: colors.cardBorder, width: 1 } });
+      s6.addText("Validation UI Preview", { x: 7.1, y: 2.1, w: 5.0, h: 0.4, fontSize: 18, bold: true, color: colors.orange });
+      
+      // Mock validation logs
+      s6.addShape(pptx.ShapeType.rect, { x: 7.1, y: 2.7, w: 5.0, h: 0.7, fill: { color: '450A0A' }, line: { color: '991B1B', width: 1 } });
+      s6.addText("⚠️ Row 4: Duplicate PNO 'UP-5001' already exists.", { x: 7.3, y: 2.85, w: 4.6, h: 0.4, fontSize: 12, bold: true, color: 'FCA5A5' });
+
+      s6.addShape(pptx.ShapeType.rect, { x: 7.1, y: 3.6, w: 5.0, h: 0.7, fill: { color: '450A0A' }, line: { color: '991B1B', width: 1 } });
+      s6.addText("⚠️ Row 9: Mobile number must contain exactly 10 digits.", { x: 7.3, y: 3.75, w: 4.6, h: 0.4, fontSize: 12, bold: true, color: 'FCA5A5' });
+
+
+      // ----------------------------------------------------
+      // SLIDE 7: DevOps and Automated Delivery
+      // ----------------------------------------------------
+      let s7 = addPremiumSlide("Automated Delivery Pipeline", "DevOps & Hosting");
+
+      s7.addShape(pptx.ShapeType.roundRect, { x: 0.8, y: 1.8, w: 5.4, h: 4.5, fill: { color: colors.cardBg }, line: { color: colors.cardBorder, width: 1 } });
+      s7.addText("GitHub Pages & Actions", { x: 1.1, y: 2.1, w: 4.8, h: 0.4, fontSize: 18, bold: true, color: colors.orange });
+      s7.addText("✔ Integrated CI/CD via GitHub workflows\n" +
+                "✔ Pushing code automatically triggers site compilation\n" +
+                "✔ Vite build outputs deploy to live GitHub Pages hosting\n" +
+                "✔ Fast load times optimized using Rollup chunking", {
+        x: 1.1, y: 2.7, w: 4.8, h: 3.2, fontSize: 14, color: colors.textLight, lineSpacing: 28
+      });
+
+      s7.addShape(pptx.ShapeType.roundRect, { x: 7.0, y: 1.8, w: 5.4, h: 4.5, fill: { color: colors.cardBg }, line: { color: colors.cardBorder, width: 1 } });
+      s7.addText("Strict Pre-Build Checks", { x: 7.3, y: 2.1, w: 4.8, h: 0.4, fontSize: 18, bold: true, color: colors.accentBlue });
+      s7.addText("✔ Full compile checks locally and on cloud\n" +
+                "✔ TypeScript validates variables & component properties\n" +
+                "✔ Vite HMR gives real-time local environment feedback\n" +
+                "✔ Zero runtime crashes thanks to linting rules", {
+        x: 7.3, y: 2.7, w: 4.8, h: 3.2, fontSize: 14, color: colors.textLight, lineSpacing: 28
+      });
+
+
+      // ----------------------------------------------------
+      // SLIDE 8: Summary / Thank You Slide
+      // ----------------------------------------------------
+      let s8 = pptx.addSlide();
+      s8.background = { fill: colors.navy };
+      
+      s8.addShape(pptx.ShapeType.rect, {
+        x: 0, y: 0, w: '100%', h: 0.25, fill: { color: colors.orange }
+      });
+
+      s8.addText("KARTAVYA SMART SYSTEM", {
+        x: 1.0, y: 1.8, w: 10, h: 0.5,
+        fontSize: 16, fontFace: 'Segoe UI', bold: true, color: colors.orange,
+        letterSpacing: 2
+      });
+
+      s8.addText("Digitalizing Lucknow police duties with security and modern designs.", {
+        x: 1.0, y: 2.5, w: 11, h: 1.0,
+        fontSize: 32, fontFace: 'Trebuchet MS', bold: true, color: colors.textLight
+      });
+
+      s8.addText("Thank You!", {
+        x: 1.0, y: 4.2, w: 5, h: 1.0,
+        fontSize: 54, fontFace: 'Trebuchet MS', bold: true, color: colors.orange
       });
 
       // Save Presentation

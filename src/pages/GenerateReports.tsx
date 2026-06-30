@@ -119,13 +119,13 @@ export const GenerateReports: React.FC = () => {
                   <select 
                     value={dateRange}
                     onChange={(e) => setDateRange(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-sm focus:border-[#FF9933] outline-none dark:text-white appearance-none cursor-pointer"
+                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:border-[#FF9933] outline-none appearance-none cursor-pointer"
                   >
-                    <option value="today">Today</option>
-                    <option value="yesterday">Yesterday</option>
-                    <option value="this_week">This Week</option>
-                    <option value="this_month">This Month</option>
-                    <option value="custom">Custom Range...</option>
+                    <option value="today" className="text-gray-900 dark:text-white dark:bg-gray-800">Today</option>
+                    <option value="yesterday" className="text-gray-900 dark:text-white dark:bg-gray-800">Yesterday</option>
+                    <option value="this_week" className="text-gray-900 dark:text-white dark:bg-gray-800">This Week</option>
+                    <option value="this_month" className="text-gray-900 dark:text-white dark:bg-gray-800">This Month</option>
+                    <option value="custom" className="text-gray-900 dark:text-white dark:bg-gray-800">Custom Range...</option>
                   </select>
                   <Calendar size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
@@ -135,11 +135,11 @@ export const GenerateReports: React.FC = () => {
               <div>
                 <label className="text-xs font-semibold text-gray-500 dark:text-white/50 mb-1.5 block">Jurisdiction / Thana</label>
                 <div className="relative">
-                  <select className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-sm focus:border-[#FF9933] outline-none dark:text-white appearance-none cursor-pointer">
-                    <option value="all">All Stations (District)</option>
-                    <option value="hazratganj">Hazratganj</option>
-                    <option value="gomtinagar">Gomti Nagar</option>
-                    <option value="indiranagar">Indira Nagar</option>
+                  <select className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:border-[#FF9933] outline-none appearance-none cursor-pointer">
+                    <option value="all" className="text-gray-900 dark:text-white dark:bg-gray-800">All Stations (District)</option>
+                    <option value="hazratganj" className="text-gray-900 dark:text-white dark:bg-gray-800">Hazratganj</option>
+                    <option value="gomtinagar" className="text-gray-900 dark:text-white dark:bg-gray-800">Gomti Nagar</option>
+                    <option value="indiranagar" className="text-gray-900 dark:text-white dark:bg-gray-800">Indira Nagar</option>
                   </select>
                   <MapPin size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />

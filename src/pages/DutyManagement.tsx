@@ -160,36 +160,65 @@ export const DutyManagement: React.FC = () => {
               {/* Left Sub-Menu Sidebar (Dark Orange Theme) */}
               <div className="w-full md:w-64 bg-[#001229] p-4 shrink-0 rounded-bl-2xl overflow-y-auto">
                  <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-4 px-2">Duty Management</h3>
-                 <div className="space-y-2">
-                   {['Daily Duty', 'VIP Duty', 'Law & Order', 'Election Duty', 'Festival Duty', 'Traffic Duty', 'Night Patrol', 'Court Duty', 'Emergency Response', 'Reserve Force'].map(cat => {
-                      const isActive = activeCategory === cat;
-                      return (
-                        <button 
-                          key={cat}
-                          onClick={() => setActiveCategory(cat)}
-                          className={`w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition-all flex items-center justify-between group
-                            ${isActive 
-                              ? 'bg-black/40 text-[#FF9933] border border-[#FF9933]/50 shadow-[0_0_15px_rgba(255,153,51,0.15)]' 
-                              : 'bg-[#000a17] text-[#FF9933]/70 hover:bg-black/40 hover:text-[#FF9933] border border-[#FF9933]/10 hover:border-[#FF9933]/30'
-                            }`}
-                        >
-                          <span className="flex items-center gap-3">
-                            {cat === 'VIP Duty' && <Shield size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
-                            {cat === 'Law & Order' && <Target size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
-                            {cat === 'Traffic Duty' && <Car size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
-                            {cat === 'Night Patrol' && <Clock size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
-                            {cat === 'Election Duty' && <Users size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
-                            {cat === 'Festival Duty' && <Calendar size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
-                            {cat === 'Emergency Response' && <AlertTriangle size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
-                            {['Daily Duty', 'Court Duty', 'Reserve Force'].includes(cat) && <FileText size={16} className={isActive ? 'text-[#FF9933]' : 'text-[#FF9933]/70 group-hover:text-[#FF9933]'} />}
-                            
-                            {cat}
-                          </span>
-                          
-                          {cat === 'VIP Duty' && <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border ${isActive ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-red-500/10 text-red-500/70 border-red-500/20'}`}>HIGH</span>}
-                        </button>
-                      );
-                   })}
+                 
+                 <div className="mb-4">
+                   <button 
+                     onClick={() => setActiveCategory('All')}
+                     className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-between group
+                       ${activeCategory === 'All' 
+                         ? 'bg-[#FF9933]/10 text-[#FF9933] border border-[#FF9933]/30 shadow-[0_0_10px_rgba(255,153,51,0.1)]' 
+                         : 'bg-transparent text-white/60 hover:bg-white/5 hover:text-white border border-transparent'
+                       }`}
+                   >
+                     <span className="flex items-center gap-3">
+                       <Briefcase size={16} className={activeCategory === 'All' ? 'text-[#FF9933]' : 'text-white/40 group-hover:text-white'} />
+                       All Duties
+                     </span>
+                   </button>
+                 </div>
+
+                 <div className="space-y-4">
+                   {[
+                     { name: 'Regular Duties', items: ['Daily Duty', 'Traffic Duty', 'Night Patrol', 'Reserve Force'] },
+                     { name: 'Security & Law', items: ['VIP Duty', 'Law & Order'] },
+                     { name: 'Event Duties', items: ['Election Duty', 'Festival Duty'] },
+                     { name: 'Legal/Emergency Services', items: ['Court Duty', 'Emergency Response'] }
+                   ].map((group, gIdx) => (
+                     <div key={gIdx}>
+                       <p className="px-2 text-[10px] font-semibold text-[#FF9933]/60 uppercase tracking-wider mb-2">{group.name}</p>
+                       <div className="space-y-2">
+                         {group.items.map(cat => {
+                            const isActive = activeCategory === cat;
+                            return (
+                              <button 
+                                key={cat}
+                                onClick={() => setActiveCategory(cat)}
+                                className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-between group
+                                  ${isActive 
+                                    ? 'bg-[#FF9933]/10 text-[#FF9933] border border-[#FF9933]/30 shadow-[0_0_10px_rgba(255,153,51,0.1)]' 
+                                    : 'bg-transparent text-white/60 hover:bg-white/5 hover:text-white border border-transparent'
+                                  }`}
+                              >
+                                <span className="flex items-center gap-3">
+                                  {cat === 'VIP Duty' && <Shield size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/40 group-hover:text-white'} />}
+                                  {cat === 'Law & Order' && <Target size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/40 group-hover:text-white'} />}
+                                  {cat === 'Traffic Duty' && <Car size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/40 group-hover:text-white'} />}
+                                  {cat === 'Night Patrol' && <Clock size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/40 group-hover:text-white'} />}
+                                  {cat === 'Election Duty' && <Users size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/40 group-hover:text-white'} />}
+                                  {cat === 'Festival Duty' && <Calendar size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/40 group-hover:text-white'} />}
+                                  {cat === 'Emergency Response' && <AlertTriangle size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/40 group-hover:text-white'} />}
+                                  {['Daily Duty', 'Court Duty', 'Reserve Force'].includes(cat) && <FileText size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/40 group-hover:text-white'} />}
+                                  
+                                  {cat}
+                                </span>
+                                
+                                {cat === 'VIP Duty' && <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border ${isActive ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-red-500/10 text-red-500/70 border-red-500/20'}`}>HIGH</span>}
+                              </button>
+                            );
+                         })}
+                       </div>
+                     </div>
+                   ))}
                  </div>
               </div>
 

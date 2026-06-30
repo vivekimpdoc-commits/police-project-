@@ -5,7 +5,7 @@ import {
   LogOut, User, Bell, CheckSquare, FileText, BarChart2, 
   Calendar, Briefcase, AlertTriangle, 
   Menu, X, Shield, Search, Map, Users, Target, Clock, ShieldAlert,
-  Car, Sword, Radio, MoreVertical, CheckCircle
+  Car, Sword, Radio, MoreVertical, CheckCircle, ChevronDown
 } from 'lucide-react';
 import { useNavigate, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { DashboardHome } from './DashboardHome';
@@ -33,6 +33,18 @@ export const Dashboard: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
+    'MAIN': true,
+    'DUTY MANAGEMENT': false,
+    'REPORTS & LOGS': true
+  });
+
+  const toggleGroup = (title: string) => {
+    setExpandedGroups(prev => ({
+      ...prev,
+      [title]: prev[title] === undefined ? false : !prev[title]
+    }));
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -51,17 +63,37 @@ export const Dashboard: React.FC = () => {
     },
     {
       title: 'DUTY MANAGEMENT',
-      items: [
-        { icon: Briefcase, label: 'Daily Duty', path: '/dashboard/duties' },
-        { icon: Shield, label: 'VIP Duty', badge: 'High', path: '/dashboard/duties' },
-        { icon: Target, label: 'Law & Order', path: '/dashboard/duties' },
-        { icon: Users, label: 'Election Duty', path: '/dashboard/duties' },
-        { icon: Calendar, label: 'Festival Duty', path: '/dashboard/duties' },
-        { icon: Car, label: 'Traffic Duty', path: '/dashboard/duties' },
-        { icon: Clock, label: 'Night Patrol', path: '/dashboard/duties' },
-        { icon: FileText, label: 'Court Duty', path: '/dashboard/duties' },
-        { icon: ShieldAlert, label: 'Emergency Response', path: '/dashboard/duties' },
-        { icon: Users, label: 'Reserve Force', path: '/dashboard/duties' },
+      categories: [
+        {
+          name: 'Regular Duties',
+          items: [
+            { icon: Briefcase, label: 'Daily Duty', path: '/dashboard/duties' },
+            { icon: Car, label: 'Traffic Duty', path: '/dashboard/duties' },
+            { icon: Clock, label: 'Night Patrol', path: '/dashboard/duties' },
+            { icon: Users, label: 'Reserve Force', path: '/dashboard/duties' },
+          ]
+        },
+        {
+          name: 'Security & Law',
+          items: [
+            { icon: Shield, label: 'VIP Duty', badge: 'High', path: '/dashboard/duties' },
+            { icon: Target, label: 'Law & Order', path: '/dashboard/duties' },
+          ]
+        },
+        {
+          name: 'Event Duties',
+          items: [
+            { icon: Users, label: 'Election Duty', path: '/dashboard/duties' },
+            { icon: Calendar, label: 'Festival Duty', path: '/dashboard/duties' },
+          ]
+        },
+        {
+          name: 'Legal/Emergency Services',
+          items: [
+            { icon: FileText, label: 'Court Duty', path: '/dashboard/duties' },
+            { icon: ShieldAlert, label: 'Emergency Response', badge: 'Urgent', path: '/dashboard/duties' },
+          ]
+        }
       ]
     },
     {
@@ -112,30 +144,76 @@ export const Dashboard: React.FC = () => {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar">
-          {menuGroups.map((group, gIdx) => (
+          {menuGroups.map((group, gIdx) => {
+            const isGroupExpanded = expandedGroups[group.title] !== false;
+            return (
             <div key={gIdx}>
-              <p className="px-4 text-[11px] font-bold text-white/40 tracking-wider mb-2">{group.title}</p>
-              <ul className="space-y-1">
-                {group.items.map((item, idx) => {
-                  const isActive = location.pathname === item.path || (item.path === '/dashboard' && location.pathname === '/dashboard/');
-                  return (
-                  <li key={idx}>
-                    <Link to={item.path} className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl transition-all text-sm font-medium ${isActive ? 'bg-gradient-to-r from-[#FF9933]/20 to-transparent text-[#FF9933] border-l-2 border-[#FF9933]' : 'text-white/70 hover:bg-white/5 hover:text-white'}`}>
-                      <div className="flex items-center gap-3">
-                        <item.icon size={18} className={isActive ? 'text-[#FF9933]' : 'text-white/50'} />
-                        <span>{item.label}</span>
-                      </div>
-                      {item.badge && (
-                        <span className="bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] py-0.5 px-2 rounded-full font-bold uppercase tracking-wider">
-                          {item.badge}
-                        </span>
-                      )}
-                    </Link>
-                  </li>
-                )})}
-              </ul>
+              <button 
+                onClick={() => toggleGroup(group.title)}
+                className="w-full flex items-center justify-between px-4 mb-2 cursor-pointer group outline-none"
+              >
+                <p className="text-[11px] font-bold text-white/40 tracking-wider group-hover:text-white/70 transition-colors uppercase">{group.title}</p>
+                <ChevronDown size={14} className={`text-white/40 group-hover:text-white/70 transition-transform duration-300 ${isGroupExpanded ? 'rotate-180' : ''}`} />
+              </button>
+              
+              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isGroupExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+              
+              {group.items && (
+                <ul className="space-y-1">
+                  {group.items.map((item, idx) => {
+                    const isActive = location.pathname === item.path || (item.path === '/dashboard' && location.pathname === '/dashboard/');
+                    return (
+                      <li key={idx}>
+                        <Link to={item.path} className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl transition-all text-sm font-medium ${isActive ? 'bg-gradient-to-r from-[#FF9933]/20 to-transparent text-[#FF9933] border-l-2 border-[#FF9933]' : 'text-white/70 hover:bg-white/5 hover:text-white'}`}>
+                          <div className="flex items-center gap-3">
+                            <item.icon size={18} className={isActive ? 'text-[#FF9933]' : 'text-white/50'} />
+                            <span>{item.label}</span>
+                          </div>
+                          {item.badge && (
+                            <span className="bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] py-0.5 px-2 rounded-full font-bold uppercase tracking-wider">
+                              {item.badge}
+                            </span>
+                          )}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+
+              {group.categories && (
+                <div className="space-y-4 mt-2">
+                  {group.categories.map((category, cIdx) => (
+                    <div key={cIdx}>
+                      <p className="px-4 text-[10px] font-semibold text-[#FF9933]/60 uppercase tracking-wider mb-1.5">{category.name}</p>
+                      <ul className="space-y-1 border-l border-white/5 ml-5 pl-2">
+                        {category.items.map((item, idx) => {
+                          const isActive = location.pathname === item.path || (item.path === '/dashboard' && location.pathname === '/dashboard/');
+                          return (
+                            <li key={idx}>
+                              <Link to={item.path} className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-all text-sm font-medium ${isActive ? 'bg-[#FF9933]/10 text-[#FF9933]' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}>
+                                <div className="flex items-center gap-3">
+                                  <item.icon size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/40'} />
+                                  <span>{item.label}</span>
+                                </div>
+                                {item.badge && (
+                                  <span className="bg-red-500/20 text-red-400 border border-red-500/30 text-[9px] py-0.5 px-1.5 rounded-full font-bold uppercase tracking-wider">
+                                    {item.badge}
+                                  </span>
+                                )}
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              </div>
             </div>
-          ))}
+          )})}
         </nav>
 
         <div className="p-4 border-t border-white/10 shrink-0">

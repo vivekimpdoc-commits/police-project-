@@ -48,6 +48,33 @@ export const AttendanceModule: React.FC = () => {
   const dynamicAttendance = DEMO_ATTENDANCE.filter(a => a.station === storedThana);
 
   const { userData } = useAuth();
+  const role = userData?.role || 'Constable';
+  const isThaneLevel = role === 'SHO' || role === 'Constable';
+
+  // Dynamic calculations based on role/Thana scope
+  const totalCount = isThaneLevel ? (dynamicAttendance.length || 10) : 2520;
+  const presentCount = isThaneLevel ? dynamicAttendance.filter(a => a.status === 'On Time').length : 2145;
+  const lateCount = isThaneLevel ? dynamicAttendance.filter(a => a.status === 'Late').length : 124;
+  const leaveCount = isThaneLevel ? dynamicAttendance.filter(a => a.status === 'On Leave').length : 210;
+  const absentCount = isThaneLevel ? dynamicAttendance.filter(a => a.status === 'Absent').length : 12;
+  const presentPercent = totalCount > 0 ? Math.round(((presentCount + lateCount) / totalCount) * 100) : 85;
+
+  const checkinTrendData = isThaneLevel ? [
+    { time: '06:00', count: Math.round(totalCount * 0.05) },
+    { time: '07:00', count: Math.round(totalCount * 0.2) },
+    { time: '08:00', count: Math.round(totalCount * 0.7) },
+    { time: '09:00', count: Math.round(totalCount * 0.85) },
+    { time: '10:00', count: Math.round(totalCount * 0.95) },
+    { time: '11:00', count: totalCount },
+  ] : [
+    { time: '06:00', count: 120 },
+    { time: '07:00', count: 450 },
+    { time: '08:00', count: 1800 },
+    { time: '09:00', count: 2100 },
+    { time: '10:00', count: 2450 },
+    { time: '11:00', count: 2500 },
+  ];
+
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('Today');
 
@@ -92,16 +119,16 @@ export const AttendanceModule: React.FC = () => {
         <div className="bg-white dark:bg-[#001229]/80 rounded-2xl p-5 border border-gray-100 dark:border-white/10 shadow-sm relative overflow-hidden">
            <div className="absolute top-0 right-0 w-20 h-20 bg-green-500/10 rounded-bl-full -mr-4 -mt-4"></div>
            <p className="text-gray-500 dark:text-white/50 text-xs font-bold uppercase tracking-wider mb-1">Present (On Time)</p>
-           <h3 className="text-3xl font-black text-gray-800 dark:text-white mb-2">2,145</h3>
+           <h3 className="text-3xl font-black text-gray-800 dark:text-white mb-2">{presentCount}</h3>
            <div className="flex items-center gap-1 text-green-500 text-sm font-bold">
-             <CheckCircle2 size={16} /> 85% of Active Force
+             <CheckCircle2 size={16} /> {presentPercent}% of Active Force
            </div>
         </div>
         
         <div className="bg-white dark:bg-[#001229]/80 rounded-2xl p-5 border border-gray-100 dark:border-white/10 shadow-sm relative overflow-hidden">
            <div className="absolute top-0 right-0 w-20 h-20 bg-amber-500/10 rounded-bl-full -mr-4 -mt-4"></div>
            <p className="text-gray-500 dark:text-white/50 text-xs font-bold uppercase tracking-wider mb-1">Marked Late</p>
-           <h3 className="text-3xl font-black text-gray-800 dark:text-white mb-2">124</h3>
+           <h3 className="text-3xl font-black text-gray-800 dark:text-white mb-2">{lateCount}</h3>
            <div className="flex items-center gap-1 text-amber-500 text-sm font-bold">
              <AlertCircle size={16} /> Needs Review
            </div>
@@ -110,7 +137,7 @@ export const AttendanceModule: React.FC = () => {
         <div className="bg-white dark:bg-[#001229]/80 rounded-2xl p-5 border border-gray-100 dark:border-white/10 shadow-sm relative overflow-hidden">
            <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-bl-full -mr-4 -mt-4"></div>
            <p className="text-gray-500 dark:text-white/50 text-xs font-bold uppercase tracking-wider mb-1">On Approved Leave</p>
-           <h3 className="text-3xl font-black text-gray-800 dark:text-white mb-2">210</h3>
+           <h3 className="text-3xl font-black text-gray-800 dark:text-white mb-2">{leaveCount}</h3>
            <div className="flex items-center gap-1 text-blue-500 text-sm font-bold">
              <Calendar size={16} /> Scheduled
            </div>
@@ -119,7 +146,7 @@ export const AttendanceModule: React.FC = () => {
         <div className="bg-white dark:bg-[#001229]/80 rounded-2xl p-5 border border-gray-100 dark:border-white/10 shadow-sm relative overflow-hidden">
            <div className="absolute top-0 right-0 w-20 h-20 bg-red-500/10 rounded-bl-full -mr-4 -mt-4"></div>
            <p className="text-gray-500 dark:text-white/50 text-xs font-bold uppercase tracking-wider mb-1">Absent (AWOL)</p>
-           <h3 className="text-3xl font-black text-gray-800 dark:text-white mb-2">12</h3>
+           <h3 className="text-3xl font-black text-gray-800 dark:text-white mb-2">{absentCount}</h3>
            <div className="flex items-center gap-1 text-red-500 text-sm font-bold">
              <XCircle size={16} /> Escalated to SHO
            </div>

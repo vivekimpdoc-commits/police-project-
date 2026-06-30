@@ -65,7 +65,6 @@ export const Dashboard: React.FC = () => {
         {
           title: 'STATION CONTROL (थाना नियंत्रण)',
           items: [
-            { icon: BarChart2, label: 'Station Dashboard (थाना डैशबोर्ड)', path: '/dashboard' },
             { icon: Briefcase, label: 'Duty Allocation (ड्यूटी आवंटन)', path: '/dashboard/duties' },
             { icon: Map, label: 'Live Patrol Map (लाइव गश्ती नक्शा)', path: '/dashboard/map' },
             { icon: Users, label: 'Staff Availability (बल उपलब्धता)', path: '/dashboard/officers' },
@@ -76,10 +75,13 @@ export const Dashboard: React.FC = () => {
     } else if (userData?.role === 'Constable') {
       return [
         {
-          title: 'MY RECORDS (मेरा खाता)',
+          title: 'STATION CONTROL (थाना नियंत्रण)',
           items: [
-            { icon: Briefcase, label: 'My Duty Schedule (मेरी ड्यूटी)', path: '/dashboard' },
-            { icon: CheckSquare, label: 'My Attendance (मेरी उपस्थिति)', path: '/dashboard/attendance' },
+            { icon: BarChart2, label: 'Station Dashboard (थाना डैशबोर्ड)', path: '/dashboard' },
+            { icon: Briefcase, label: 'Duty Allocation (ड्यूटी आवंटन)', path: '/dashboard/duties' },
+            { icon: Map, label: 'Live Patrol Map (लाइव गश्ती नक्शा)', path: '/dashboard/map' },
+            { icon: Users, label: 'Staff Availability (बल उपलब्धता)', path: '/dashboard/officers' },
+            { icon: CheckSquare, label: 'Attendance & Check-in (उपस्थिति)', path: '/dashboard/attendance' },
           ]
         }
       ];

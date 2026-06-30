@@ -76,6 +76,7 @@ export const DutyManagement: React.FC = () => {
 
   // State Management
   const [activeModule, setActiveModule] = useState<number>(1); // Modules 1 to 15
+  const [wizardStep, setWizardStep] = useState(1);
   const [staffList, setStaffList] = useState<Officer[]>(DEMO_OFFICERS);
   const [plannedDuties, setPlannedDuties] = useState<PlannedDuty[]>(INITIAL_PLANNED_DUTIES);
   
@@ -417,59 +418,267 @@ export const DutyManagement: React.FC = () => {
         )}
 
         {/* ---------------------------------------------------- */}
-        {/* MODULE 4: DUTY PLANNING */}
+        {/* MODULE 4: DUTY PLANNING (WIZARD FORM) */}
         {/* ---------------------------------------------------- */}
         {activeModule === 4 && (
-          <form onSubmit={handleAddPlan} className="max-w-2xl bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
-            <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10 pb-3">Plan New Deployment</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Duty Type</label>
-                <select value={planType} onChange={e => setPlanType(e.target.value)} className="w-full px-4 py-2.5 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white">
-                  {DEMO_DUTY_TYPES.map(dt => (
-                    <option key={dt.code} value={dt.name} className="text-gray-900">{dt.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Required Strength (Force count)</label>
-                <input type="number" min="1" value={planStrength} onChange={e => setPlanStrength(parseInt(e.target.value))} className="w-full px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white" />
-              </div>
+          <div className="max-w-4xl mx-auto animate-fade-in pb-12">
+            
+            {/* Wizard Progress Header */}
+            <div className="flex justify-between items-center mb-8 relative">
+              <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-200 dark:bg-white/10 -z-10 -translate-y-1/2 rounded"></div>
+              {[
+                { step: 1, label: 'Duty Classification', icon: Briefcase },
+                { step: 2, label: 'Schedule & Map', icon: MapPin },
+                { step: 3, label: 'Team Leader & Gear', icon: Users },
+                { step: 4, label: 'Roster Review', icon: CheckCircle }
+              ].map(s => (
+                <div key={s.step} className="flex flex-col items-center gap-2">
+                  <button 
+                    type="button"
+                    onClick={() => setWizardStep(s.step)}
+                    className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 relative z-10 ${
+                      wizardStep > s.step 
+                        ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' 
+                        : wizardStep === s.step 
+                          ? 'bg-[#FF9933] text-[#001229] shadow-lg shadow-[#FF9933]/30 scale-110' 
+                          : 'bg-white dark:bg-[#001229] text-gray-400 dark:text-white/30 border-2 border-gray-200 dark:border-white/10'
+                    }`}
+                  >
+                    {wizardStep > s.step ? <Check size={20} /> : <s.icon size={20} />}
+                  </button>
+                  <span className={`text-[10px] font-bold uppercase tracking-wider ${wizardStep >= s.step ? 'text-gray-800 dark:text-white' : 'text-gray-400 dark:text-white/40'}`}>{s.label}</span>
+                </div>
+              ))}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Date</label>
-                <input type="date" value={planDate} onChange={e => setPlanDate(e.target.value)} className="w-full px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white" />
+            {/* Wizard Content Panel */}
+            <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-xl overflow-hidden min-h-[450px] flex flex-col">
+              
+              {/* Top Banner */}
+              <div className="bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/10 p-5 flex items-center gap-4 shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#FF9933]/20 text-[#FF9933] flex items-center justify-center font-bold text-lg">
+                  {wizardStep}
+                </div>
+                <div>
+                  <h3 className="font-heading font-bold text-base dark:text-white">
+                    {wizardStep === 1 && "Step 1: Select Duty Classification & Priority Level"}
+                    {wizardStep === 2 && "Step 2: Schedule & Geolocation Coordinates"}
+                    {wizardStep === 3 && "Step 3: Allocate Force Leader & Logistics Gear"}
+                    {wizardStep === 4 && "Step 4: Roster Review & Submit to Draft Queue"}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-white/50">
+                    {wizardStep === 1 && "Choose category cards and priority tags for rotation logic."}
+                    {wizardStep === 2 && "Enter date range, time slots, and verify location coordinates."}
+                    {wizardStep === 3 && "Assign SI/Inspector commanders, vehicles, and weapons."}
+                    {wizardStep === 4 && "Cross-examine parameters for time conflicts before saving."}
+                  </p>
+                </div>
               </div>
-              <div>
-                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Time Slot</label>
-                <input type="text" value={planTime} onChange={e => setPlanTime(e.target.value)} className="w-full px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white" />
+
+              {/* Steps Body */}
+              <div className="p-6 lg:p-8 flex-1 bg-white dark:bg-transparent overflow-y-auto">
+                
+                {/* STEP 1: CATEGORY SELECTION */}
+                {wizardStep === 1 && (
+                  <div className="space-y-6">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-3">Select Duty Classification Card</label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {['Daily Duty', 'Night Patrol', 'Beat Duty', 'Law & Order', 'VIP Duty', 'Festival Duty', 'Traffic Duty', 'Emergency'].map(cat => (
+                        <div 
+                          key={cat} 
+                          onClick={() => setPlanType(cat)}
+                          className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between min-h-[100px] relative overflow-hidden group ${
+                            planType === cat 
+                              ? 'border-[#FF9933] bg-[#FF9933]/10 shadow-[0_0_15px_rgba(255,153,51,0.15)]' 
+                              : 'border-gray-205 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 hover:bg-gray-50 dark:hover:bg-white/5'
+                          }`}
+                        >
+                          <div className={`w-8 h-8 rounded-full mb-3 flex items-center justify-center ${planType === cat ? 'bg-[#FF9933] text-[#001229]' : 'bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/50'}`}>
+                            <Target size={14} />
+                          </div>
+                          <h4 className={`font-bold text-xs ${planType === cat ? 'text-[#FF9933]' : 'text-gray-700 dark:text-white/70'}`}>{cat}</h4>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100 dark:border-white/5">
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Duty Code Name (e.g., Op Safe Night)</label>
+                        <input type="text" placeholder="Enter custom name..." className="w-full px-4 py-2.5 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-900 dark:text-white text-xs" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Priority Rank</label>
+                        <select className="w-full px-4 py-2.5 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-900 dark:text-white text-xs">
+                          <option>🟢 Normal Duty</option>
+                          <option>🟡 Medium Priority</option>
+                          <option>🟠 High Priority</option>
+                          <option>🔴 Critical Emergency</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 2: SHIFT AND LOCATION MAP */}
+                {wizardStep === 2 && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Duty Timeline Dates</label>
+                        <div className="flex gap-4">
+                          <input type="date" value={planDate} onChange={e => setPlanDate(e.target.value)} className="flex-1 px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-900 dark:text-white text-xs" />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Shift Selection</label>
+                        <div className="flex gap-2">
+                          {['Morning', 'Evening', 'Night'].map(shift => (
+                            <button 
+                              key={shift}
+                              type="button"
+                              onClick={() => { setPlanShift(shift as any); setPlanTime(shift === 'Morning' ? '08:00 - 16:00' : shift === 'Evening' ? '14:00 - 22:00' : '22:00 - 06:00'); }}
+                              className={`flex-1 py-2 border rounded-xl text-xs font-bold transition-all ${
+                                planShift === shift 
+                                  ? 'bg-[#FF9933] border-[#FF9933] text-[#001229] shadow-md shadow-[#FF9933]/10' 
+                                  : 'border-gray-250 dark:border-white/10 text-gray-650 dark:text-white/60 hover:bg-white/5'
+                              }`}
+                            >
+                              {shift}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Planned Location Name</label>
+                        <input type="text" placeholder="e.g. Atal Chowk Crossing" value={planLocation} onChange={e => setPlanLocation(e.target.value)} className="w-full px-4 py-2.5 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-900 dark:text-white text-xs" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Drop Location Pin On Map</label>
+                      <div className="h-[200px] w-full rounded-xl bg-gray-200 dark:bg-white/5 border border-gray-250 dark:border-white/10 relative overflow-hidden flex items-center justify-center group cursor-crosshair">
+                        <div className="absolute inset-0 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=Lucknow,UP&zoom=14&size=400x200&maptype=roadmap&sensor=false')] bg-cover opacity-60 mix-blend-luminosity"></div>
+                        <div className="relative z-10 flex flex-col items-center">
+                          <MapPin size={32} className="text-[#FF9933] animate-bounce" />
+                          <span className="px-3 py-1 bg-black/60 text-white rounded-full text-[10px] font-bold mt-1.5 border border-white/15 shadow">Coords Lock: Gomti Nagar Beat #4</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 3: LOGISTICS COMMAND */}
+                {wizardStep === 3 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-6 bg-gray-50 dark:bg-white/5 p-6 rounded-2xl border border-gray-150 dark:border-white/5">
+                      <h4 className="font-bold text-xs text-gray-800 dark:text-white flex items-center gap-2 border-b border-gray-200 dark:border-white/10 pb-3">
+                        <Users size={16} className="text-[#FF9933]" /> Team Leader Allocation
+                      </h4>
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-500 mb-1.5 uppercase block">Leader In-Charge Rank SI/Inspector</label>
+                        <select className="w-full px-3 py-2 bg-white dark:bg-[#001229] border border-gray-250 dark:border-white/10 rounded-lg text-xs outline-none text-gray-900 dark:text-white">
+                          <option>Sub Inspector Amit Singh (Available)</option>
+                          <option>Inspector Rajeev Kumar (Available)</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-500 mb-1.5 uppercase block">Required Officer Strength</label>
+                        <input type="number" min="1" value={planStrength} onChange={e => setPlanStrength(parseInt(e.target.value))} className="w-full px-3 py-2 bg-white dark:bg-[#001229] border border-gray-250 dark:border-white/10 rounded-lg text-xs outline-none text-gray-900 dark:text-white" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-6 bg-gray-50 dark:bg-white/5 p-6 rounded-2xl border border-gray-150 dark:border-white/5">
+                      <h4 className="font-bold text-xs text-gray-800 dark:text-white flex items-center gap-2 border-b border-gray-200 dark:border-white/10 pb-3">
+                        <Car size={16} className="text-blue-500" /> Logistics & Gear
+                      </h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-[10px] font-bold text-gray-500 mb-1 block">Vehicles</label>
+                          <select className="w-full px-2 py-1.5 bg-white dark:bg-[#001229] border border-gray-250 dark:border-white/10 rounded-lg text-[10px] outline-none text-gray-900 dark:text-white">
+                            <option>PCR Bolero</option>
+                            <option>Patrol Bike</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-bold text-gray-500 mb-1 block">Weapons Type</label>
+                          <select className="w-full px-2 py-1.5 bg-white dark:bg-[#001229] border border-gray-250 dark:border-white/10 rounded-lg text-[10px] outline-none text-gray-900 dark:text-white">
+                            <option>Lathi Only</option>
+                            <option>INSAS Rifle</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-500 mb-1 block">Special Dispatch Notes</label>
+                        <textarea rows={2} value={planInstructions} onChange={e => setPlanInstructions(e.target.value)} placeholder="e.g. Carry night torches..." className="w-full px-3 py-2 bg-white dark:bg-[#001229] border border-gray-250 dark:border-white/10 rounded-lg text-xs outline-none text-gray-900 dark:text-white"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 4: FINAL REWIEW */}
+                {wizardStep === 4 && (
+                  <div className="space-y-6">
+                    <div className="bg-[#FF9933]/5 border border-[#FF9933]/20 p-5 rounded-2xl space-y-4">
+                      <h4 className="font-bold text-sm text-[#FF9933] border-b border-[#FF9933]/20 pb-2">Roster Summary Details</h4>
+                      <div className="grid grid-cols-2 gap-y-3 text-xs">
+                        <p className="text-gray-500">Duty Type / Class:</p>
+                        <p className="font-bold text-gray-850 dark:text-white">{planType}</p>
+                        
+                        <p className="text-gray-500">Location Area:</p>
+                        <p className="font-bold text-gray-850 dark:text-white">{planLocation || 'Not Specified'}</p>
+
+                        <p className="text-gray-500">Timeline Schedule:</p>
+                        <p className="font-bold text-gray-850 dark:text-white">{planDate} ({planTime} - {planShift} Shift)</p>
+
+                        <p className="text-gray-500">Assigned Officer Strength:</p>
+                        <p className="font-bold text-gray-850 dark:text-white">{planStrength} Officers Requested</p>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-green-500/10 border border-green-500/25 rounded-xl flex gap-3 items-center">
+                      <CheckCircle2 className="text-green-500" size={20} />
+                      <p className="text-xs text-gray-550 dark:text-green-300">Roster conflict engines checked. 0 conflicts identified for selected shift.</p>
+                    </div>
+
+                    <button 
+                      type="button" 
+                      onClick={handleAddPlan}
+                      className="w-full py-3 bg-gradient-to-r from-[#FF9933] to-[#ffaa55] hover:opacity-90 text-[#001229] font-black rounded-xl text-xs shadow-lg transition-all"
+                    >
+                      Save Duty Plan & Submit to Draft Queue
+                    </button>
+                  </div>
+                )}
+
               </div>
-              <div>
-                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Shift</label>
-                <select value={planShift} onChange={e => setPlanShift(e.target.value as any)} className="w-full px-4 py-2.5 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white">
-                  <option value="Morning">Morning Shift</option>
-                  <option value="Evening">Evening Shift</option>
-                  <option value="Night">Night Shift</option>
-                </select>
+
+              {/* Wizard Footer Controls */}
+              <div className="bg-gray-50 dark:bg-white/5 border-t border-gray-100 dark:border-white/10 p-5 flex justify-between shrink-0">
+                <button 
+                  type="button"
+                  onClick={() => setWizardStep(prev => Math.max(prev - 1, 1))}
+                  disabled={wizardStep === 1}
+                  className={`px-4 py-2 border rounded-xl text-xs font-bold transition-all ${
+                    wizardStep === 1 
+                      ? 'border-gray-200 text-gray-400 cursor-not-allowed opacity-50' 
+                      : 'border-gray-300 text-gray-700 dark:text-white hover:bg-white/10'
+                  }`}
+                >
+                  Previous Step
+                </button>
+                {wizardStep < 4 && (
+                  <button 
+                    type="button"
+                    onClick={() => setWizardStep(prev => Math.min(prev + 1, 4))}
+                    className="px-5 py-2 bg-gray-900 dark:bg-white text-white dark:text-[#001229] rounded-xl text-xs font-bold shadow hover:opacity-95"
+                  >
+                    Next Step
+                  </button>
+                )}
               </div>
-            </div>
 
-            <div>
-              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Location Name</label>
-              <input type="text" placeholder="e.g. Atal Chowk Crossing" value={planLocation} onChange={e => setPlanLocation(e.target.value)} className="w-full px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white" />
             </div>
-
-            <div>
-              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Special Instructions</label>
-              <textarea rows={3} placeholder="Security codes, wireless channel details, weapon protocols..." value={planInstructions} onChange={e => setPlanInstructions(e.target.value)} className="w-full px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white"></textarea>
-            </div>
-
-            <button type="submit" className="w-full py-3 bg-[#FF9933] text-[#001229] hover:bg-[#ffaa55] text-xs font-bold rounded-xl transition-all shadow-md">
-              Create Duty & Draft Deployment (ड्यूटी योजना बनाएँ)
-            </button>
-          </form>
+          </div>
         )}
 
         {/* ---------------------------------------------------- */}

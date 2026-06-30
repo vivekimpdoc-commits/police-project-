@@ -184,13 +184,6 @@ export const Dashboard: React.FC = () => {
               ]
             }
           ]
-        },
-        {
-          title: 'MY RECORDS (मेरा खाता)',
-          items: [
-            { icon: Calendar, label: 'My Duty Schedule', path: '/dashboard/my-duties' },
-            { icon: CheckSquare, label: 'My Attendance', path: '/dashboard/attendance' },
-          ]
         }
       ];
     } else {

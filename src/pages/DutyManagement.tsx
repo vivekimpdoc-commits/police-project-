@@ -3,719 +3,913 @@ import {
   Plus, Search, Filter, Briefcase, MapPin, Clock, Calendar, CheckCircle, 
   AlertTriangle, MoreVertical, Shield, ChevronDown, Download, Users, 
   Car, Radio, ArrowRight, ArrowLeft, Target, ShieldAlert, FileText, Check, X,
-  ThumbsUp, Eye, ShieldCheck, UserCheck, CheckCircle2, ChevronRight
+  ThumbsUp, Eye, ShieldCheck, UserCheck, CheckCircle2, ChevronRight, Settings,
+  Activity, Info, CalendarRange, HelpCircle, Bell, RefreshCw, Layers
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
-const INITIAL_DUTIES = [
-  // Hazratganj
-  { id: 'DTY-9021', category: 'VIP Duty', name: 'CM Airport Escort', date: '2026-06-30', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 24, status: 'Active (Approved)', approvalStage: 4, priority: 'Critical' },
-  { id: 'DTY-9022', category: 'Law & Order', name: 'Hazratganj Protest', date: '2026-06-29', shift: 'Evening', district: 'Lucknow', station: 'Hazratganj', staff: 12, status: 'Pending SHO', approvalStage: 1, priority: 'High' },
-  { id: 'DTY-9023', category: 'Traffic Duty', name: 'Hazratganj Chauraha Check', date: '2026-07-01', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 6, status: 'Pending District', approvalStage: 2, priority: 'Medium' },
-  { id: 'DTY-9024', category: 'Night Patrol', name: 'Sector 4 Area Patrol', date: '2026-06-29', shift: 'Night', district: 'Lucknow', station: 'Hazratganj', staff: 6, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'Medium' },
-  { id: 'DTY-9026', category: 'Court Duty', name: 'High Court Security', date: '2026-06-30', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 4, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'Medium' },
-  { id: 'DTY-9029', category: 'VIP Duty', name: 'Governor House Guard', date: '2026-07-01', shift: 'Morning', district: 'Lucknow', station: 'Hazratganj', staff: 15, status: 'Pending SHO', approvalStage: 1, priority: 'High' },
-  
-  // Gomti Nagar
-  { id: 'DTY-8011', category: 'Traffic Duty', name: 'Marine Drive Diversion', date: '2026-07-01', shift: 'Evening', district: 'Lucknow', station: 'Gomti Nagar', staff: 8, status: 'Active (Approved)', approvalStage: 4, priority: 'Medium' },
-  { id: 'DTY-8012', category: 'VIP Duty', name: 'Minister Residence Security', date: '2026-06-29', shift: 'Morning', district: 'Lucknow', station: 'Gomti Nagar', staff: 12, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
-  { id: 'DTY-8013', category: 'Night Patrol', name: 'Vikas Khand Patrol', date: '2026-06-30', shift: 'Night', district: 'Lucknow', station: 'Gomti Nagar', staff: 4, status: 'Pending SHO', approvalStage: 1, priority: 'Low' },
-  
-  // Chowk
-  { id: 'DTY-7011', category: 'Law & Order', name: 'Old City Strike Control', date: '2026-07-02', shift: 'Evening', district: 'Lucknow', station: 'Chowk', staff: 20, status: 'Active (Approved)', approvalStage: 4, priority: 'High' },
-  { id: 'DTY-7012', category: 'Festival Duty', name: 'Procession Route Security', date: '2026-07-10', shift: 'Evening', district: 'Lucknow', station: 'Chowk', staff: 45, status: 'Pending District', approvalStage: 2, priority: 'Critical' },
-  
-  // Alambagh
-  { id: 'DTY-6011', category: 'Emergency', name: 'Highway Accident Response', date: '2026-06-29', shift: 'Night', district: 'Lucknow', station: 'Alambagh', staff: 8, status: 'Active (Approved)', approvalStage: 4, priority: 'Critical' },
-  { id: 'DTY-6012', category: 'Reserve Force', name: 'Bus Stand QRT', date: '2026-06-30', shift: 'Custom', district: 'Lucknow', station: 'Alambagh', staff: 25, status: 'Monitoring (Zone)', approvalStage: 3, priority: 'High' },
+// ----------------------------------------------------------------------
+// DATA MODELS & DEMO DATA
+// ----------------------------------------------------------------------
+interface Officer {
+  name: string;
+  rank: string;
+  beltNumber: string;
+  mobile: string;
+  gender: string;
+  station: string;
+  skills: string[];
+  status: 'Available' | 'On Duty' | 'On Leave';
+  experienceYears: number;
+}
+
+const DEMO_OFFICERS: Officer[] = [
+  { name: 'Constable Ramesh', rank: 'Constable', beltNumber: 'BELT-4421', mobile: '9876543210', gender: 'Male', station: 'Hazratganj', skills: ['Patrolling', 'Crowd Control'], status: 'Available', experienceYears: 5 },
+  { name: 'Constable Suresh', rank: 'Constable', beltNumber: 'BELT-4422', mobile: '9876543211', gender: 'Male', station: 'Hazratganj', skills: ['Traffic Control', 'Lathi Charge'], status: 'On Duty', experienceYears: 4 },
+  { name: 'Head Constable Sunil', rank: 'Head Constable', beltNumber: 'BELT-3190', mobile: '9876543212', gender: 'Male', station: 'Hazratganj', skills: ['Investigations', 'Night Beat Specialist'], status: 'Available', experienceYears: 12 },
+  { name: 'Constable Priya', rank: 'Constable', beltNumber: 'BELT-6701', mobile: '9876543213', gender: 'Female', station: 'Hazratganj', skills: ['Comms', 'Women Desk Specialist'], status: 'On Leave', experienceYears: 3 },
+  { name: 'Sub Inspector Amit Singh', rank: 'Sub Inspector', beltNumber: 'BELT-2055', mobile: '9876543214', gender: 'Male', station: 'Hazratganj', skills: ['Riot Control', 'VIP Security'], status: 'Available', experienceYears: 8 },
+  { name: 'Traffic SI Anil Yadav', rank: 'Sub Inspector', beltNumber: 'BELT-5102', mobile: '9876543215', gender: 'Male', station: 'Hazratganj', skills: ['Traffic Flow Optimization', 'Accident Investigator'], status: 'On Duty', experienceYears: 10 },
+  { name: 'Inspector Rajeev Kumar', rank: 'Inspector', beltNumber: 'BELT-1042', mobile: '9876543216', gender: 'Male', station: 'Hazratganj', skills: ['Tactical Planning', 'Commanding'], status: 'Available', experienceYears: 18 }
+];
+
+const DEMO_DUTY_TYPES = [
+  { code: 'DT-DAILY', name: 'Daily Duty', desc: 'Routine general station duty roster' },
+  { code: 'DT-GD', name: 'General Duty', desc: 'Thana entry, diary logging & station desk' },
+  { code: 'DT-NIGHT', name: 'Night Patrol', desc: 'Late night neighborhood vigilance' },
+  { code: 'DT-BEAT', name: 'Beat Duty', desc: 'Foot patrols in designated market beats' },
+  { code: 'DT-LO', name: 'Law & Order Duty', desc: 'Protest, strike, or VIP movement assembly' },
+  { code: 'DT-VIP', name: 'VIP Duty', desc: 'Dignitary escorts and high-security zones' },
+  { code: 'DT-FESTIVAL', name: 'Festival Duty', desc: 'Crowd management for seasonal events' },
+  { code: 'DT-TRAFFIC', name: 'Traffic Duty', desc: 'Main junction and crossing regulation' },
+  { code: 'DT-COURT', name: 'Court Duty', desc: 'Prisoner escort to court hearings' },
+  { code: 'DT-BANDOBAST', name: 'Bandobast Duty', desc: 'Heavy barricading & deployment' },
+  { code: 'DT-EMERGENCY', name: 'Emergency Duty', desc: 'Unforeseen law/order crisis quick reaction' },
+  { code: 'DT-RESERVE', name: 'Reserve Force', desc: 'Thana standby force for quick calls' },
+  { code: 'DT-NAKABANDI', name: 'Nakabandi Duty', desc: 'Inter-district highway checkpoints' },
+  { code: 'DT-ESCORT', name: 'Escort Duty', desc: 'Secured transport of critical assets/persons' }
+];
+
+interface PlannedDuty {
+  id: string;
+  type: string;
+  date: string;
+  time: string;
+  location: string;
+  strength: number;
+  shift: 'Morning' | 'Evening' | 'Night';
+  instructions: string;
+  status: 'Draft' | 'Pending Review' | 'Approved' | 'Published' | 'Cancelled';
+  assignedStaff: string[];
+}
+
+const INITIAL_PLANNED_DUTIES: PlannedDuty[] = [
+  { id: 'DUTY-001', type: 'Night Patrol', date: '2026-06-30', time: '22:00 - 06:00', location: 'Hazratganj Sector-4 Market', strength: 3, shift: 'Night', instructions: 'Maintain flashlights and keep radio active. Check locked shops.', status: 'Published', assignedStaff: ['Constable Ramesh', 'Head Constable Sunil'] },
+  { id: 'DUTY-002', type: 'VIP Duty', date: '2026-07-01', time: '08:00 - 16:00', location: 'Vidhan Sabha Marg Crossing', strength: 2, shift: 'Morning', instructions: 'Riot gear and formal uniform mandatory. Guard VIP corridor.', status: 'Pending Review', assignedStaff: ['Sub Inspector Amit Singh'] },
+  { id: 'DUTY-003', type: 'Traffic Duty', date: '2026-06-30', time: '14:00 - 22:00', location: 'Atal Chowk Crossing', strength: 1, shift: 'Evening', instructions: 'Manage heavy evening commuter flow.', status: 'Approved', assignedStaff: ['Traffic SI Anil Yadav'] }
 ];
 
 export const DutyManagement: React.FC = () => {
   const { userData } = useAuth();
   const userRole = userData?.role || 'Constable';
-
   const storedThana = localStorage.getItem('demoThana') || 'Hazratganj';
-  const storedDistrict = localStorage.getItem('demoDistrict') || 'Lucknow';
 
-  const [activeTab, setActiveTab] = useState('list'); // 'list' | 'create'
-  const [duties, setDuties] = useState(() => {
-    // TRUE FILTERING: Only show duties assigned to the logged-in Thana
-    return INITIAL_DUTIES.filter(d => d.station === storedThana).map(d => ({...d, district: storedDistrict}));
-  });
+  // State Management
+  const [activeModule, setActiveModule] = useState<number>(1); // Modules 1 to 15
+  const [staffList, setStaffList] = useState<Officer[]>(DEMO_OFFICERS);
+  const [plannedDuties, setPlannedDuties] = useState<PlannedDuty[]>(INITIAL_PLANNED_DUTIES);
   
-  // Wizard State
-  const [wizardStep, setWizardStep] = useState(1);
-  const [dutyCategory, setDutyCategory] = useState('Law & Order');
-  const [expandedDuty, setExpandedDuty] = useState<string | null>(null);
-  
-  // Filtering State
-  const [activeCategory, setActiveCategory] = useState('Law & Order');
+  // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterRank, setFilterRank] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
 
-  const getStatusBadge = (status: string) => {
-    if (status.includes('Approved') || status.includes('Active')) return 'bg-green-500/10 text-green-500 border-green-500/20';
-    if (status.includes('Pending')) return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
-    if (status.includes('Monitoring')) return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
-    return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+  // 4. Duty Planning Form State
+  const [planType, setPlanType] = useState('Daily Duty');
+  const [planDate, setPlanDate] = useState('2026-07-01');
+  const [planTime, setPlanTime] = useState('08:00 - 16:00');
+  const [planLocation, setPlanLocation] = useState('');
+  const [planStrength, setPlanStrength] = useState(2);
+  const [planShift, setPlanShift] = useState<'Morning' | 'Evening' | 'Night'>('Morning');
+  const [planInstructions, setPlanInstructions] = useState('');
+
+  // AI Assignment Factor States
+  const [aiFactors, setAiFactors] = useState({
+    rank: true,
+    availability: true,
+    previousDuty: true,
+    nightRotation: true,
+    experience: true,
+    femaleRequirement: false,
+    equalWorkload: true
+  });
+
+  // Manual Assignment Temp States
+  const [selectedDutyId, setSelectedDutyId] = useState('DUTY-002');
+  const [selectedOfficerName, setSelectedOfficerName] = useState('Constable Ramesh');
+
+  // Calendar View
+  const [calendarView, setCalendarView] = useState<'day' | 'week' | 'month'>('week');
+
+  // Trigger AI Auto Assignment Recommendation
+  const [aiSuggestions, setAiSuggestions] = useState<string[]>([
+    "Suggesting Sub Inspector Amit Singh for VIP Duty (Meets VIP training standards).",
+    "Suggesting Constable Ramesh for Night Patrol (Completed 36 hours since last night shift).",
+    "Alert: Constable Priya is currently on leave. Do not assign."
+  ]);
+
+  // Handle Planning Submit
+  const handleAddPlan = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!planLocation) return alert('Please enter location.');
+    
+    const newPlan: PlannedDuty = {
+      id: `DUTY-00${plannedDuties.length + 1}`,
+      type: planType,
+      date: planDate,
+      time: planTime,
+      location: planLocation,
+      strength: planStrength,
+      shift: planShift,
+      instructions: planInstructions,
+      status: 'Draft',
+      assignedStaff: []
+    };
+    setPlannedDuties([newPlan, ...plannedDuties]);
+    setPlanLocation('');
+    setPlanInstructions('');
+    alert('Duty Plan Saved as Draft!');
+    setActiveModule(10); // Go to Monitoring Tab
   };
 
-  const nextStep = () => setWizardStep(prev => Math.min(prev + 1, 4));
-  const prevStep = () => setWizardStep(prev => Math.max(prev - 1, 1));
-
-  // Hierarchy Logic
-  const canApprove = (stage: number) => {
-    if (userRole === 'SHO' && stage === 1) return true;
-    if (userRole === 'District Admin' && stage === 2) return true;
-    return false;
+  // Handle Manual Assignment
+  const handleManualAssign = () => {
+    setPlannedDuties(plannedDuties.map(d => {
+      if (d.id === selectedDutyId) {
+        if (d.assignedStaff.includes(selectedOfficerName)) {
+          alert('Officer is already assigned to this duty!');
+          return d;
+        }
+        return { ...d, assignedStaff: [...d.assignedStaff, selectedOfficerName] };
+      }
+      return d;
+    }));
+    alert(`Assigned ${selectedOfficerName} successfully!`);
   };
 
-  const handleApprove = (id: string, currentStage: number) => {
-    setDuties(duties.map(d => {
-      if (d.id === id) {
-        if (currentStage === 1) return { ...d, approvalStage: 2, status: 'Pending District' };
-        if (currentStage === 2) return { ...d, approvalStage: 3, status: 'Monitoring (Zone)' };
+  // Handle Remove Staff Manual
+  const handleRemoveStaff = (dutyId: string, officerName: string) => {
+    setPlannedDuties(plannedDuties.map(d => {
+      if (d.id === dutyId) {
+        return { ...d, assignedStaff: d.assignedStaff.filter(name => name !== officerName) };
       }
       return d;
     }));
   };
 
-  const renderApprovalPipeline = (stage: number) => {
-    const steps = [
-      { num: 0, label: 'Constable Request', icon: UserCheck },
-      { num: 1, label: 'SHO Approval', icon: ShieldCheck },
-      { num: 2, label: 'District Admin', icon: CheckCircle2 },
-      { num: 3, label: 'Range/Zone Monitor', icon: Eye },
-      { num: 4, label: 'State HQ (Active)', icon: Shield }
-    ];
-
-    return (
-      <div className="flex items-center w-full max-w-3xl mx-auto py-6">
-        {steps.map((step, idx) => (
-          <React.Fragment key={idx}>
-             <div className="flex flex-col items-center gap-2 relative z-10 w-24">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${
-                  stage >= step.num 
-                    ? 'bg-green-500 border-green-500 text-white shadow-[0_0_15px_rgba(34,197,94,0.4)]' 
-                    : stage === step.num - 1 
-                      ? 'bg-amber-500 border-amber-500 text-[#001229] shadow-[0_0_15px_rgba(245,158,11,0.4)] animate-pulse'
-                      : 'bg-white dark:bg-[#001229] border-gray-300 dark:border-white/20 text-gray-400 dark:text-white/30'
-                }`}>
-                  <step.icon size={18} />
-                </div>
-                <span className={`text-[10px] text-center font-bold uppercase tracking-wider ${stage >= step.num ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-white/40'}`}>
-                  {step.label}
-                </span>
-             </div>
-             {idx < steps.length - 1 && (
-               <div className="flex-1 h-1 bg-gray-200 dark:bg-white/10 relative -mt-5 mx-2 rounded-full overflow-hidden">
-                 <div className={`absolute top-0 left-0 h-full bg-green-500 transition-all duration-700`} style={{ width: stage > step.num ? '100%' : '0%' }}></div>
-               </div>
-             )}
-          </React.Fragment>
-        ))}
-      </div>
-    );
+  // AI Assignment Trigger
+  const triggerAIAssignment = () => {
+    // Logic simulation
+    let assignCount = 0;
+    const updated = plannedDuties.map(d => {
+      if (d.status === 'Draft' || d.status === 'Pending Review') {
+        const available = staffList.filter(o => o.status === 'Available' && !d.assignedStaff.includes(o.name));
+        const assignees = available.slice(0, d.strength).map(o => o.name);
+        assignCount += assignees.length;
+        return { ...d, assignedStaff: [...d.assignedStaff, ...assignees], status: 'Approved' as const };
+      }
+      return d;
+    });
+    setPlannedDuties(updated);
+    alert(`AI Assigned ${assignCount} officers based on rank, rotation history and workloads.`);
   };
 
+  // Handle Approval Action
+  const handleApproveStatus = (id: string, newStatus: 'Draft' | 'Pending Review' | 'Approved' | 'Published' | 'Cancelled') => {
+    setPlannedDuties(plannedDuties.map(d => {
+      if (d.id === id) return { ...d, status: newStatus };
+      return d;
+    }));
+  };
+
+  // Emergency Deployment
+  const triggerEmergencyForce = () => {
+    const activeReserves = staffList.filter(o => o.status === 'Available').slice(0, 3);
+    if (activeReserves.length === 0) return alert('No reserves available!');
+    
+    const emergencyDuty: PlannedDuty = {
+      id: `DUTY-EM-${Date.now().toString().slice(-4)}`,
+      type: 'Emergency Duty',
+      date: new Date().toISOString().split('T')[0],
+      time: 'Immediate - 8 Hours',
+      location: 'Hazratganj Main Market (Anti-Riot Standby)',
+      strength: activeReserves.length,
+      shift: 'Morning',
+      instructions: 'Urgent Crowd control deployment. Riot Shield + INSAS gear activated.',
+      status: 'Published',
+      assignedStaff: activeReserves.map(o => o.name)
+    };
+    setPlannedDuties([emergencyDuty, ...plannedDuties]);
+    alert(`Emergency deployment published! Activated reserve officers: ${activeReserves.map(o => o.name).join(', ')}`);
+  };
+
+  // 15 Modules Sidebar Navigation Config
+  const MODULES_MENU = [
+    { id: 1, label: '1. Dashboard (थाना डैशबोर्ड)' },
+    { id: 2, label: '2. Staff Master (बल उपलब्ध)' },
+    { id: 3, label: '3. Duty Types (ड्यूटी प्रकार)' },
+    { id: 4, label: '4. Duty Planning (नियोजन)' },
+    { id: 5, label: '5. AI Assignment (AI आवंटन)' },
+    { id: 6, label: '6. Manual Assignment (मैनुअल)' },
+    { id: 7, label: '7. Duty Approval (अनुमोदन)' },
+    { id: 8, label: '8. Duty Calendar (कैलेंडर)' },
+    { id: 9, label: '9. Conflict Detection (टकराव)' },
+    { id: 10, label: '10. Duty Monitoring (निगरानी)' },
+    { id: 11, label: '11. Reserve Force (रिजर्व बल)' },
+    { id: 12, label: '12. Emergency Duty (आपातकालीन)' },
+    { id: 13, label: '13. AI Suggestions (सिफारिशें)' },
+    { id: 14, label: '14. Search & Filters (खोज/फ़िल्टर)' },
+    { id: 15, label: '15. Reports & Log (रिपोर्ट्स)' }
+  ];
+
   return (
-    <div className="flex-1 overflow-y-auto p-4 lg:p-8 custom-scrollbar relative">
+    <div className="flex-1 flex overflow-hidden bg-gray-50 dark:bg-[#000a17]">
       
-      {/* Header section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-         <div>
-           <h2 className="text-3xl font-bold font-heading text-gray-900 dark:text-white mb-1 flex items-center gap-3">
-             <Briefcase className="text-[#FF9933]" size={32} />
-             Duty Management Dashboard
-           </h2>
-           <p className="text-gray-500 dark:text-white/60 text-sm mt-2 flex items-center gap-2">
-             Logged in as: <span className="px-2 py-0.5 bg-white/10 rounded-md font-bold text-white border border-white/20">{userData?.fullName} ({userRole})</span>
-           </p>
-         </div>
-         <div className="flex items-center gap-3">
-           {['Constable', 'SHO'].includes(userRole) && (
-             <button 
-               onClick={() => { setActiveTab('create'); setWizardStep(1); }}
-               className="px-5 py-2.5 bg-gradient-to-r from-[#002147] to-[#0d386b] dark:from-[#FF9933] dark:to-[#ffaa55] hover:opacity-90 text-white dark:text-[#001229] rounded-xl text-sm font-bold shadow-lg transition-all flex items-center gap-2"
-             >
-               <Plus size={16} /> Request New Deployment
-             </button>
-           )}
-         </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex gap-4 border-b border-gray-200 dark:border-white/10 mb-6">
-        <button 
-          onClick={() => setActiveTab('list')}
-          className={`pb-3 px-2 text-sm font-bold transition-all border-b-2 ${activeTab === 'list' ? 'border-[#FF9933] text-[#FF9933]' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-white/50 dark:hover:text-white'}`}
-        >
-          Hierarchy Approval Queue
-        </button>
-        {['Constable', 'SHO'].includes(userRole) && (
-          <button 
-            onClick={() => setActiveTab('create')}
-            className={`pb-3 px-2 text-sm font-bold transition-all border-b-2 ${activeTab === 'create' ? 'border-[#FF9933] text-[#FF9933]' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-white/50 dark:hover:text-white'}`}
-          >
-            Advanced Duty Entry
-          </button>
-        )}
-      </div>
-
-      {activeTab === 'list' && (
-        <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm overflow-hidden animate-fade-in">
-           {/* Filters */}
-           {/* Main Content Area with Sidebar */}
-           <div className="flex flex-col md:flex-row min-h-[600px]">
-              
-              {/* Left Sub-Menu Sidebar (Dark Orange Theme) */}
-              <div className="w-full md:w-64 bg-gradient-to-b from-[#1a1c29] to-[#0a0a0f] border-r border-white/5 p-4 shrink-0 rounded-bl-2xl overflow-y-auto shadow-inner">
-                 <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-4 px-2">Duty Management</h3>
-                 
-                 <div className="mb-4">
-                   <button 
-                     onClick={() => setActiveCategory('All')}
-                     className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-between group
-                       ${activeCategory === 'All' 
-                         ? 'bg-[#FF9933]/20 text-[#FF9933] border border-[#FF9933]/50 shadow-md' 
-                         : 'bg-white/5 text-white/90 hover:bg-white/10 hover:text-white border border-white/10'
-                       }`}
-                   >
-                     <span className="flex items-center gap-3">
-                       <Briefcase size={16} className={activeCategory === 'All' ? 'text-[#FF9933]' : 'text-white/70 group-hover:text-white'} />
-                       All Duties
-                     </span>
-                   </button>
-                 </div>
-
-                 <div className="space-y-4">
-                   {[
-                     { name: 'Regular Duties', items: ['Daily Duty', 'Traffic Duty', 'Night Patrol', 'Reserve Force'] },
-                     { name: 'Security & Law', items: ['VIP Duty', 'Law & Order'] },
-                     { name: 'Event Duties', items: ['Election Duty', 'Festival Duty'] },
-                     { name: 'Legal/Emergency Services', items: ['Court Duty', 'Emergency Response'] }
-                   ].map((group, gIdx) => (
-                     <div key={gIdx}>
-                       <p className="px-2 text-[10px] font-semibold text-[#FF9933]/60 uppercase tracking-wider mb-2">{group.name}</p>
-                       <div className="space-y-2">
-                         {group.items.map(cat => {
-                            const isActive = activeCategory === cat;
-                            return (
-                              <button 
-                                key={cat}
-                                onClick={() => setActiveCategory(cat)}
-                                className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-between group
-                                  ${isActive 
-                                    ? 'bg-[#FF9933]/20 text-[#FF9933] border border-[#FF9933]/50 shadow-md' 
-                                    : 'bg-white/5 text-white/90 hover:bg-white/10 hover:text-white border border-white/10'
-                                  }`}
-                              >
-                                <span className="flex items-center gap-3">
-                                  {cat === 'VIP Duty' && <Shield size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/70 group-hover:text-white'} />}
-                                  {cat === 'Law & Order' && <Target size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/70 group-hover:text-white'} />}
-                                  {cat === 'Traffic Duty' && <Car size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/70 group-hover:text-white'} />}
-                                  {cat === 'Night Patrol' && <Clock size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/70 group-hover:text-white'} />}
-                                  {cat === 'Election Duty' && <Users size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/70 group-hover:text-white'} />}
-                                  {cat === 'Festival Duty' && <Calendar size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/70 group-hover:text-white'} />}
-                                  {cat === 'Emergency Response' && <AlertTriangle size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/70 group-hover:text-white'} />}
-                                  {['Daily Duty', 'Court Duty', 'Reserve Force'].includes(cat) && <FileText size={16} className={isActive ? 'text-[#FF9933]' : 'text-white/70 group-hover:text-white'} />}
-                                  
-                                  {cat}
-                                </span>
-                                
-                                {cat === 'VIP Duty' && <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border ${isActive ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-red-500/10 text-red-500/70 border-red-500/20'}`}>HIGH</span>}
-                              </button>
-                            );
-                         })}
-                       </div>
-                     </div>
-                   ))}
-                 </div>
-              </div>
-
-              {/* Right Side Table Area */}
-              <div className="flex-1 flex flex-col min-w-0">
-                 {/* Search & Top Filters */}
-                 <div className="p-4 border-b border-gray-100 dark:border-white/10 flex flex-wrap gap-4 bg-white dark:bg-transparent items-center justify-between">
-                    <div className="relative max-w-sm w-full">
-                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                       <input 
-                         type="text" 
-                         placeholder={`Search ${activeCategory === 'All' ? '' : activeCategory} duties...`}
-                         value={searchQuery}
-                         onChange={(e) => setSearchQuery(e.target.value)}
-                         className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm focus:border-[#FF9933] outline-none dark:text-white transition-colors" 
-                       />
-                    </div>
-                    <button className="px-4 py-2 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-semibold dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 flex items-center gap-2">
-                       <Filter size={16} /> Advanced Filter
-                    </button>
-                 </div>
-
-           {/* Table */}
-           <div className="overflow-x-auto">
-             <table className="w-full text-left border-collapse">
-               <thead>
-                 <tr className="text-xs uppercase text-gray-500 dark:text-white/40 bg-gray-50 dark:bg-transparent border-b border-gray-100 dark:border-white/5">
-                   <th className="p-4 font-semibold w-10"></th>
-                   <th className="p-4 font-semibold">Duty Details</th>
-                   <th className="p-4 font-semibold">Location</th>
-                   <th className="p-4 font-semibold">Personnel</th>
-                   <th className="p-4 font-semibold">Hierarchy Status</th>
-                   <th className="p-4 font-semibold text-right">Actions</th>
-                 </tr>
-               </thead>
-               <tbody className="text-sm divide-y divide-gray-100 dark:divide-white/5">
-                 {duties
-                    .filter(d => activeCategory === 'All' || d.category === activeCategory)
-                    .filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase()) || d.id.toLowerCase().includes(searchQuery.toLowerCase()) || d.station.toLowerCase().includes(searchQuery.toLowerCase()))
-                    .map((duty) => (
-                   <React.Fragment key={duty.id}>
-                     <tr className={`hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer ${expandedDuty === duty.id ? 'bg-gray-50 dark:bg-white/5' : ''}`} onClick={() => setExpandedDuty(expandedDuty === duty.id ? null : duty.id)}>
-                       <td className="p-4 text-gray-400">
-                         <ChevronRight size={18} className={`transition-transform ${expandedDuty === duty.id ? 'rotate-90' : ''}`} />
-                       </td>
-                       <td className="p-4">
-                          <div className="font-bold text-gray-800 dark:text-white">{duty.name}</div>
-                          <div className="text-xs text-gray-500 dark:text-white/50 mt-0.5">{duty.id} • {duty.category}</div>
-                       </td>
-                       <td className="p-4">
-                          <div className="flex items-center gap-1.5 text-gray-800 dark:text-white/90 font-medium mb-1">
-                            <MapPin size={14} className="text-gray-400" /> {duty.station}
-                          </div>
-                       </td>
-                       <td className="p-4">
-                         <div className="flex items-center gap-2">
-                           <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">
-                             {duty.staff}
-                           </div>
-                         </div>
-                       </td>
-                       <td className="p-4">
-                         <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusBadge(duty.status)}`}>
-                           {duty.status}
-                         </span>
-                       </td>
-                       <td className="p-4 text-right">
-                         {canApprove(duty.approvalStage) ? (
-                            <button 
-                              onClick={(e) => { e.stopPropagation(); handleApprove(duty.id, duty.approvalStage); }}
-                              className="px-4 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs font-bold shadow-md transition-colors flex items-center gap-1 ml-auto"
-                            >
-                              <CheckCircle size={14} /> Approve
-                            </button>
-                         ) : (
-                            <span className="text-xs text-gray-400 italic">No Action Needed</span>
-                         )}
-                       </td>
-                     </tr>
-                     
-                     {/* Expanded Row for Hierarchy Pipeline View */}
-                     {expandedDuty === duty.id && (
-                       <tr>
-                         <td colSpan={6} className="p-0 border-b-2 border-[#FF9933]/30">
-                           <div className="bg-gray-50/80 dark:bg-black/40 p-6 shadow-inner animate-fade-in">
-                              <h4 className="text-sm font-bold text-gray-700 dark:text-white/80 mb-4 text-center tracking-wider">APPROVAL PIPELINE</h4>
-                              {renderApprovalPipeline(duty.approvalStage)}
-                              
-                              {canApprove(duty.approvalStage) && (
-                                <div className="mt-6 flex justify-center">
-                                   <button 
-                                      onClick={() => handleApprove(duty.id, duty.approvalStage)}
-                                      className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl text-sm font-extrabold shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:scale-105 transition-all flex items-center gap-2"
-                                    >
-                                      <ThumbsUp size={18} /> Approve Deployment (As {userRole})
-                                    </button>
-                                </div>
-                              )}
-                              
-                              {/* Force Assignment Section for SHO */}
-                              {userRole === 'SHO' && duty.status.includes('Active') && (
-                                <div className="mt-8 border-t border-gray-200 dark:border-white/10 pt-6 text-left animate-fade-in" style={{animationDelay: '150ms'}}>
-                                  <h5 className="font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4">
-                                    <Users size={18} className="text-[#FF9933]" />
-                                    Assign Personnel to this Deployment
-                                  </h5>
-                                  <div className="bg-white dark:bg-[#001229] rounded-xl p-5 border border-gray-200 dark:border-white/10">
-                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-                                      <p className="text-sm text-gray-500 dark:text-white/60">
-                                        You need to deploy <strong className="text-gray-900 dark:text-white">{duty.staff}</strong> officers. Select available officers from your Thana:
-                                      </p>
-                                      <span className="px-3 py-1 bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 rounded-md text-xs font-bold">
-                                        1/{duty.staff} Assigned
-                                      </span>
-                                    </div>
-                                    <div className="flex gap-2">
-                                      <select className="flex-1 px-4 py-2.5 bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-lg text-sm outline-none text-gray-900 dark:text-white">
-                                        <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">Select Officer...</option>
-                                        <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">Constable Rahul Singh</option>
-                                        <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">Constable Amit Kumar</option>
-                                        <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">Sub Inspector Vikram</option>
-                                      </select>
-                                      <button className="px-6 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-[#001229] rounded-lg text-sm font-bold shadow-md hover:opacity-90 transition-all flex items-center gap-2 shrink-0">
-                                        <Plus size={16} /> Add to Duty
-                                      </button>
-                                    </div>
-                                    <div className="mt-5 flex gap-2 flex-wrap">
-                                      {/* Assigned officers chips */}
-                                      <span className="px-3 py-1.5 bg-[#FF9933]/10 border border-[#FF9933]/20 text-[#FF9933] rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-[#FF9933]/20 transition-colors cursor-pointer group">
-                                        Constable Ramesh <X size={12} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                           </div>
-                         </td>
-                       </tr>
-                     )}
-                   </React.Fragment>
-                 ))}
-               </tbody>
-             </table>
-              </div>
-           </div>
+      {/* 15 Modules Sidebar inside the page */}
+      <div className="w-64 bg-[#001229] border-r border-white/10 flex flex-col shrink-0">
+        <div className="p-4 border-b border-white/10 flex items-center gap-2">
+          <Layers size={18} className="text-[#FF9933]" />
+          <span className="text-white text-xs font-bold uppercase tracking-wider">Thana Duty Modules</span>
         </div>
+        <nav className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
+          {MODULES_MENU.map(mod => (
+            <button
+              key={mod.id}
+              onClick={() => setActiveModule(mod.id)}
+              className={`w-full text-left px-3 py-2 text-xs font-bold rounded-lg transition-all ${activeModule === mod.id ? 'bg-[#FF9933] text-[#001229] shadow-lg shadow-[#FF9933]/20' : 'text-white/70 hover:bg-white/5 hover:text-white'}`}
+            >
+              {mod.label}
+            </button>
+          ))}
+        </nav>
       </div>
-      )}
 
-      {/* CREATE TAB - Kept exact same wizard code */}
-      {activeTab === 'create' && (
-        <div className="max-w-5xl mx-auto animate-fade-in pb-12">
-           
-           {/* Wizard Progress */}
-           <div className="flex justify-between items-center mb-8 relative">
-              <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-200 dark:bg-white/10 -z-10 -translate-y-1/2 rounded"></div>
-              {[
-                { step: 1, label: 'Duty Type & Basics', icon: Briefcase },
-                { step: 2, label: 'Location & Time', icon: MapPin },
-                { step: 3, label: 'Personnel & Gear', icon: Users },
-                { step: 4, label: 'Review & Send to SHO', icon: CheckCircle }
-              ].map(s => (
-                <div key={s.step} className="flex flex-col items-center gap-2">
-                   <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${wizardStep > s.step ? 'bg-green-500 text-white shadow-lg shadow-green-500/30' : wizardStep === s.step ? 'bg-[#FF9933] text-[#001229] shadow-lg shadow-[#FF9933]/30 scale-110' : 'bg-white dark:bg-[#001229] text-gray-400 dark:text-white/30 border-2 border-gray-200 dark:border-white/10'}`}>
-                     {wizardStep > s.step ? <Check size={20} /> : <s.icon size={20} />}
-                   </div>
-                   <span className={`text-xs font-bold ${wizardStep >= s.step ? 'text-gray-800 dark:text-white' : 'text-gray-400 dark:text-white/40'}`}>{s.label}</span>
+      {/* Main Workspace for Active Module */}
+      <div className="flex-1 overflow-y-auto p-6 lg:p-8 custom-scrollbar">
+        
+        {/* Module Title Header */}
+        <div className="mb-8 border-b border-gray-200 dark:border-white/10 pb-4 flex justify-between items-end">
+          <div>
+            <h2 className="text-2xl font-bold text-[#001229] dark:text-white">
+              {MODULES_MENU.find(m => m.id === activeModule)?.label}
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-white/60">
+              Station Duty Management Suite • Police Station: {storedThana}
+            </p>
+          </div>
+          {activeModule === 12 && (
+            <button onClick={triggerEmergencyForce} className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold animate-pulse shadow-lg flex items-center gap-2">
+              🚨 Trigger Quick Deployment
+            </button>
+          )}
+        </div>
+
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 1: DASHBOARD */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 1 && (
+          <div className="space-y-8 animate-fade-in">
+            {/* Stats Roster */}
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div className="bg-white dark:bg-[#001229]/80 p-5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Today's Duty Summary</p>
+                <h3 className="text-2xl font-black mt-2 text-gray-900 dark:text-white">{plannedDuties.filter(d => d.status === 'Published').length} Active</h3>
+              </div>
+              <div className="bg-white dark:bg-[#001229]/80 p-5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Total Available Force</p>
+                <h3 className="text-2xl font-black mt-2 text-green-500">{staffList.filter(s => s.status === 'Available').length} Officers</h3>
+              </div>
+              <div className="bg-white dark:bg-[#001229]/80 p-5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Personnel on Duty</p>
+                <h3 className="text-2xl font-black mt-2 text-[#FF9933]">{staffList.filter(s => s.status === 'On Duty').length} Deployed</h3>
+              </div>
+              <div className="bg-white dark:bg-[#001229]/80 p-5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Reserve Force</p>
+                <h3 className="text-2xl font-black mt-2 text-blue-500">3 Standby</h3>
+              </div>
+              <div className="bg-white dark:bg-[#001229]/80 p-5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Pending Duty</p>
+                <h3 className="text-2xl font-black mt-2 text-red-500">{plannedDuties.filter(d => d.status === 'Pending Review').length} Review</h3>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Today's Alerts */}
+              <div className="lg:col-span-2 bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
+                <h3 className="font-bold font-heading text-base text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <Bell size={18} className="text-red-500 animate-bounce" /> Today's Alerts (थाना अलर्ट)
+                </h3>
+                <div className="space-y-3">
+                  <div className="p-3 bg-red-50 dark:bg-red-500/5 border border-red-200 dark:border-red-500/20 rounded-xl text-xs text-red-700 dark:text-red-300">
+                    ⚠️ <b>Conflict Detected:</b> Sub Inspector Amit Singh assigned to VIP Duty while marked as having 3 consecutive Night Patrols.
+                  </div>
+                  <div className="p-3 bg-amber-50 dark:bg-amber-500/5 border border-amber-200 dark:border-amber-500/20 rounded-xl text-xs text-amber-700 dark:text-amber-300">
+                    ⚠️ <b>Location Mismatch:</b> Constable Suresh check-in flagged 1.2km away from Atal Chowk Traffic Point.
+                  </div>
+                </div>
+              </div>
+
+              {/* Upcoming Duties */}
+              <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
+                <h3 className="font-bold font-heading text-base text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <Calendar size={18} className="text-[#FF9933]" /> Tomorrow's Duties
+                </h3>
+                <div className="space-y-3">
+                  {plannedDuties.map((d, i) => (
+                    <div key={i} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5">
+                      <div>
+                        <p className="font-bold text-xs text-gray-800 dark:text-white">{d.type} - {d.location}</p>
+                        <p className="text-[10px] text-gray-500 mt-1">{d.time}</p>
+                      </div>
+                      <span className="text-[9px] bg-blue-500/10 text-blue-500 font-bold px-2 py-0.5 rounded border border-blue-500/20">{d.status}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 2: STAFF MASTER */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 2 && (
+          <div className="space-y-6 bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm animate-fade-in">
+            <div className="flex justify-between items-center flex-wrap gap-4">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white">Active Duty Force Roster</h3>
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  placeholder="Search staff name..." 
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  className="px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white"
+                />
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-gray-200 dark:border-white/10 text-gray-400 font-bold uppercase">
+                    <th className="p-3">Name</th>
+                    <th className="p-3">Rank</th>
+                    <th className="p-3">Belt Number</th>
+                    <th className="p-3">Mobile</th>
+                    <th className="p-3">Gender</th>
+                    <th className="p-3">Skills</th>
+                    <th className="p-3">Current Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-white/5 font-medium">
+                  {staffList
+                    .filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                    .map((s, idx) => (
+                    <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                      <td className="p-3 font-bold text-gray-900 dark:text-white">{s.name}</td>
+                      <td className="p-3">{s.rank}</td>
+                      <td className="p-3 font-mono">{s.beltNumber}</td>
+                      <td className="p-3">{s.mobile}</td>
+                      <td className="p-3">{s.gender}</td>
+                      <td className="p-3 flex gap-1 flex-wrap">
+                        {s.skills.map((sk, i) => (
+                          <span key={i} className="px-1.5 py-0.5 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded text-[9px]">{sk}</span>
+                        ))}
+                      </td>
+                      <td className="p-3">
+                        <span className={`px-2 py-0.5 rounded font-bold border ${
+                          s.status === 'Available' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 
+                          s.status === 'On Duty' ? 'bg-[#FF9933]/10 text-[#FF9933] border-[#FF9933]/20' : 
+                          'bg-red-500/10 text-red-500 border-red-500/20'
+                        }`}>{s.status}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 3: DUTY TYPES */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 3 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+            {DEMO_DUTY_TYPES.map((dt, idx) => (
+              <div key={idx} className="bg-white dark:bg-[#001229]/80 p-5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-[#FF9933]/5 rounded-bl-full -mr-8 -mt-8"></div>
+                <h4 className="font-bold text-[#FF9933] text-base mb-1">{dt.name}</h4>
+                <p className="text-[10px] font-mono text-gray-400 mb-3">{dt.code}</p>
+                <p className="text-xs text-gray-500 dark:text-white/60">{dt.desc}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 4: DUTY PLANNING */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 4 && (
+          <form onSubmit={handleAddPlan} className="max-w-2xl bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10 pb-3">Plan New Deployment</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Duty Type</label>
+                <select value={planType} onChange={e => setPlanType(e.target.value)} className="w-full px-4 py-2.5 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white">
+                  {DEMO_DUTY_TYPES.map(dt => (
+                    <option key={dt.code} value={dt.name} className="text-gray-900">{dt.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Required Strength (Force count)</label>
+                <input type="number" min="1" value={planStrength} onChange={e => setPlanStrength(parseInt(e.target.value))} className="w-full px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Date</label>
+                <input type="date" value={planDate} onChange={e => setPlanDate(e.target.value)} className="w-full px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white" />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Time Slot</label>
+                <input type="text" value={planTime} onChange={e => setPlanTime(e.target.value)} className="w-full px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white" />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Shift</label>
+                <select value={planShift} onChange={e => setPlanShift(e.target.value as any)} className="w-full px-4 py-2.5 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white">
+                  <option value="Morning">Morning Shift</option>
+                  <option value="Evening">Evening Shift</option>
+                  <option value="Night">Night Shift</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Location Name</label>
+              <input type="text" placeholder="e.g. Atal Chowk Crossing" value={planLocation} onChange={e => setPlanLocation(e.target.value)} className="w-full px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white" />
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Special Instructions</label>
+              <textarea rows={3} placeholder="Security codes, wireless channel details, weapon protocols..." value={planInstructions} onChange={e => setPlanInstructions(e.target.value)} className="w-full px-4 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-xs outline-none text-gray-900 dark:text-white"></textarea>
+            </div>
+
+            <button type="submit" className="w-full py-3 bg-[#FF9933] text-[#001229] hover:bg-[#ffaa55] text-xs font-bold rounded-xl transition-all shadow-md">
+              Create Duty & Draft Deployment (ड्यूटी योजना बनाएँ)
+            </button>
+          </form>
+        )}
+
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 5: AI DUTY ASSIGNMENT */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 5 && (
+          <div className="max-w-2xl bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10 pb-3">AI Duty Matrix Engine</h3>
+            
+            <div className="space-y-4">
+              <p className="text-xs text-gray-500 dark:text-white/60">Configure the parameters that the AI engine will use to auto-select and balance officers for duties:</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.keys(aiFactors).map((factor) => (
+                  <label key={factor} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-black/20 rounded-xl cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5 transition-colors border border-gray-150 dark:border-white/5">
+                    <input 
+                      type="checkbox" 
+                      checked={(aiFactors as any)[factor]} 
+                      onChange={() => setAiFactors(prev => ({ ...prev, [factor]: !(prev as any)[factor] }))}
+                      className="rounded text-[#FF9933] focus:ring-[#FF9933]" 
+                    />
+                    <span className="text-xs font-bold text-gray-800 dark:text-white capitalize">{factor.replace(/([A-Z])/g, ' $1')} Matching</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-4 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 border border-blue-500/20 rounded-xl">
+              <h4 className="text-xs font-bold text-blue-500 flex items-center gap-2 mb-1.5">
+                <Info size={14} /> AI Recommendation Metrics
+              </h4>
+              <p className="text-[11px] text-gray-500 dark:text-blue-200/80 leading-relaxed">
+                Rank weights, previous workloads, night shifts completed, and special skills metrics will be matched to output the best-fit scoring list for each draft duty slot.
+              </p>
+            </div>
+
+            <button onClick={triggerAIAssignment} className="w-full py-3 bg-gradient-to-r from-[#FF9933] to-[#ff8c1a] hover:opacity-95 text-[#001229] font-black rounded-xl text-xs shadow-lg transition-all flex items-center justify-center gap-2">
+              <RefreshCw size={16} /> Run AI Auto Allocation (स्मार्ट ऑटो आवंटन)
+            </button>
+          </div>
+        )}
+
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 6: MANUAL DUTY ASSIGNMENT */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 6 && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
+            
+            {/* Manual Assignment Form */}
+            <div className="lg:col-span-1 bg-white dark:bg-[#001229]/80 p-5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm h-fit space-y-4">
+              <h3 className="font-bold text-sm text-gray-900 dark:text-white">Manual Assignment Control</h3>
+              
+              <div>
+                <label className="text-[10px] font-bold text-gray-500 mb-1 block">1. Select Planned Duty Slot</label>
+                <select value={selectedDutyId} onChange={e => setSelectedDutyId(e.target.value)} className="w-full px-3 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg text-xs outline-none text-gray-900 dark:text-white">
+                  {plannedDuties.map(d => (
+                    <option key={d.id} value={d.id} className="text-gray-900">{d.id} - {d.type} ({d.location})</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-gray-500 mb-1 block">2. Select Staff / Officer</label>
+                <select value={selectedOfficerName} onChange={e => setSelectedOfficerName(e.target.value)} className="w-full px-3 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg text-xs outline-none text-gray-900 dark:text-white">
+                  {staffList.map(o => (
+                    <option key={o.beltNumber} value={o.name} className="text-gray-900">{o.name} ({o.rank} - {o.status})</option>
+                  ))}
+                </select>
+              </div>
+
+              <button onClick={handleManualAssign} className="w-full py-2.5 bg-gray-900 dark:bg-white text-white dark:text-[#001229] rounded-xl text-xs font-bold shadow-md">
+                Add Selected Staff to Duty
+              </button>
+            </div>
+
+            {/* List & Roster preview */}
+            <div className="lg:col-span-2 bg-white dark:bg-[#001229]/80 p-5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-4">
+              <h3 className="font-bold text-sm text-gray-900 dark:text-white">Current Force Assignments</h3>
+              <div className="space-y-4">
+                {plannedDuties.map((d) => (
+                  <div key={d.id} className="p-4 bg-gray-50 dark:bg-black/20 border border-gray-150 dark:border-white/5 rounded-xl">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h4 className="font-bold text-xs text-gray-900 dark:text-white">{d.id} • {d.type}</h4>
+                        <p className="text-[10px] text-gray-400 mt-0.5">📍 {d.location} • {d.time}</p>
+                      </div>
+                      <span className="text-[9px] bg-green-500/10 text-green-500 font-bold px-2 py-0.5 border border-green-500/20 rounded">{d.status}</span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      {d.assignedStaff.length === 0 ? (
+                        <p className="text-[10px] text-gray-400 italic">No personnel assigned yet.</p>
+                      ) : (
+                        d.assignedStaff.map(name => (
+                          <span key={name} className="px-2.5 py-1 bg-[#FF9933]/10 border border-[#FF9933]/20 text-[#FF9933] rounded-lg text-[10px] font-bold flex items-center gap-1.5 hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-colors cursor-pointer group" onClick={() => handleRemoveStaff(d.id, name)}>
+                            {name} <X size={10} className="opacity-60 group-hover:opacity-100" />
+                          </span>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 7: DUTY APPROVAL */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 7 && (
+          <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10 pb-3">Roster Verification & Approval Pipeline</h3>
+            
+            <div className="space-y-4">
+              {plannedDuties.map((d) => (
+                <div key={d.id} className="p-5 bg-gray-50 dark:bg-black/20 border border-gray-150 dark:border-white/5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                  <div>
+                    <h4 className="font-bold text-sm text-gray-900 dark:text-white">{d.type} - {d.location}</h4>
+                    <p className="text-xs text-gray-500 mt-1">Date: {d.date} • Required Force: {d.strength} • Assigned: {d.assignedStaff.length}</p>
+                    <div className="flex gap-1.5 items-center mt-2">
+                      <span className="text-[10px] bg-gray-200 dark:bg-white/10 px-2 py-0.5 rounded font-bold text-gray-600 dark:text-white/60">{d.status}</span>
+                      {d.assignedStaff.length < d.strength && (
+                        <span className="text-[10px] bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-0.5 rounded font-bold">INSUFFICIENT FORCE</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    {d.status === 'Draft' && (
+                      <button onClick={() => handleApproveStatus(d.id, 'Pending Review')} className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow transition-colors">Submit for Review</button>
+                    )}
+                    {d.status === 'Pending Review' && (
+                      <>
+                        <button onClick={() => handleApproveStatus(d.id, 'Approved')} className="px-3.5 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-bold shadow transition-colors">Approve Draft</button>
+                        <button onClick={() => handleApproveStatus(d.id, 'Cancelled')} className="px-3.5 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-bold shadow transition-colors">Reject/Cancel</button>
+                      </>
+                    )}
+                    {d.status === 'Approved' && (
+                      <button onClick={() => handleApproveStatus(d.id, 'Published')} className="px-4 py-2 bg-gradient-to-r from-[#FF9933] to-[#ff8c1a] text-[#001229] rounded-lg text-xs font-extrabold shadow-md hover:opacity-90">Publish Today's Roster</button>
+                    )}
+                    {d.status === 'Published' && (
+                      <span className="text-xs text-green-500 font-bold flex items-center gap-1"><CheckCircle size={14} /> Roster Published & Locked</span>
+                    )}
+                  </div>
                 </div>
               ))}
-           </div>
+            </div>
+          </div>
+        )}
 
-           {/* Wizard Form Container */}
-           <div className="bg-white dark:bg-[#001229]/80 rounded-2xl border border-gray-100 dark:border-white/10 shadow-xl overflow-hidden min-h-[400px] flex flex-col relative">
-             
-             {/* Dynamic Top Bar */}
-             <div className="bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/10 p-5 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-500 flex items-center justify-center">
-                  {wizardStep === 1 ? <Briefcase size={20}/> : wizardStep === 2 ? <MapPin size={20}/> : wizardStep === 3 ? <ShieldAlert size={20}/> : <FileText size={20}/>}
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 8: DUTY CALENDAR */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 8 && (
+          <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+            <div className="flex justify-between items-center flex-wrap gap-4">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white">Thana Duty Calendar Planner</h3>
+              <div className="flex p-0.5 bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-lg">
+                {['day', 'week', 'month'].map(v => (
+                  <button 
+                    key={v}
+                    onClick={() => setCalendarView(v as any)}
+                    className={`px-3 py-1.5 text-xs font-bold capitalize rounded-md transition-all ${calendarView === v ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm' : 'text-gray-400'}`}
+                  >
+                    {v}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-7 gap-2 text-center border border-gray-100 dark:border-white/5 p-4 rounded-xl">
+              {['Mon 29', 'Tue 30', 'Wed 01', 'Thu 02', 'Fri 03', 'Sat 04', 'Sun 05'].map((day, idx) => (
+                <div key={idx} className="space-y-3 min-h-[150px] bg-gray-50/50 dark:bg-black/10 p-2 rounded-lg border border-gray-150 dark:border-white/5">
+                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">{day}</p>
+                  
+                  {plannedDuties.map(d => (
+                    <div key={d.id} className="p-2 bg-[#FF9933]/15 text-[#FF9933] border border-[#FF9933]/25 rounded text-[9px] font-bold text-left space-y-0.5">
+                      <p className="truncate">{d.type}</p>
+                      <p className="text-[8px] text-gray-400 truncate">{d.location}</p>
+                    </div>
+                  ))}
                 </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 9: DUTY CONFLICT DETECTION */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 9 && (
+          <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10 pb-3">Thana Conflict Detection Board</h3>
+            
+            <div className="space-y-4">
+              <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex gap-3 items-start">
+                <AlertTriangle className="text-red-500 mt-0.5 shrink-0" size={18} />
                 <div>
-                  <h3 className="font-heading font-bold text-lg dark:text-white">
-                    {wizardStep === 1 && "Step 1: Select Duty Category & Basic Details"}
-                    {wizardStep === 2 && "Step 2: Pinpoint Location & Schedule"}
-                    {wizardStep === 3 && "Step 3: Allocate Force & Equipment"}
-                    {wizardStep === 4 && "Step 4: Final Review & Submit"}
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-white/50">
-                    {wizardStep === 1 && "Choose the right classification for accurate resource allocation."}
-                    {wizardStep === 2 && "Where and when will this duty take place?"}
-                    {wizardStep === 3 && "Assign officers, vehicles, and weapons to this duty."}
-                    {wizardStep === 4 && "Verify details before sending to SHO for approval."}
+                  <h4 className="font-bold text-sm text-red-500">Double Duty / Schedule Overlap Detected</h4>
+                  <p className="text-xs text-gray-500 dark:text-red-300/80 mt-1">
+                    Constable Ramesh is allocated to "Sector 4 Night Patrol" and "Daily Thana Desk" in consecutive shifts without the mandatory 8-hour off-duty transition window.
                   </p>
                 </div>
-             </div>
+              </div>
 
-             {/* Form Area */}
-             <div className="p-6 lg:p-8 flex-1 bg-white dark:bg-transparent">
-                
-                {/* STEP 1: BASICS */}
-                {wizardStep === 1 && (
-                  <div className="space-y-6 animate-fade-in">
-                    
-                    <div>
-                      <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-3 block">1. Select Duty Classification</label>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {['Law & Order', 'VIP Escort', 'Traffic Check', 'Night Patrol', 'Election Duty', 'Court Duty', 'Festival Guard', 'Emergency'].map(cat => (
-                          <div 
-                            key={cat} 
-                            onClick={() => setDutyCategory(cat)}
-                            className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${dutyCategory === cat ? 'border-[#FF9933] bg-[#FF9933]/10 shadow-[0_0_15px_rgba(255,153,51,0.15)]' : 'border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 hover:bg-gray-50 dark:hover:bg-white/5'}`}
-                          >
-                            <div className={`w-8 h-8 rounded-full mb-2 flex items-center justify-center ${dutyCategory === cat ? 'bg-[#FF9933] text-[#001229]' : 'bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/50'}`}>
-                               <Target size={14} />
-                            </div>
-                            <h4 className={`font-bold text-sm ${dutyCategory === cat ? 'text-[#FF9933]' : 'text-gray-700 dark:text-white/70'}`}>{cat}</h4>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+              <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl flex gap-3 items-start">
+                <AlertTriangle className="text-amber-500 mt-0.5 shrink-0" size={18} />
+                <div>
+                  <h4 className="font-bold text-sm text-amber-500">Consecutive Night Duties Alert</h4>
+                  <p className="text-xs text-gray-500 dark:text-amber-300/80 mt-1">
+                    Head Constable Sunil has been assigned to Night Patrol for 3 nights in rotation. Recommend rotation offset.
+                  </p>
+                </div>
+              </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                      <div>
-                        <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-2 block">Duty Name / Code Name</label>
-                        <input type="text" placeholder="e.g., Operation Sunrise" className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-[#FF9933]/50 outline-none text-gray-900 dark:text-white transition-all" />
-                      </div>
-                      <div>
-                        <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-2 block">Priority Level</label>
-                        <select className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-[#FF9933]/50 outline-none text-gray-900 dark:text-white transition-all appearance-none">
-                          <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">🟢 Low Priority</option>
-                          <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">🟡 Medium Priority</option>
-                          <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">🟠 High Priority</option>
-                          <option className="text-gray-900 dark:text-white bg-white dark:bg-[#001229]">🔴 CRITICAL EMERGENCY</option>
-                        </select>
-                      </div>
-                    </div>
+              <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl flex gap-3 items-start">
+                <Info className="text-blue-500 mt-0.5 shrink-0" size={18} />
+                <div>
+                  <h4 className="font-bold text-sm text-blue-500">Insufficient Strength Alert</h4>
+                  <p className="text-xs text-gray-500 dark:text-blue-300/80 mt-1">
+                    VIP corridor deployment requires 4 officers, currently only 1 officer (SI Amit Singh) is assigned.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 10: DUTY MONITORING */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 10 && (
+          <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10 pb-3">Real-time Duty Monitoring Console</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+              <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl">
+                <p className="text-xs text-gray-400 font-bold">Upcoming Duties</p>
+                <h4 className="text-xl font-bold mt-1 text-blue-500">2 Scheduled</h4>
+              </div>
+              <div className="bg-green-500/10 border border-green-500/20 p-4 rounded-xl">
+                <p className="text-xs text-gray-400 font-bold">Active Duties</p>
+                <h4 className="text-xl font-bold mt-1 text-green-500">1 Live</h4>
+              </div>
+              <div className="bg-gray-500/10 border border-gray-500/20 p-4 rounded-xl">
+                <p className="text-xs text-gray-400 font-bold">Completed Duties</p>
+                <h4 className="text-xl font-bold mt-1 text-gray-400">12 Checked-out</h4>
+              </div>
+              <div className="bg-amber-500/10 border border-amber-500/20 p-4 rounded-xl">
+                <p className="text-xs text-gray-400 font-bold">Pending Duties</p>
+                <h4 className="text-xl font-bold mt-1 text-amber-500">1 Draft</h4>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {plannedDuties.map((d, i) => (
+                <div key={i} className="p-4 bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-xl flex justify-between items-center">
+                  <div>
+                    <h4 className="font-bold text-xs text-gray-800 dark:text-white">{d.type} - {d.location}</h4>
+                    <p className="text-[10px] text-gray-400 mt-1">{d.time} • Staff Assigned: {d.assignedStaff.join(', ') || 'None'}</p>
                   </div>
-                )}
+                  <span className="text-[10px] bg-green-500/10 text-green-500 font-bold px-3 py-1 rounded-full border border-green-500/20 uppercase tracking-wider">{d.status}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
-                {/* STEP 2: LOCATION */}
-                {wizardStep === 2 && (
-                  <div className="space-y-6 animate-fade-in">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                       
-                       <div className="space-y-6">
-                         <div>
-                           <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-2 block">District & Police Station</label>
-                           <div className="flex gap-4">
-                             <input disabled value={storedDistrict} type="text" className="flex-1 px-4 py-3 bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-500 dark:text-white/50 cursor-not-allowed" />
-                             <input disabled value={storedThana} type="text" className="flex-1 px-4 py-3 bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-500 dark:text-white/50 cursor-not-allowed" />
-                           </div>
-                         </div>
-                         
-                         <div>
-                           <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-2 block">Schedule Dates</label>
-                           <div className="flex items-center gap-4">
-                             <input type="date" className="flex-1 px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-900 dark:text-white" />
-                             <span className="text-gray-400">to</span>
-                             <input type="date" className="flex-1 px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-900 dark:text-white" />
-                           </div>
-                         </div>
-
-                         <div>
-                           <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-2 block">Shift Timing</label>
-                           <div className="flex gap-2">
-                             {['Morning', 'Evening', 'Night Patrol', 'Custom'].map(shift => (
-                               <button key={shift} className="px-4 py-2 border border-gray-200 dark:border-white/10 rounded-lg text-sm font-semibold text-gray-700 dark:text-white/70 hover:bg-[#FF9933]/10 hover:text-[#FF9933] hover:border-[#FF9933] transition-colors">{shift}</button>
-                             ))}
-                           </div>
-                         </div>
-                       </div>
-
-                       <div>
-                         <label className="text-sm font-bold text-gray-700 dark:text-white/80 mb-2 block">Pinpoint Exact Location</label>
-                         <div className="w-full h-[250px] bg-gray-200 dark:bg-white/5 rounded-xl border border-gray-300 dark:border-white/10 relative overflow-hidden flex items-center justify-center group cursor-crosshair">
-                            {/* Mock Map */}
-                            <div className="absolute inset-0 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=Lucknow,UP&zoom=14&size=600x300&maptype=roadmap&sensor=false')] bg-cover bg-center opacity-60 mix-blend-luminosity transition-transform group-hover:scale-105 duration-700"></div>
-                            
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#001229] to-transparent opacity-50"></div>
-                            
-                            <div className="relative z-10 flex flex-col items-center">
-                               <MapPin size={40} className="text-[#FF9933] drop-shadow-xl animate-bounce" />
-                               <div className="px-4 py-1.5 bg-black/60 backdrop-blur-md rounded-full mt-2 text-white text-xs font-bold border border-white/20 shadow-lg">
-                                 Click map to drop pin
-                               </div>
-                            </div>
-                         </div>
-                       </div>
-
-                    </div>
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 11: RESERVE FORCE */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 11 && (
+          <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10 pb-3">Reserve Standby Force Management</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {staffList.filter(o => o.status === 'Available').slice(0, 3).map((o, idx) => (
+                <div key={idx} className="p-4 bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-white/5 rounded-xl flex justify-between items-center">
+                  <div>
+                    <h4 className="font-bold text-xs text-gray-850 dark:text-white">{o.name}</h4>
+                    <p className="text-[10px] text-gray-400 mt-0.5">{o.rank} • Belt: {o.beltNumber}</p>
                   </div>
-                )}
-
-                {/* STEP 3: PERSONNEL & GEAR */}
-                {wizardStep === 3 && (
-                  <div className="space-y-8 animate-fade-in">
-                    {/* AI Suggestion Banner */}
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-500/30 rounded-2xl p-5 flex gap-4 items-start shadow-sm relative overflow-hidden group">
-                       <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition-colors"></div>
-                       <div className="p-2.5 bg-white dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded-xl shrink-0 shadow-sm border border-blue-100 dark:border-blue-500/20 relative z-10">
-                         <Target size={22} className="animate-pulse" />
-                       </div>
-                       <div className="relative z-10">
-                         <h4 className="font-bold text-blue-900 dark:text-blue-300 text-base mb-1 flex items-center gap-2">
-                           Smart Suggestion Active <span className="flex h-2 w-2"><span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-blue-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>
-                         </h4>
-                         <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
-                           Based on historical data for <b>{dutyCategory}</b>, the system recommends:<br/>
-                           <span className="font-semibold bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded mt-1 inline-block border border-blue-200/50 dark:border-blue-500/20">1 Team Leader</span> • 
-                           <span className="font-semibold bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded mt-1 inline-block mx-1 border border-blue-200/50 dark:border-blue-500/20">4 Constables</span> • 
-                           <span className="font-semibold bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded mt-1 inline-block border border-blue-200/50 dark:border-blue-500/20">1 PCR Bolero + Anti-Riot Gear</span>
-                         </p>
-                       </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                      {/* Left Column: Personnel */}
-                      <div className="space-y-5 bg-gray-50 dark:bg-white/5 p-6 rounded-2xl border border-gray-100 dark:border-white/5">
-                        <div className="flex items-center gap-3 border-b border-gray-200 dark:border-white/10 pb-3">
-                           <div className="p-1.5 bg-[#FF9933]/10 text-[#FF9933] rounded-lg"><Users size={18} /></div>
-                           <h3 className="font-bold text-gray-900 dark:text-white text-lg">Assign Personnel</h3>
-                        </div>
-                        
-                        {/* Team Leader */}
-                        <div>
-                           <p className="text-xs text-gray-500 dark:text-white/50 mb-2 font-bold uppercase tracking-wider flex items-center gap-2">
-                             Team Leader In-charge <span className="text-red-500">*</span>
-                           </p>
-                           <div className="relative group">
-                             <select className="w-full appearance-none bg-white dark:bg-[#001229] border-2 border-gray-200 dark:border-white/10 focus:border-[#FF9933] dark:focus:border-[#FF9933] rounded-xl px-4 py-3.5 text-gray-900 dark:text-white font-bold text-sm outline-none transition-all shadow-sm cursor-pointer hover:shadow-md">
-                               <option value="" disabled selected>Select Team Leader...</option>
-                               <option value="UP-9921">Insp. Rajesh Kumar (UP-9921) - Available</option>
-                               <option value="UP-8832">SI Vikram Singh (UP-8832) - Available</option>
-                               <option value="UP-7745">SI Amit Patel (UP-7745) - On Duty</option>
-                             </select>
-                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none group-hover:text-[#FF9933] transition-colors" size={20} />
-                           </div>
-                        </div>
-
-                        {/* Force Count */}
-                        <div>
-                           <p className="text-xs text-gray-500 dark:text-white/50 mb-2 font-bold uppercase tracking-wider">
-                             Add Force (Staff Count)
-                           </p>
-                           <div className="flex flex-col sm:flex-row gap-3">
-                             <div className="relative shrink-0 w-full sm:w-auto">
-                               <Users size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                               <input type="number" placeholder="Qty" min="1" className="w-full sm:w-28 pl-9 pr-4 py-3.5 bg-white dark:bg-[#001229] border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-900 dark:text-white text-center font-black text-lg focus:border-[#FF9933] focus:ring-2 focus:ring-[#FF9933]/20 transition-all shadow-sm" />
-                             </div>
-                             <button className="flex-1 bg-white dark:bg-[#001229] border-2 border-dashed border-gray-300 dark:border-white/20 hover:border-[#FF9933] hover:bg-[#FF9933]/5 hover:text-[#FF9933] transition-all rounded-xl py-3.5 text-sm font-bold text-gray-600 dark:text-white/70 flex items-center justify-center gap-2 shadow-sm group">
-                               <div className="p-1 bg-gray-100 dark:bg-white/5 rounded-lg group-hover:bg-[#FF9933]/10 transition-colors"><Plus size={16} className="group-hover:text-[#FF9933]" /></div>
-                               Auto-Select Constables
-                             </button>
-                           </div>
-                        </div>
-                      </div>
-
-                      {/* Right Column: Logistics */}
-                      <div className="space-y-5 bg-gray-50 dark:bg-white/5 p-6 rounded-2xl border border-gray-100 dark:border-white/5">
-                        <div className="flex items-center gap-3 border-b border-gray-200 dark:border-white/10 pb-3">
-                           <div className="p-1.5 bg-blue-500/10 text-blue-500 rounded-lg"><Shield size={18} /></div>
-                           <h3 className="font-bold text-gray-900 dark:text-white text-lg">Logistics & Gear</h3>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                           {/* Vehicle Card */}
-                           <div className="p-4 bg-white dark:bg-[#001229] border border-gray-200 dark:border-white/10 rounded-xl shadow-sm focus-within:border-blue-500/50 hover:shadow-md transition-all relative overflow-hidden group">
-                             <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                             <div className="flex items-center gap-2 mb-3 relative z-10">
-                               <div className="p-1.5 bg-gray-100 dark:bg-white/5 rounded-lg text-gray-600 dark:text-gray-300">
-                                 <Car size={18} />
-                               </div>
-                               <p className="font-bold text-sm text-gray-900 dark:text-white">Vehicles</p>
-                             </div>
-                             <div className="relative z-10 flex gap-2">
-                               <input type="number" placeholder="0" min="0" className="w-16 px-2 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg text-center text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:border-blue-500" />
-                               <select className="flex-1 appearance-none bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 dark:text-white/80 focus:outline-none focus:border-blue-500">
-                                 <option value="bolero">PCR Bolero</option>
-                                 <option value="bike">Patrol Bike</option>
-                                 <option value="bus">Police Bus</option>
-                                 <option value="van">Prison Van</option>
-                               </select>
-                             </div>
-                           </div>
-                           
-                           {/* Comms Card */}
-                           <div className="p-4 bg-white dark:bg-[#001229] border border-gray-200 dark:border-white/10 rounded-xl shadow-sm focus-within:border-blue-500/50 hover:shadow-md transition-all relative overflow-hidden group">
-                             <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                             <div className="flex items-center gap-2 mb-3 relative z-10">
-                               <div className="p-1.5 bg-gray-100 dark:bg-white/5 rounded-lg text-gray-600 dark:text-gray-300">
-                                 <Radio size={18} />
-                               </div>
-                               <p className="font-bold text-sm text-gray-900 dark:text-white">Comms (Sets)</p>
-                             </div>
-                             <div className="relative z-10 flex gap-2">
-                               <input type="number" placeholder="0" min="0" className="w-16 px-2 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg text-center text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:border-blue-500" />
-                               <select className="flex-1 appearance-none bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 dark:text-white/80 focus:outline-none focus:border-blue-500">
-                                 <option value="wireless">Wireless VHF</option>
-                                 <option value="meg">Megaphone</option>
-                               </select>
-                             </div>
-                           </div>
-
-                           {/* Specialized Gear Card */}
-                           <div className="col-span-1 sm:col-span-2 p-4 bg-white dark:bg-[#001229] border border-gray-200 dark:border-white/10 rounded-xl shadow-sm focus-within:border-[#FF9933]/50 hover:shadow-md transition-all relative overflow-hidden group">
-                             <div className="absolute inset-0 bg-[#FF9933]/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                             <div className="flex items-center gap-2 mb-3 relative z-10">
-                               <div className="p-1.5 bg-gray-100 dark:bg-white/5 rounded-lg text-gray-600 dark:text-gray-300">
-                                 <ShieldAlert size={18} />
-                               </div>
-                               <p className="font-bold text-sm text-gray-900 dark:text-white">Weapons / Riot Gear</p>
-                             </div>
-                             <div className="relative z-10 flex gap-2">
-                               <input type="number" placeholder="0" min="0" className="w-16 px-2 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg text-center text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:border-[#FF9933]" />
-                               <select className="flex-1 appearance-none bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 dark:text-white/80 focus:outline-none focus:border-[#FF9933]">
-                                 <option value="" disabled selected>Select Gear Type...</option>
-                                 <option value="baton">Lathi / Baton</option>
-                                 <option value="shield">Riot Shield</option>
-                                 <option value="teargas">Tear Gas Shells</option>
-                                 <option value="rifle">INSAS Rifle</option>
-                                 <option value="pistol">9mm Pistol</option>
-                               </select>
-                             </div>
-                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* STEP 4: REVIEW */}
-                {wizardStep === 4 && (
-                  <div className="animate-fade-in flex flex-col items-center text-center max-w-lg mx-auto py-8">
-                     <div className="w-20 h-20 rounded-full bg-amber-500/10 border-4 border-amber-500/30 flex items-center justify-center mb-6">
-                       <CheckCircle size={40} className="text-amber-500" />
-                     </div>
-                     <h3 className="text-2xl font-bold font-heading dark:text-white mb-2">Ready to Submit for Approval</h3>
-                     <p className="text-sm text-gray-500 dark:text-white/60 mb-8">
-                       The duty roster for <b>{dutyCategory}</b> has been compiled. It will now be sent to your SHO for the first level of approval.
-                     </p>
-                     
-                     <div className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl p-6 text-left space-y-4">
-                        <div className="flex justify-between items-center border-b border-gray-200 dark:border-white/5 pb-3">
-                          <span className="text-sm text-gray-500 font-semibold">Total Force</span>
-                          <span className="font-bold dark:text-white text-lg">5 Personnel</span>
-                        </div>
-                        <div className="flex justify-between items-center border-b border-gray-200 dark:border-white/5 pb-3">
-                          <span className="text-sm text-gray-500 font-semibold">Location</span>
-                          <span className="font-bold dark:text-white text-right">{storedDistrict} - {storedThana}<br/><span className="text-xs font-normal text-gray-400">Map Pin Verified</span></span>
-                        </div>
-                        <div className="flex justify-between items-center pb-1">
-                          <span className="text-sm text-gray-500 font-semibold">Next Step in Hierarchy</span>
-                          <span className="font-bold text-amber-500 text-sm flex items-center gap-1"><ShieldCheck size={14}/> Awaiting SHO Approval</span>
-                        </div>
-                     </div>
-                  </div>
-                )}
-
-             </div>
-
-             {/* Wizard Footer Controls */}
-             <div className="p-5 border-t border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 flex justify-between items-center mt-auto">
-                {wizardStep > 1 ? (
-                  <button onClick={prevStep} className="px-6 py-2.5 rounded-xl font-bold text-gray-500 dark:text-white/60 hover:bg-gray-200 dark:hover:bg-white/10 transition-all flex items-center gap-2">
-                    <ArrowLeft size={18} /> Back
+                  <button onClick={triggerEmergencyForce} className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[10px] font-bold transition-all shadow">
+                    Assign to Active Duty
                   </button>
-                ) : <div />}
-                
-                {wizardStep < 4 ? (
-                  <button onClick={nextStep} className="px-8 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-[#001229] rounded-xl text-sm font-bold shadow-lg hover:opacity-90 transition-all flex items-center gap-2">
-                    Continue to Step {wizardStep + 1} <ArrowRight size={18} />
-                  </button>
-                ) : (
-                  <button onClick={() => { 
-                      setActiveTab('list'); 
-                      setWizardStep(1); 
-                      setDuties([{ id: 'DTY-9099', category: dutyCategory, name: 'New Request', date: '2026-07-02', shift: 'Morning', district: storedDistrict, station: storedThana, staff: 5, status: 'Pending SHO', approvalStage: 1, priority: 'High' }, ...duties]);
-                  }} className="px-10 py-3 bg-gradient-to-r from-[#FF9933] to-[#ffaa55] text-[#001229] rounded-xl text-sm font-extrabold shadow-[0_0_20px_rgba(255,153,51,0.4)] hover:scale-105 transition-all flex items-center gap-2 animate-pulse">
-                    <CheckCircle size={18} /> Send to SHO for Approval
-                  </button>
-                )}
-             </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
-           </div>
-        </div>
-      )}
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 12: EMERGENCY DUTY */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 12 && (
+          <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10 pb-3">Emergency & Quick Deploy Board</h3>
+            
+            <div className="p-6 bg-red-600/10 border border-red-600/30 rounded-2xl flex flex-col items-center justify-center text-center space-y-4">
+              <div className="w-16 h-16 bg-red-600/20 text-red-500 rounded-full flex items-center justify-center animate-pulse border border-red-500/30">
+                <ShieldAlert size={32} />
+              </div>
+              <div>
+                <h4 className="font-bold text-base text-red-600">Quick Force Deployment (त्वरित बल तैनात करें)</h4>
+                <p className="text-xs text-gray-500 dark:text-red-300/80 max-w-md mt-1 leading-relaxed">
+                  In case of immediate emergencies or sudden VIP corridor requirements, deploy the available reserve force instantly without approval delays.
+                </p>
+              </div>
+              <button onClick={triggerEmergencyForce} className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl text-xs shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center gap-2">
+                🚨 Trigger Quick Deployment (त्वरित तैनाती)
+              </button>
+            </div>
+          </div>
+        )}
 
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 13: AI RECOMMENDATIONS */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 13 && (
+          <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10 pb-3">AI Recommendation Log</h3>
+            
+            <div className="space-y-3">
+              {aiSuggestions.map((rec, i) => (
+                <div key={i} className="p-4 bg-blue-500/5 border border-blue-500/20 rounded-xl flex gap-3 items-center">
+                  <div className="w-8 h-8 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+                    <CheckCircle2 size={16} />
+                  </div>
+                  <p className="text-xs text-gray-700 dark:text-blue-200 font-bold">{rec}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 14: SEARCH & FILTERS */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 14 && (
+          <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10 pb-3">Advanced Search & Filters</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="text-xs font-bold text-gray-500 mb-1 block">Officer Name / Belt No</label>
+                <input 
+                  type="text" 
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="e.g. Ramesh" 
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg text-xs outline-none text-gray-900 dark:text-white" 
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-500 mb-1 block">Rank</label>
+                <select value={filterRank} onChange={e => setFilterRank(e.target.value)} className="w-full px-3 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg text-xs outline-none text-gray-900 dark:text-white">
+                  <option value="">All Ranks</option>
+                  <option value="Constable">Constable</option>
+                  <option value="Head Constable">Head Constable</option>
+                  <option value="Sub Inspector">Sub Inspector</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-500 mb-1 block">Availability Status</label>
+                <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="w-full px-3 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg text-xs outline-none text-gray-900 dark:text-white">
+                  <option value="">All Statuses</option>
+                  <option value="Available">Available</option>
+                  <option value="On Duty">On Duty</option>
+                  <option value="On Leave">On Leave</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="border border-gray-100 dark:border-white/5 rounded-xl overflow-hidden mt-6">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-gray-50 dark:bg-black/20 text-gray-400 font-bold uppercase border-b border-gray-200 dark:border-white/10">
+                    <th className="p-3">Officer Name</th>
+                    <th className="p-3">Rank</th>
+                    <th className="p-3">Current Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {staffList
+                    .filter(o => !searchQuery || o.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                    .filter(o => !filterRank || o.rank === filterRank)
+                    .filter(o => !filterStatus || o.status === filterStatus)
+                    .map((o, idx) => (
+                      <tr key={idx} className="border-b border-gray-100 dark:border-white/5 text-gray-700 dark:text-white/80">
+                        <td className="p-3 font-bold">{o.name}</td>
+                        <td className="p-3">{o.rank}</td>
+                        <td className="p-3"><span className="px-2 py-0.5 rounded-full border bg-white/5 border-white/10 text-xs font-bold">{o.status}</span></td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 15: REPORTS */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 15 && (
+          <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10 pb-3">Thana Duty Reports & Registers</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="p-5 bg-gray-50 dark:bg-black/20 border border-gray-150 dark:border-white/5 rounded-2xl relative overflow-hidden group hover:shadow-md transition-shadow">
+                <h4 className="font-bold text-gray-800 dark:text-white mb-2">Daily Duty Report</h4>
+                <p className="text-xs text-gray-500 dark:text-white/50 mb-4">Export today's beat deployments, traffic slots filled, and active VIP escorts.</p>
+                <button onClick={() => alert('Exporting PDF Daily Duty Report...')} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
+                  <Download size={14} /> Export Daily Report
+                </button>
+              </div>
+
+              <div className="p-5 bg-gray-50 dark:bg-black/20 border border-gray-150 dark:border-white/5 rounded-2xl relative overflow-hidden group hover:shadow-md transition-shadow">
+                <h4 className="font-bold text-gray-800 dark:text-white mb-2">Weekly Duty Register</h4>
+                <p className="text-xs text-gray-500 dark:text-white/50 mb-4">Official weekly rotation ledger format including approvals and signatures.</p>
+                <button onClick={() => alert('Exporting Excel Weekly Duty Register...')} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
+                  <Download size={14} /> Export Weekly Register
+                </button>
+              </div>
+
+              <div className="p-5 bg-gray-50 dark:bg-black/20 border border-gray-150 dark:border-white/5 rounded-2xl relative overflow-hidden group hover:shadow-md transition-shadow">
+                <h4 className="font-bold text-gray-800 dark:text-white mb-2">Individual Duty History</h4>
+                <p className="text-xs text-gray-500 dark:text-white/50 mb-4">History log of shifts, night duties, and leaves for auditing fairness.</p>
+                <button onClick={() => alert('Exporting PDF Audit History...')} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
+                  <Download size={14} /> Export Audit Ledger
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
     </div>
   );
 };

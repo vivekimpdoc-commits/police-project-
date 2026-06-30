@@ -16,7 +16,7 @@ export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [loginMethod, setLoginMethod] = useState<'password' | 'otp'>('password');
+  const [loginMethod, setLoginMethod] = useState<'password' | 'otp' | 'pno'>('pno');
   const [otp, setOtp] = useState('');
   const [captchaValue, setCaptchaValue] = useState('');
   const [captchaCode, setCaptchaCode] = useState(generateCaptcha());
@@ -147,6 +147,27 @@ export const Login: React.FC = () => {
     if (loginMethod === 'password' && !password) return setError('Password is required.');
     if (loginMethod === 'otp' && otp.length !== 6) return setError('Please enter a valid 6-digit OTP.');
     if (captchaValue.toUpperCase() !== captchaCode) return setError('Invalid CAPTCHA code.');
+
+    if (loginMethod === 'pno') {
+      if (!email) return setError('PNO Number is required.');
+      if (captchaValue.toUpperCase() !== captchaCode) return setError('Invalid CAPTCHA code.');
+      
+      setLoading(true);
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        localStorage.setItem('demoAuth', 'constable');
+        localStorage.setItem('demoPNO', email.toUpperCase().trim());
+        localStorage.setItem('demoDistrict', selectedDistrict || 'Lucknow');
+        localStorage.setItem('demoThana', selectedThana || 'Hazratganj');
+        navigate('/dashboard');
+        window.location.reload();
+      } catch (err: any) {
+        setError(err.message || 'Failed to authenticate');
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
 
     setLoading(true);
     try {
@@ -304,14 +325,21 @@ export const Login: React.FC = () => {
             <div className="flex p-1 mb-8 bg-black/20 backdrop-blur-sm rounded-xl border border-white/10 stagger-2">
               <button 
                 type="button"
-                className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 ${loginMethod === 'password' ? 'bg-white text-[var(--color-primary-dark)] shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
-                onClick={() => setLoginMethod('password')}
+                className={`flex-1 py-2.5 text-xs font-semibold rounded-lg transition-all duration-300 ${loginMethod === 'pno' ? 'bg-[#FF9933] text-[#001229] shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
+                onClick={() => setLoginMethod('pno')}
               >
-                Password
+                PNO Login (ड्यूटी चेक)
               </button>
               <button 
                 type="button"
-                className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 ${loginMethod === 'otp' ? 'bg-white text-[var(--color-primary-dark)] shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
+                className={`flex-1 py-2.5 text-xs font-semibold rounded-lg transition-all duration-300 ${loginMethod === 'password' ? 'bg-white text-[var(--color-primary-dark)] shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
+                onClick={() => setLoginMethod('password')}
+              >
+                Password Login
+              </button>
+              <button 
+                type="button"
+                className={`flex-1 py-2.5 text-xs font-semibold rounded-lg transition-all duration-300 ${loginMethod === 'otp' ? 'bg-white text-[var(--color-primary-dark)] shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10'}`}
                 onClick={() => setLoginMethod('otp')}
               >
                 OTP Login
@@ -319,18 +347,33 @@ export const Login: React.FC = () => {
             </div>
 
             <form onSubmit={handleLoginSubmit} className="flex flex-col gap-5 stagger-3 text-white">
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white/90 ml-1" htmlFor="email">Official Email / Username</label>
-                <input 
-                  id="email"
-                  type="text" 
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-white/40 focus:border-[#FF9933] focus:ring-2 focus:ring-[#FF9933]/30 transition-all outline-none backdrop-blur-md" 
-                  placeholder="officer@uppolice.gov.in"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
+              {loginMethod === 'pno' ? (
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-semibold text-white/90 ml-1" htmlFor="pno">Enter PNO Number (PNO / बेल्ट नंबर)</label>
+                  <input 
+                    id="pno"
+                    type="text" 
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-white/40 focus:border-[#FF9933] focus:ring-2 focus:ring-[#FF9933]/30 transition-all outline-none backdrop-blur-md" 
+                    placeholder="e.g. UPP-4421, UP-5001"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-semibold text-white/90 ml-1" htmlFor="email">Official Email / Username</label>
+                  <input 
+                    id="email"
+                    type="text" 
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-white/40 focus:border-[#FF9933] focus:ring-2 focus:ring-[#FF9933]/30 transition-all outline-none backdrop-blur-md" 
+                    placeholder="officer@uppolice.gov.in"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+              )}
 
               {loginMethod === 'password' ? (
                 <div className="flex flex-col gap-2">

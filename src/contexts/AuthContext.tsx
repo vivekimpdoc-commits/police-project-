@@ -35,8 +35,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       let role: UserRole = 'Officer';
       let fullName = 'Demo Officer';
       
+      const storedPNO = localStorage.getItem('demoPNO');
+      const pnoNames: Record<string, string> = {
+        'UPP-4421': 'Constable Ramesh',
+        'UPP-4422': 'Constable Suresh',
+        'UPP-3190': 'Head Constable Sunil',
+        'UPP-6701': 'Constable Priya',
+        'UPP-2055': 'Sub Inspector Amit Singh',
+        'UP-5001': 'Constable Ramesh',
+        'UP-5002': 'Head Constable Pradeep Mishra',
+        'UP-5003': 'Sub Inspector Kavita Rani'
+      };
+
       switch(demoAuth) {
-        case 'constable': role = 'Constable'; fullName = 'Constable Ramesh'; break;
+        case 'constable': 
+          role = 'Constable'; 
+          fullName = storedPNO ? (pnoNames[storedPNO.toUpperCase()] || `Constable (PNO: ${storedPNO})`) : 'Constable Ramesh'; 
+          break;
         case 'sho': role = 'SHO'; fullName = 'SHO Rajesh Kumar'; break;
         case 'district': role = 'District Admin'; fullName = 'SP Lucknow'; break;
         case 'hq': role = 'State HQ'; fullName = 'DGP Headquarters'; break;

@@ -166,14 +166,14 @@ export const OfficerAvailability: React.FC = () => {
           }
 
           // Check for duplicate PNO in existing officers
-          const existingPNO = officers.find(o => o.id === pno.toString().trim());
+          const existingPNO = officers.find((o: any) => o.id === pno.toString().trim());
           if (existingPNO) {
             errors.push(`Row ${rowNum}: PNO "${pno}" already exists (${existingPNO.name})`);
             return;
           }
 
           // Check for duplicate PNO within uploaded data
-          const duplicateInUpload = parsed.find(p => p.id === pno.toString().trim());
+          const duplicateInUpload = parsed.find((p: any) => p.id === pno.toString().trim());
           if (duplicateInUpload) {
             errors.push(`Row ${rowNum}: Duplicate PNO "${pno}" in the file`);
             return;
@@ -237,14 +237,14 @@ export const OfficerAvailability: React.FC = () => {
   const handleConfirmUpload = () => {
     setUploadStep('processing');
     setTimeout(() => {
-      setOfficers(prev => [...prev, ...excelParsedData]);
+      setOfficers((prev: any[]) => [...prev, ...excelParsedData]);
       setUploadStep('success');
     }, 2000);
   };
 
   const handleManualSave = () => {
     if (!manualForm.name || !manualForm.id) return;
-    setOfficers(prev => [...prev, {
+    setOfficers((prev: any[]) => [...prev, {
       id: manualForm.id, name: manualForm.name, rank: manualForm.rank,
       station: storedThana, status: manualForm.status, duty: null,
       phone: manualForm.phone || 'N/A'
@@ -263,7 +263,7 @@ export const OfficerAvailability: React.FC = () => {
     }
   };
 
-  const filteredOfficers = officers.filter(officer => {
+  const filteredOfficers = officers.filter((officer: any) => {
     const matchesSearch = officer.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           officer.id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'All' || officer.status === statusFilter;
@@ -272,9 +272,9 @@ export const OfficerAvailability: React.FC = () => {
 
   const stats = {
     total: officers.length,
-    available: officers.filter(o => o.status === 'Available').length,
-    onDuty: officers.filter(o => o.status === 'On Duty').length,
-    onLeave: officers.filter(o => o.status === 'On Leave').length,
+    available: officers.filter((o: any) => o.status === 'Available').length,
+    onDuty: officers.filter((o: any) => o.status === 'On Duty').length,
+    onLeave: officers.filter((o: any) => o.status === 'On Leave').length,
   };
 
   return (
@@ -352,7 +352,7 @@ export const OfficerAvailability: React.FC = () => {
                  </tr>
                </thead>
                <tbody className="text-sm divide-y divide-gray-100 dark:divide-white/5">
-                 {filteredOfficers.map((officer) => (
+                 {filteredOfficers.map((officer: any, index: number) => (
                    <tr key={officer.id} onClick={() => setSelectedOfficer(officer)}
                      className={`hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer ${selectedOfficer?.id === officer.id ? 'bg-[#FF9933]/5 dark:bg-[#FF9933]/10' : ''}`}>
                      <td className="p-4">

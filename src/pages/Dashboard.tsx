@@ -311,7 +311,7 @@ export const Dashboard: React.FC = () => {
 
                   {group.items && (
                     <ul className="space-y-1">
-                      {group.items.map((item, idx) => {
+                      {group.items.map((item: any, idx: number) => {
                         const isActive = location.pathname === item.path || (item.path === '/dashboard' && location.pathname === '/dashboard/');
                         return (
                           <li key={idx}>
@@ -338,7 +338,7 @@ export const Dashboard: React.FC = () => {
                         <div key={cIdx}>
                           <p className="px-4 text-[10px] font-semibold text-[#FF9933]/60 uppercase tracking-wider mb-1.5">{category.name}</p>
                           <ul className="space-y-1 border-l border-white/5 ml-5 pl-2">
-                            {category.items.map((item, idx) => {
+                            {category.items.map((item: any, idx: number) => {
                               const isActive = location.pathname === item.path || (item.path === '/dashboard' && location.pathname === '/dashboard/');
                               return (
                                 <li key={idx}>

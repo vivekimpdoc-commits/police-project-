@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Plus, Search, Filter, Briefcase, MapPin, Clock, Calendar, CheckCircle, 
   AlertTriangle, MoreVertical, Shield, ChevronDown, Download, Users, 
-  Car, Radio, ArrowRight, ArrowLeft, Target, ShieldAlert, FileText, Check,
+  Car, Radio, ArrowRight, ArrowLeft, Target, ShieldAlert, FileText, Check, X,
   ThumbsUp, Eye, ShieldCheck, UserCheck, CheckCircle2, ChevronRight
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';

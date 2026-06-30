@@ -111,6 +111,7 @@ export const DutyManagement: React.FC = () => {
 
   // Calendar View
   const [calendarView, setCalendarView] = useState<'day' | 'week' | 'month'>('week');
+  const [selectedCalendarDate, setSelectedCalendarDate] = useState('2026-07-01');
 
   // Trigger AI Auto Assignment Recommendation
   const [aiSuggestions, setAiSuggestions] = useState<string[]>([
@@ -884,39 +885,199 @@ export const DutyManagement: React.FC = () => {
         {/* ---------------------------------------------------- */}
         {/* MODULE 8: DUTY CALENDAR */}
         {/* ---------------------------------------------------- */}
-        {activeModule === 8 && (
-          <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
-            <div className="flex justify-between items-center flex-wrap gap-4">
-              <h3 className="font-bold text-lg text-gray-900 dark:text-white">Thana Duty Calendar Planner</h3>
-              <div className="flex p-0.5 bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-lg">
-                {['day', 'week', 'month'].map(v => (
-                  <button 
-                    key={v}
-                    onClick={() => setCalendarView(v as any)}
-                    className={`px-3 py-1.5 text-xs font-bold capitalize rounded-md transition-all ${calendarView === v ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm' : 'text-gray-400'}`}
-                  >
-                    {v}
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* ---------------------------------------------------- */}
+        {/* MODULE 8: DUTY CALENDAR */}
+        {/* ---------------------------------------------------- */}
+        {activeModule === 8 && (() => {
+          // Construct days for month view (July 2026 starting on Wednesday)
+          const julyDays = [];
+          julyDays.push({ day: 29, dateStr: '2026-06-29', isFiller: true });
+          julyDays.push({ day: 30, dateStr: '2026-06-30', isFiller: true });
+          for (let i = 1; i <= 31; i++) {
+            const dayStr = i < 10 ? `0${i}` : `${i}`;
+            julyDays.push({ day: i, dateStr: `2026-07-${dayStr}`, isFiller: false });
+          }
+          for (let i = 1; i <= 9; i++) {
+            julyDays.push({ day: i, dateStr: `2026-08-0${i}`, isFiller: true });
+          }
 
-            <div className="grid grid-cols-7 gap-2 text-center border border-gray-100 dark:border-white/5 p-4 rounded-xl">
-              {['Mon 29', 'Tue 30', 'Wed 01', 'Thu 02', 'Fri 03', 'Sat 04', 'Sun 05'].map((day, idx) => (
-                <div key={idx} className="space-y-3 min-h-[150px] bg-gray-50/50 dark:bg-black/10 p-2 rounded-lg border border-gray-150 dark:border-white/5">
-                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">{day}</p>
-                  
-                  {plannedDuties.map(d => (
-                    <div key={d.id} className="p-2 bg-[#FF9933]/15 text-[#FF9933] border border-[#FF9933]/25 rounded text-[9px] font-bold text-left space-y-0.5">
-                      <p className="truncate">{d.type}</p>
-                      <p className="text-[8px] text-gray-400 truncate">{d.location}</p>
-                    </div>
+          // Week mapping
+          const weekDays = [
+            { label: 'Mon 29', dateStr: '2026-06-29' },
+            { label: 'Tue 30', dateStr: '2026-06-30' },
+            { label: 'Wed 01', dateStr: '2026-07-01' },
+            { label: 'Thu 02', dateStr: '2026-07-02' },
+            { label: 'Fri 03', dateStr: '2026-07-03' },
+            { label: 'Sat 04', dateStr: '2026-07-04' },
+            { label: 'Sun 05', dateStr: '2026-07-05' }
+          ];
+
+          return (
+            <div className="bg-white dark:bg-[#001229]/80 p-6 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm space-y-6 animate-fade-in">
+              <div className="flex justify-between items-center flex-wrap gap-4 border-b border-gray-100 dark:border-white/5 pb-4">
+                <div>
+                  <h3 className="font-bold text-lg text-gray-900 dark:text-white">Thana Duty Calendar Planner</h3>
+                  <p className="text-xs text-gray-500 dark:text-white/40">Select views and click on days to view detailed schedules</p>
+                </div>
+                <div className="flex p-0.5 bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-lg">
+                  {['day', 'week', 'month'].map(v => (
+                    <button 
+                      key={v}
+                      type="button"
+                      onClick={() => setCalendarView(v as any)}
+                      className={`px-3 py-1.5 text-xs font-bold capitalize rounded-md transition-all ${
+                        calendarView === v 
+                          ? 'bg-[#FF9933] text-[#001229] shadow-sm font-black' 
+                          : 'text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                      }`}
+                    >
+                      {v}
+                    </button>
                   ))}
                 </div>
-              ))}
+              </div>
+
+              {/* 1. DAY VIEW */}
+              {calendarView === 'day' && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between bg-gray-50 dark:bg-white/5 p-4 rounded-xl border border-gray-100 dark:border-white/5">
+                    <p className="text-xs font-bold text-gray-800 dark:text-white">Timeline Schedule for: <span className="text-[#FF9933] font-mono">{selectedCalendarDate}</span></p>
+                    <input 
+                      type="date" 
+                      value={selectedCalendarDate} 
+                      onChange={e => setSelectedCalendarDate(e.target.value)} 
+                      className="px-3 py-1.5 bg-white dark:bg-[#001229] border border-gray-200 dark:border-white/10 rounded-lg text-xs outline-none text-gray-800 dark:text-white"
+                    />
+                  </div>
+
+                  <div className="space-y-3">
+                    {['Morning', 'Evening', 'Night'].map(shift => {
+                      const shiftDuties = plannedDuties.filter(d => d.date === selectedCalendarDate && d.shift === shift);
+                      return (
+                        <div key={shift} className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-gray-50/50 dark:bg-black/15 border border-gray-100 dark:border-white/5 rounded-xl">
+                          <div className="flex items-center gap-2">
+                            <Clock size={16} className="text-[#FF9933]" />
+                            <div>
+                              <p className="text-xs font-bold text-gray-800 dark:text-white">{shift} Shift</p>
+                              <p className="text-[10px] text-gray-400">{shift === 'Morning' ? '08:00 - 16:00' : shift === 'Evening' ? '14:00 - 22:00' : '22:00 - 06:00'}</p>
+                            </div>
+                          </div>
+                          <div className="md:col-span-3 space-y-2">
+                            {shiftDuties.length === 0 ? (
+                              <p className="text-xs text-gray-400 italic">No duties scheduled for this shift.</p>
+                            ) : (
+                              shiftDuties.map(d => (
+                                <div key={d.id} className="p-3 bg-[#FF9933]/5 border border-[#FF9933]/20 rounded-xl space-y-1">
+                                  <div className="flex justify-between items-center">
+                                    <h4 className="text-xs font-bold text-[#FF9933]">{d.type}</h4>
+                                    <span className="text-[10px] px-2 py-0.5 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded font-mono font-bold text-gray-650 dark:text-white/60">{d.id}</span>
+                                  </div>
+                                  <p className="text-[10px] text-gray-500 dark:text-white/60">📍 {d.location} | Strength: {d.strength} officers</p>
+                                  <p className="text-[10px] text-gray-400 dark:text-white/40">👥 Staff: {d.assignedStaff.join(', ') || 'No staff allocated yet'}</p>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* 2. WEEK VIEW */}
+              {calendarView === 'week' && (
+                <div className="grid grid-cols-1 md:grid-cols-7 gap-3">
+                  {weekDays.map(w => {
+                    const dayDuties = plannedDuties.filter(d => d.date === w.dateStr);
+                    return (
+                      <div key={w.dateStr} className="bg-gray-50/50 dark:bg-black/10 p-3 rounded-xl border border-gray-150 dark:border-white/5 space-y-3 min-h-[220px]">
+                        <div className="text-center border-b border-gray-200 dark:border-white/5 pb-2">
+                          <p className="text-[10px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-widest">{w.label.split(' ')[0]}</p>
+                          <p className="text-xs font-black text-gray-800 dark:text-white font-mono">{w.label.split(' ')[1]}</p>
+                        </div>
+                        <div className="space-y-2">
+                          {dayDuties.length === 0 ? (
+                            <p className="text-[10px] text-gray-400 italic text-center py-4">No Duty</p>
+                          ) : (
+                            dayDuties.map(d => (
+                              <div key={d.id} className="p-2 bg-[#FF9933]/10 border border-[#FF9933]/20 rounded-lg text-[9px] font-bold space-y-1 hover:shadow-sm transition-shadow">
+                                <p className="text-[#FF9933] truncate leading-tight">{d.type}</p>
+                                <p className="text-gray-450 dark:text-white/50 truncate font-mono">{d.time}</p>
+                                <p className="text-gray-400 dark:text-white/30 truncate">📍 {d.location}</p>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* 3. MONTH VIEW */}
+              {calendarView === 'month' && (
+                <div className="space-y-6">
+                  {/* July Calendar Grid */}
+                  <div>
+                    <p className="text-xs font-bold text-gray-800 dark:text-white mb-3 text-center uppercase tracking-wider">July 2026</p>
+                    <div className="grid grid-cols-7 gap-1 text-center font-bold text-[10px] text-gray-400 dark:text-white/30 uppercase tracking-wider mb-1">
+                      {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(h => <div key={h}>{h}</div>)}
+                    </div>
+                    <div className="grid grid-cols-7 gap-1">
+                      {julyDays.map((day, idx) => {
+                        const dayDuties = plannedDuties.filter(d => d.date === day.dateStr);
+                        const isSelected = selectedCalendarDate === day.dateStr;
+                        return (
+                          <div 
+                            key={idx}
+                            onClick={() => setSelectedCalendarDate(day.dateStr)}
+                            className={`min-h-[55px] p-1.5 rounded-lg border cursor-pointer transition-all flex flex-col justify-between ${
+                              day.isFiller 
+                                ? 'bg-gray-100/30 dark:bg-white/2 border-transparent text-gray-300 dark:text-white/10' 
+                                : isSelected
+                                  ? 'bg-[#FF9933] border-[#FF9933] text-[#001229]'
+                                  : 'bg-gray-50/50 dark:bg-black/15 border-gray-100 dark:border-white/5 text-gray-700 dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/5'
+                            }`}
+                          >
+                            <span className="text-[10px] font-mono">{day.day}</span>
+                            {dayDuties.length > 0 && (
+                              <span className={`text-[8px] font-bold px-1 py-0.5 rounded self-center ${
+                                isSelected ? 'bg-white/90 text-[#001229]' : 'bg-[#FF9933]/15 text-[#FF9933]'
+                              }`}>
+                                {dayDuties.length} {dayDuties.length === 1 ? 'Duty' : 'Duties'}
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Duties list for selected month day */}
+                  <div className="bg-gray-50 dark:bg-white/5 p-4 rounded-xl border border-gray-100 dark:border-white/5">
+                    <h4 className="text-xs font-bold text-gray-800 dark:text-white mb-3">Schedules on Selected Date: <span className="font-mono text-[#FF9933]">{selectedCalendarDate}</span></h4>
+                    <div className="space-y-2">
+                      {plannedDuties.filter(d => d.date === selectedCalendarDate).length === 0 ? (
+                        <p className="text-xs text-gray-400 italic">No duties scheduled on this day.</p>
+                      ) : (
+                        plannedDuties.filter(d => d.date === selectedCalendarDate).map(d => (
+                          <div key={d.id} className="flex justify-between items-center p-3 bg-white dark:bg-[#001229] border border-gray-200 dark:border-white/10 rounded-xl">
+                            <div>
+                              <p className="text-xs font-bold text-gray-800 dark:text-white">{d.type} - <span className="text-gray-455 font-mono text-[10px]">{d.id}</span></p>
+                              <p className="text-[10px] text-gray-400">📍 {d.location} | Shift: {d.shift} ({d.time})</p>
+                            </div>
+                            <span className="text-[10px] font-bold text-gray-500">Staff count: {d.strength}</span>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* ---------------------------------------------------- */}
         {/* MODULE 9: DUTY CONFLICT DETECTION */}

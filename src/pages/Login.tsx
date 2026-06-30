@@ -159,6 +159,7 @@ export const Login: React.FC = () => {
       localStorage.setItem('demoDistrict', selectedDistrict || 'Lucknow');
       localStorage.setItem('demoThana', selectedThana || 'Hazratganj');
       navigate('/dashboard/duties');
+      window.location.reload();
       
     } catch (err: any) {
       setError(err.message || 'Failed to authenticate');

@@ -885,10 +885,51 @@ export const DutyManagement: React.FC = () => {
         {/* ---------------------------------------------------- */}
         {/* MODULE 8: DUTY CALENDAR */}
         {/* ---------------------------------------------------- */}
-        {/* ---------------------------------------------------- */}
-        {/* MODULE 8: DUTY CALENDAR */}
-        {/* ---------------------------------------------------- */}
         {activeModule === 8 && (() => {
+          // Dynamic color scheme generator based on Duty Type
+          const getDutyColorClasses = (type: string) => {
+            switch (type) {
+              case 'Night Patrol':
+                return {
+                  bg: 'bg-indigo-500/10 border-indigo-500/20 dark:bg-indigo-500/15',
+                  text: 'text-indigo-600 dark:text-indigo-400',
+                  badge: 'bg-indigo-500 text-white'
+                };
+              case 'VIP Duty':
+                return {
+                  bg: 'bg-amber-500/10 border-amber-500/20 dark:bg-amber-500/15',
+                  text: 'text-amber-600 dark:text-amber-400',
+                  badge: 'bg-amber-500 text-white'
+                };
+              case 'Traffic Duty':
+                return {
+                  bg: 'bg-blue-500/10 border-blue-500/20 dark:bg-blue-500/15',
+                  text: 'text-blue-600 dark:text-blue-400',
+                  badge: 'bg-blue-500 text-white'
+                };
+              case 'Law & Order':
+              case 'Emergency Duty':
+                return {
+                  bg: 'bg-red-500/10 border-red-500/20 dark:bg-red-500/15',
+                  text: 'text-red-650 dark:text-red-400',
+                  badge: 'bg-red-500 text-white'
+                };
+              case 'Daily Duty':
+              case 'General Duty':
+                return {
+                  bg: 'bg-green-500/10 border-green-500/20 dark:bg-green-500/15',
+                  text: 'text-green-600 dark:text-green-400',
+                  badge: 'bg-green-500 text-white'
+                };
+              default:
+                return {
+                  bg: 'bg-teal-500/10 border-teal-500/20 dark:bg-teal-500/15',
+                  text: 'text-teal-600 dark:text-teal-400',
+                  badge: 'bg-teal-500 text-white'
+                };
+            }
+          };
+
           // Construct days for month view (July 2026 starting on Wednesday)
           const julyDays = [];
           julyDays.push({ day: 29, dateStr: '2026-06-29', isFiller: true });
@@ -966,16 +1007,19 @@ export const DutyManagement: React.FC = () => {
                             {shiftDuties.length === 0 ? (
                               <p className="text-xs text-gray-400 italic">No duties scheduled for this shift.</p>
                             ) : (
-                              shiftDuties.map(d => (
-                                <div key={d.id} className="p-3 bg-[#FF9933]/5 border border-[#FF9933]/20 rounded-xl space-y-1">
-                                  <div className="flex justify-between items-center">
-                                    <h4 className="text-xs font-bold text-[#FF9933]">{d.type}</h4>
-                                    <span className="text-[10px] px-2 py-0.5 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded font-mono font-bold text-gray-650 dark:text-white/60">{d.id}</span>
+                              shiftDuties.map(d => {
+                                const colors = getDutyColorClasses(d.type);
+                                return (
+                                  <div key={d.id} className={`p-3 border rounded-xl space-y-1 ${colors.bg}`}>
+                                    <div className="flex justify-between items-center">
+                                      <h4 className={`text-xs font-black ${colors.text}`}>{d.type}</h4>
+                                      <span className="text-[10px] px-2 py-0.5 bg-gray-150 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded font-mono font-bold text-gray-650 dark:text-white/60">{d.id}</span>
+                                    </div>
+                                    <p className="text-[10px] text-gray-500 dark:text-white/60">📍 {d.location} | Strength: {d.strength} officers</p>
+                                    <p className="text-[10px] text-gray-455 dark:text-white/40 font-semibold">👥 Staff: {d.assignedStaff.join(', ') || 'No staff allocated yet'}</p>
                                   </div>
-                                  <p className="text-[10px] text-gray-500 dark:text-white/60">📍 {d.location} | Strength: {d.strength} officers</p>
-                                  <p className="text-[10px] text-gray-400 dark:text-white/40">👥 Staff: {d.assignedStaff.join(', ') || 'No staff allocated yet'}</p>
-                                </div>
-                              ))
+                                );
+                              })
                             )}
                           </div>
                         </div>
@@ -1000,13 +1044,16 @@ export const DutyManagement: React.FC = () => {
                           {dayDuties.length === 0 ? (
                             <p className="text-[10px] text-gray-400 italic text-center py-4">No Duty</p>
                           ) : (
-                            dayDuties.map(d => (
-                              <div key={d.id} className="p-2 bg-[#FF9933]/10 border border-[#FF9933]/20 rounded-lg text-[9px] font-bold space-y-1 hover:shadow-sm transition-shadow">
-                                <p className="text-[#FF9933] truncate leading-tight">{d.type}</p>
-                                <p className="text-gray-450 dark:text-white/50 truncate font-mono">{d.time}</p>
-                                <p className="text-gray-400 dark:text-white/30 truncate">📍 {d.location}</p>
-                              </div>
-                            ))
+                            dayDuties.map(d => {
+                              const colors = getDutyColorClasses(d.type);
+                              return (
+                                <div key={d.id} className={`p-2 border rounded-lg text-[9px] font-bold space-y-1 hover:shadow-sm transition-all ${colors.bg}`}>
+                                  <p className={`truncate leading-tight font-black ${colors.text}`}>{d.type}</p>
+                                  <p className="text-gray-450 dark:text-white/50 truncate font-mono">{d.time}</p>
+                                  <p className="text-gray-400 dark:text-white/30 truncate">📍 {d.location}</p>
+                                </div>
+                              );
+                            })
                           )}
                         </div>
                       </div>

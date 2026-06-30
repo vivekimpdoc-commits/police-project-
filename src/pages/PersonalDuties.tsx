@@ -2,22 +2,24 @@ import React from 'react';
 import { Briefcase, Calendar, CheckCircle, ShieldAlert, Check } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
-export const PersonalDuties: React.FC = () => {
+export const PersonalDuties: React.FC<{ hideHeader?: boolean }> = ({ hideHeader }) => {
   const { userData } = useAuth();
   const userName = userData?.fullName || 'Constable Ramesh';
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 lg:p-8 custom-scrollbar bg-gray-50 dark:bg-[#000a17]">
+    <div className={hideHeader ? "" : "flex-1 overflow-y-auto p-4 lg:p-8 custom-scrollbar bg-gray-50 dark:bg-[#000a17]"}>
       
       {/* Header */}
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold font-heading text-[#001229] dark:text-white">
-          My Profile & Duties
-        </h2>
-        <p className="text-gray-500 dark:text-white/60 text-sm mt-1">
-          Welcome back, {userName}
-        </p>
-      </div>
+      {!hideHeader && (
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold font-heading text-[#001229] dark:text-white">
+            My Profile & Duties
+          </h2>
+          <p className="text-gray-500 dark:text-white/60 text-sm mt-1">
+            Welcome back, {userName}
+          </p>
+        </div>
+      )}
 
       {/* Metric Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">

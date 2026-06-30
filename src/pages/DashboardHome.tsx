@@ -340,7 +340,7 @@ export const DashboardHome: React.FC = () => {
 
       {/* Render Dashboard Based on Role */}
       {role === 'Constable' && (
-        constableTab === 'my-duties' ? <PersonalDuties /> : <SHODashboard navigate={navigate} stats={thanaStats} isConstable={true} />
+        constableTab === 'my-duties' ? <PersonalDuties hideHeader /> : <SHODashboard navigate={navigate} stats={thanaStats} isConstable={true} />
       )}
       {role === 'SHO' && <SHODashboard navigate={navigate} stats={thanaStats} />}
       {!['Constable', 'SHO'].includes(role) && <MacroDashboard navigate={navigate} />}

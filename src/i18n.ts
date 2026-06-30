@@ -5,8 +5,9 @@ import { initReactI18next } from 'react-i18next';
 const resources = {
   en: {
     translation: {
-      "welcome": "Welcome to PNO",
-      // Add more English strings here
+      "welcome": "Welcome to KARTAVYA",
+      "login_title": "Login to KARTAVYA System",
+      "username": "Username/PNO",
     }
   },
   hi: {

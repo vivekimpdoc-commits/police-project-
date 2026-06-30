@@ -118,10 +118,10 @@ export const Signup: React.FC = () => {
             </div>
           </div>
           <h1 className="text-3xl font-heading font-bold text-center mb-1 text-white">
-            PNO Registration Portal
+            KARTAVYA Registration Portal
           </h1>
           <p className="text-blue-100/70 text-sm text-center font-medium tracking-wide">
-            OFFICIAL UTTAR PRADESH POLICE ACCESS
+            Create your official digital identity
           </p>
         </div>
 

@@ -201,9 +201,9 @@ export const Login: React.FC = () => {
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#002147] to-[#0d386b] flex items-center justify-center shadow-[0_0_20px_rgba(0,33,71,0.5)] border border-white/20">
                <Shield size={32} className="text-[#FF9933] filter drop-shadow-[0_0_8px_rgba(255,153,51,0.8)]" />
             </div>
-            {/* PNO Logo */}
+            {/* KARTAVYA Logo */}
             <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center shadow-lg border border-white/20">
-               <span className="font-heading font-extrabold text-xl text-white tracking-wider">PNO</span>
+               <span className="font-heading font-extrabold text-sm text-white tracking-wider">KARTAVYA</span>
             </div>
           </div>
           

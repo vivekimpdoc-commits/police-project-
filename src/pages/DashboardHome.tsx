@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Shield, Target, ShieldAlert, Users, Car, Clock, FileText, Sword, Radio, Map, BarChart2, Briefcase, Calendar, MoreVertical, CheckCircle, AlertCircle, TrendingUp
+  Shield, Target, ShieldAlert, Users, Car, Clock, FileText, Sword, Radio, Map, MapPin, BarChart2, Briefcase, Calendar, MoreVertical, CheckCircle, AlertCircle, TrendingUp
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { useNavigate } from 'react-router-dom';
@@ -338,7 +338,7 @@ export const DashboardHome: React.FC = () => {
   const thanaStats = getThanaStats(storedThana);
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 lg:p-8 custom-scrollbar">
+    <div className="flex-1 overflow-y-auto p-4 lg:p-8 custom-scrollbar bg-gray-50 dark:bg-[#000a17]">
       {/* Dynamic Page Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
          <div>

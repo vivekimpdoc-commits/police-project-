@@ -524,77 +524,134 @@ export const DutyManagement: React.FC = () => {
 
                 {/* STEP 3: PERSONNEL & GEAR */}
                 {wizardStep === 3 && (
-                  <div className="space-y-6 animate-fade-in">
-                    <div className="bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-xl p-4 flex gap-4 items-start">
-                       <div className="p-2 bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded-lg shrink-0">
-                         <Target size={20} />
+                  <div className="space-y-8 animate-fade-in">
+                    {/* AI Suggestion Banner */}
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-500/30 rounded-2xl p-5 flex gap-4 items-start shadow-sm relative overflow-hidden group">
+                       <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition-colors"></div>
+                       <div className="p-2.5 bg-white dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded-xl shrink-0 shadow-sm border border-blue-100 dark:border-blue-500/20 relative z-10">
+                         <Target size={22} className="animate-pulse" />
                        </div>
-                       <div>
-                         <h4 className="font-bold text-blue-900 dark:text-blue-300 text-sm">Smart Suggestion Active</h4>
-                         <p className="text-xs text-blue-700 dark:text-blue-200 mt-1">For <b>{dutyCategory}</b>, system recommends: 1 Team Leader, 4 Constables, 1 Bolero Vehicle, and Anti-Riot Gear.</p>
+                       <div className="relative z-10">
+                         <h4 className="font-bold text-blue-900 dark:text-blue-300 text-base mb-1 flex items-center gap-2">
+                           Smart Suggestion Active <span className="flex h-2 w-2"><span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-blue-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>
+                         </h4>
+                         <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                           Based on historical data for <b>{dutyCategory}</b>, the system recommends:<br/>
+                           <span className="font-semibold bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded mt-1 inline-block border border-blue-200/50 dark:border-blue-500/20">1 Team Leader</span> • 
+                           <span className="font-semibold bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded mt-1 inline-block mx-1 border border-blue-200/50 dark:border-blue-500/20">4 Constables</span> • 
+                           <span className="font-semibold bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded mt-1 inline-block border border-blue-200/50 dark:border-blue-500/20">1 PCR Bolero + Anti-Riot Gear</span>
+                         </p>
                        </div>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                      <div className="space-y-4">
-                        <label className="text-sm font-bold text-gray-700 dark:text-white/80 block border-b border-gray-200 dark:border-white/10 pb-2">Assign Officers</label>
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                      {/* Left Column: Personnel */}
+                      <div className="space-y-5 bg-gray-50 dark:bg-white/5 p-6 rounded-2xl border border-gray-100 dark:border-white/5">
+                        <div className="flex items-center gap-3 border-b border-gray-200 dark:border-white/10 pb-3">
+                           <div className="p-1.5 bg-[#FF9933]/10 text-[#FF9933] rounded-lg"><Users size={18} /></div>
+                           <h3 className="font-bold text-gray-900 dark:text-white text-lg">Assign Personnel</h3>
+                        </div>
                         
+                        {/* Team Leader */}
                         <div>
-                           <p className="text-xs text-gray-500 mb-2 font-medium">Team Leader In-charge</p>
-                           <div className="flex items-center gap-3 p-3 border border-[#FF9933]/50 bg-[#FF9933]/5 rounded-xl">
-                             <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden shrink-0">
-                               <img src="https://api.dicebear.com/7.x/initials/svg?seed=Inspector&backgroundColor=002147" alt="Profile" />
-                             </div>
-                             <div className="flex-1">
-                               <p className="font-bold text-sm dark:text-white">Insp. Rajesh Kumar</p>
-                               <p className="text-xs text-gray-500">PNO: UP-9921 • Available</p>
-                             </div>
-                             <button className="text-xs font-bold text-[#FF9933] bg-white dark:bg-[#001229] px-3 py-1.5 rounded-lg border border-[#FF9933]/20 shadow-sm hover:bg-[#FF9933] hover:text-white transition-colors">Change</button>
+                           <p className="text-xs text-gray-500 dark:text-white/50 mb-2 font-bold uppercase tracking-wider flex items-center gap-2">
+                             Team Leader In-charge <span className="text-red-500">*</span>
+                           </p>
+                           <div className="relative group">
+                             <select className="w-full appearance-none bg-white dark:bg-[#001229] border-2 border-gray-200 dark:border-white/10 focus:border-[#FF9933] dark:focus:border-[#FF9933] rounded-xl px-4 py-3.5 text-gray-900 dark:text-white font-bold text-sm outline-none transition-all shadow-sm cursor-pointer hover:shadow-md">
+                               <option value="" disabled selected>Select Team Leader...</option>
+                               <option value="UP-9921">Insp. Rajesh Kumar (UP-9921) - Available</option>
+                               <option value="UP-8832">SI Vikram Singh (UP-8832) - Available</option>
+                               <option value="UP-7745">SI Amit Patel (UP-7745) - On Duty</option>
+                             </select>
+                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none group-hover:text-[#FF9933] transition-colors" size={20} />
                            </div>
                         </div>
 
+                        {/* Force Count */}
                         <div>
-                           <p className="text-xs text-gray-500 mb-2 font-medium">Add Force (Staff Count)</p>
-                           <div className="flex gap-2">
-                             <input type="number" defaultValue="4" className="w-20 px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl outline-none dark:text-white text-center font-bold" />
-                             <button className="flex-1 bg-gray-100 dark:bg-white/5 border border-dashed border-gray-300 dark:border-white/20 hover:border-[#FF9933] hover:bg-[#FF9933]/5 transition-colors rounded-xl text-sm font-semibold dark:text-white/70 flex items-center justify-center gap-2">
-                               <Plus size={16} /> Auto-Select Available Constables
+                           <p className="text-xs text-gray-500 dark:text-white/50 mb-2 font-bold uppercase tracking-wider">
+                             Add Force (Staff Count)
+                           </p>
+                           <div className="flex flex-col sm:flex-row gap-3">
+                             <div className="relative shrink-0 w-full sm:w-auto">
+                               <Users size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                               <input type="number" placeholder="Qty" min="1" className="w-full sm:w-28 pl-9 pr-4 py-3.5 bg-white dark:bg-[#001229] border border-gray-200 dark:border-white/10 rounded-xl outline-none text-gray-900 dark:text-white text-center font-black text-lg focus:border-[#FF9933] focus:ring-2 focus:ring-[#FF9933]/20 transition-all shadow-sm" />
+                             </div>
+                             <button className="flex-1 bg-white dark:bg-[#001229] border-2 border-dashed border-gray-300 dark:border-white/20 hover:border-[#FF9933] hover:bg-[#FF9933]/5 hover:text-[#FF9933] transition-all rounded-xl py-3.5 text-sm font-bold text-gray-600 dark:text-white/70 flex items-center justify-center gap-2 shadow-sm group">
+                               <div className="p-1 bg-gray-100 dark:bg-white/5 rounded-lg group-hover:bg-[#FF9933]/10 transition-colors"><Plus size={16} className="group-hover:text-[#FF9933]" /></div>
+                               Auto-Select Constables
                              </button>
                            </div>
                         </div>
                       </div>
 
-                      <div className="space-y-4">
-                        <label className="text-sm font-bold text-gray-700 dark:text-white/80 block border-b border-gray-200 dark:border-white/10 pb-2">Logistics & Gear</label>
+                      {/* Right Column: Logistics */}
+                      <div className="space-y-5 bg-gray-50 dark:bg-white/5 p-6 rounded-2xl border border-gray-100 dark:border-white/5">
+                        <div className="flex items-center gap-3 border-b border-gray-200 dark:border-white/10 pb-3">
+                           <div className="p-1.5 bg-blue-500/10 text-blue-500 rounded-lg"><Shield size={18} /></div>
+                           <h3 className="font-bold text-gray-900 dark:text-white text-lg">Logistics & Gear</h3>
+                        </div>
                         
-                        <div className="grid grid-cols-2 gap-4">
-                           <div className="p-3 border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-black/20">
-                             <div className="flex items-center justify-between mb-2">
-                               <Car size={16} className="text-gray-500" />
-                               <input type="checkbox" defaultChecked className="accent-[#FF9933]" />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                           {/* Vehicle Card */}
+                           <div className="p-4 bg-white dark:bg-[#001229] border border-gray-200 dark:border-white/10 rounded-xl shadow-sm focus-within:border-blue-500/50 hover:shadow-md transition-all relative overflow-hidden group">
+                             <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                             <div className="flex items-center gap-2 mb-3 relative z-10">
+                               <div className="p-1.5 bg-gray-100 dark:bg-white/5 rounded-lg text-gray-600 dark:text-gray-300">
+                                 <Car size={18} />
+                               </div>
+                               <p className="font-bold text-sm text-gray-900 dark:text-white">Vehicles</p>
                              </div>
-                             <p className="font-bold text-sm dark:text-white">Vehicles</p>
-                             <p className="text-xs text-gray-500">1 PCR Bolero</p>
+                             <div className="relative z-10 flex gap-2">
+                               <input type="number" placeholder="0" min="0" className="w-16 px-2 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg text-center text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:border-blue-500" />
+                               <select className="flex-1 appearance-none bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 dark:text-white/80 focus:outline-none focus:border-blue-500">
+                                 <option value="bolero">PCR Bolero</option>
+                                 <option value="bike">Patrol Bike</option>
+                                 <option value="bus">Police Bus</option>
+                                 <option value="van">Prison Van</option>
+                               </select>
+                             </div>
                            </div>
                            
-                           <div className="p-3 border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-black/20">
-                             <div className="flex items-center justify-between mb-2">
-                               <Radio size={16} className="text-gray-500" />
-                               <input type="checkbox" defaultChecked className="accent-[#FF9933]" />
+                           {/* Comms Card */}
+                           <div className="p-4 bg-white dark:bg-[#001229] border border-gray-200 dark:border-white/10 rounded-xl shadow-sm focus-within:border-blue-500/50 hover:shadow-md transition-all relative overflow-hidden group">
+                             <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                             <div className="flex items-center gap-2 mb-3 relative z-10">
+                               <div className="p-1.5 bg-gray-100 dark:bg-white/5 rounded-lg text-gray-600 dark:text-gray-300">
+                                 <Radio size={18} />
+                               </div>
+                               <p className="font-bold text-sm text-gray-900 dark:text-white">Comms (Sets)</p>
                              </div>
-                             <p className="font-bold text-sm dark:text-white">Comms</p>
-                             <p className="text-xs text-gray-500">5 Wireless Sets</p>
+                             <div className="relative z-10 flex gap-2">
+                               <input type="number" placeholder="0" min="0" className="w-16 px-2 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg text-center text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:border-blue-500" />
+                               <select className="flex-1 appearance-none bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 dark:text-white/80 focus:outline-none focus:border-blue-500">
+                                 <option value="wireless">Wireless VHF</option>
+                                 <option value="meg">Megaphone</option>
+                               </select>
+                             </div>
                            </div>
 
-                           <div className="p-3 border border-[#FF9933]/30 rounded-xl bg-[#FF9933]/5 col-span-2 flex justify-between items-center cursor-pointer hover:bg-[#FF9933]/10 transition-colors">
-                             <div className="flex items-center gap-3">
-                               <div className="p-2 bg-white dark:bg-[#001229] rounded-lg shadow-sm"><ShieldAlert size={16} className="text-[#FF9933]" /></div>
-                               <div>
-                                 <p className="font-bold text-sm dark:text-white">Specialized Weapons / Gear</p>
-                                 <p className="text-xs text-gray-500">Click to add riot gear, rifles, etc.</p>
+                           {/* Specialized Gear Card */}
+                           <div className="col-span-1 sm:col-span-2 p-4 bg-white dark:bg-[#001229] border border-gray-200 dark:border-white/10 rounded-xl shadow-sm focus-within:border-[#FF9933]/50 hover:shadow-md transition-all relative overflow-hidden group">
+                             <div className="absolute inset-0 bg-[#FF9933]/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                             <div className="flex items-center gap-2 mb-3 relative z-10">
+                               <div className="p-1.5 bg-gray-100 dark:bg-white/5 rounded-lg text-gray-600 dark:text-gray-300">
+                                 <ShieldAlert size={18} />
                                </div>
+                               <p className="font-bold text-sm text-gray-900 dark:text-white">Weapons / Riot Gear</p>
                              </div>
-                             <Plus size={18} className="text-gray-400" />
+                             <div className="relative z-10 flex gap-2">
+                               <input type="number" placeholder="0" min="0" className="w-16 px-2 py-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg text-center text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:border-[#FF9933]" />
+                               <select className="flex-1 appearance-none bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 dark:text-white/80 focus:outline-none focus:border-[#FF9933]">
+                                 <option value="" disabled selected>Select Gear Type...</option>
+                                 <option value="baton">Lathi / Baton</option>
+                                 <option value="shield">Riot Shield</option>
+                                 <option value="teargas">Tear Gas Shells</option>
+                                 <option value="rifle">INSAS Rifle</option>
+                                 <option value="pistol">9mm Pistol</option>
+                               </select>
+                             </div>
                            </div>
                         </div>
                       </div>

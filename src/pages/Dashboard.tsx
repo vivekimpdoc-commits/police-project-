@@ -36,15 +36,9 @@ export const Dashboard: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     'MAIN': true,
-    'DUTY MANAGEMENT': false,
-    'REPORTS & LOGS': true,
-    'STATION COMMAND': true,
-    'STATION DUTIES': false,
-    'STATION LOGS': true,
     'STATION CONTROL (थाना नियंत्रण)': true,
-    'DUTY MANAGEMENT (ड्यूटी)': false,
-    'PERSONNEL (कर्मचारी)': false,
-    'MY RECORDS (मेरा खाता)': true
+    'DUTY TYPES (ड्यूटी श्रेणियां)': false,
+    'STATION RECORDS (थाना अभिलेख)': false
   });
 
   const toggleGroup = (title: string) => {
@@ -60,29 +54,54 @@ export const Dashboard: React.FC = () => {
   };
 
   const getMenuGroups = () => {
-    if (userData?.role === 'SHO') {
+    if (userData?.role === 'SHO' || userData?.role === 'Constable') {
       return [
         {
           title: 'STATION CONTROL (थाना नियंत्रण)',
           items: [
             { icon: BarChart2, label: 'Station Dashboard (थाना डैशबोर्ड)', path: '/dashboard' },
-            { icon: Briefcase, label: 'Duty Allocation (ड्यूटी आवंटन)', path: '/dashboard/duties' },
             { icon: Map, label: 'Live Patrol Map (लाइव गश्ती नक्शा)', path: '/dashboard/map' },
             { icon: Users, label: 'Staff Availability (बल उपलब्धता)', path: '/dashboard/officers' },
             { icon: CheckSquare, label: 'Attendance & Check-in (उपस्थिति)', path: '/dashboard/attendance' },
           ]
-        }
-      ];
-    } else if (userData?.role === 'Constable') {
-      return [
+        },
         {
-          title: 'STATION CONTROL (थाना नियंत्रण)',
+          title: 'DUTY TYPES (ड्यूटी श्रेणियां)',
+          categories: [
+            {
+              name: 'Regular Deployments (नियमित तैनाती)',
+              items: [
+                { icon: Briefcase, label: 'Daily Beat Duty', path: '/dashboard/duties' },
+                { icon: Car, label: 'Traffic Points', path: '/dashboard/duties' },
+                { icon: Clock, label: 'Night Patrols', path: '/dashboard/duties' },
+                { icon: Users, label: 'Reserve Force', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Special & Event (विशेष और कार्यक्रम)',
+              items: [
+                { icon: Shield, label: 'VIP Routes', badge: 'High', path: '/dashboard/duties' },
+                { icon: Target, label: 'Law & Order', path: '/dashboard/duties' },
+                { icon: Users, label: 'Election Duty', path: '/dashboard/duties' },
+                { icon: Calendar, label: 'Festival Duty', path: '/dashboard/duties' },
+              ]
+            },
+            {
+              name: 'Legal & Emergency (कानूनी/आपातकालीन)',
+              items: [
+                { icon: FileText, label: 'Court Duty/Escort', path: '/dashboard/duties' },
+                { icon: ShieldAlert, label: 'Emergency Response', badge: 'Urgent', path: '/dashboard/duties' },
+              ]
+            }
+          ]
+        },
+        {
+          title: 'STATION RECORDS (थाना अभिलेख)',
           items: [
-            { icon: BarChart2, label: 'Station Dashboard (थाना डैशबोर्ड)', path: '/dashboard' },
-            { icon: Briefcase, label: 'Duty Allocation (ड्यूटी आवंटन)', path: '/dashboard/duties' },
-            { icon: Map, label: 'Live Patrol Map (लाइव गश्ती नक्शा)', path: '/dashboard/map' },
-            { icon: Users, label: 'Staff Availability (बल उपलब्धता)', path: '/dashboard/officers' },
-            { icon: CheckSquare, label: 'Attendance & Check-in (उपस्थिति)', path: '/dashboard/attendance' },
+            { icon: FileText, label: 'Daily Diary (GD) (रोजनामचा)', path: '/dashboard/reports' },
+            { icon: Bell, label: 'Station Alerts (थाना अलर्ट)', path: '/dashboard/alerts' },
+            { icon: FileText, label: 'Leave Applications (छुट्टी आवेदन)', badge: '2', path: '/dashboard/attendance' },
+            { icon: Briefcase, label: 'Duty Approvals (ड्यूटी अनुमोदन)', badge: '3', path: '/dashboard/duties' },
           ]
         }
       ];

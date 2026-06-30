@@ -403,39 +403,39 @@ export const OfficerAvailability: React.FC = () => {
                <div className="grid grid-cols-2 gap-4">
                  <div>
                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Officer Name</label>
-                   <input type="text" placeholder="e.g. Rahul Singh" className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] dark:text-white" />
+                   <input type="text" placeholder="e.g. Rahul Singh" className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] text-gray-900 dark:text-white" />
                  </div>
                  <div>
                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">PNO Number</label>
-                   <input type="text" placeholder="e.g. UP-1029" className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] dark:text-white" />
+                   <input type="text" placeholder="e.g. UP-1029" className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] text-gray-900 dark:text-white" />
                  </div>
                </div>
 
                <div className="grid grid-cols-2 gap-4">
                  <div>
                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Rank</label>
-                   <select className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] dark:text-white">
-                     <option>Constable</option>
-                     <option>Head Constable</option>
-                     <option>Sub Inspector</option>
-                     <option>Inspector</option>
+                   <select className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] text-gray-900 dark:text-white">
+                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Constable</option>
+                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Head Constable</option>
+                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Sub Inspector</option>
+                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Inspector</option>
                    </select>
                  </div>
                  <div>
                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Posting Station</label>
-                   <select className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] dark:text-white">
-                     <option>Hazratganj</option>
-                     <option>Gomti Nagar</option>
-                     <option>Chowk</option>
-                     <option>Alambagh</option>
-                     <option>Indira Nagar</option>
+                   <select className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] text-gray-900 dark:text-white">
+                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Hazratganj</option>
+                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Gomti Nagar</option>
+                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Chowk</option>
+                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Alambagh</option>
+                     <option className="text-gray-900 dark:text-white bg-white dark:bg-[#000a17]">Indira Nagar</option>
                    </select>
                  </div>
                </div>
 
                <div>
                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Contact Number</label>
-                 <input type="tel" placeholder="+91 9999999999" className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] dark:text-white" />
+                 <input type="tel" placeholder="+91 9999999999" className="w-full p-3 bg-gray-50 dark:bg-[#000a17] border border-gray-200 dark:border-white/10 rounded-xl text-sm outline-none focus:border-[#FF9933] text-gray-900 dark:text-white" />
                </div>
 
                <div className="pt-4 border-t border-gray-100 dark:border-white/10 flex justify-end gap-3">

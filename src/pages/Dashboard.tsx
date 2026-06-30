@@ -112,16 +112,20 @@ export const Dashboard: React.FC = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-[#000a17] flex overflow-hidden font-sans">
       
       {/* Enterprise Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-72' : 'w-0 -translate-x-full'} transition-all duration-300 flex-shrink-0 bg-[#001229] border-r border-white/10 text-white h-screen flex flex-col z-30 absolute md:relative`}>
+      <aside className={`${sidebarOpen ? 'w-72' : 'w-0 -translate-x-full'} transition-all duration-300 flex-shrink-0 bg-gradient-to-b from-[#1a1c29] to-[#0a0a0f] border-r border-white/10 text-white h-screen flex flex-col z-30 absolute md:relative`}>
         {/* Logo Area */}
-        <div className="h-20 flex items-center justify-between px-6 border-b border-white/10 bg-[#001229] shrink-0">
+        <div className="h-20 flex items-center justify-between px-6 border-b border-white/10 bg-transparent shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF9933] to-[#ffaa55] flex items-center justify-center shadow-lg shadow-[#FF9933]/20">
                <Shield size={22} className="text-[#001229]" />
             </div>
-            <div>
-              <h1 className="font-heading font-extrabold tracking-wide text-lg leading-tight">UPCOP COMMAND</h1>
-              <p className="text-[10px] text-white/50 tracking-widest font-semibold">UP POLICE PORTAL</p>
+            <div className="flex-1 overflow-hidden pr-2">
+              <h1 className="font-heading font-extrabold tracking-wide text-lg leading-tight text-white flex items-baseline gap-1.5 truncate">
+                KARTAVYA AI <span className="text-sm font-medium text-[#FF9933] font-sans tracking-normal opacity-90 truncate">(कर्तव्य AI)</span>
+              </h1>
+              <p className="text-[10px] text-white/60 font-semibold tracking-wider uppercase leading-snug mt-1 whitespace-normal break-words w-full" title="Key Attendance, Roster, Tracking, And Verification Yield Assistant">
+                Key Attendance, Roster, Tracking, And Verification Yield Assistant
+              </p>
             </div>
           </div>
           <button onClick={() => setSidebarOpen(false)} className="md:hidden text-white/50 hover:text-white">

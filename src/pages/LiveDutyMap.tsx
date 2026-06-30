@@ -44,21 +44,22 @@ export const LiveDutyMap: React.FC = () => {
   const filteredMarkers = MAP_MARKERS.filter(m => activeFilter === 'all' || m.type === activeFilter);
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-gray-50 dark:bg-[#000a17] relative overflow-hidden">
+    <div className="flex-1 w-full h-full flex flex-col p-4 md:p-6 overflow-hidden">
+      <div className="flex-1 w-full h-full bg-gradient-to-b from-[#1a1c29] to-[#0a0a0f] relative overflow-hidden rounded-3xl border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col">
       
       {/* Top Floating Bar */}
-      <div className="absolute top-4 left-4 right-4 z-20 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center pointer-events-none">
-         <div className="bg-white/90 dark:bg-[#001229]/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-lg border border-gray-200 dark:border-white/10 pointer-events-auto flex items-center gap-4">
-            <div className="w-12 h-12 bg-[#FF9933]/20 rounded-full flex items-center justify-center">
+      <div className="absolute top-6 left-6 right-6 z-20 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center pointer-events-none">
+         <div className="bg-[#0f172a]/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-2xl border border-white/10 pointer-events-auto flex items-center gap-4">
+            <div className="w-12 h-12 bg-[#FF9933]/20 rounded-full flex items-center justify-center border border-[#FF9933]/30 shadow-[0_0_15px_rgba(255,153,51,0.2)]">
               <MapIcon size={24} className="text-[#FF9933]" />
             </div>
             <div>
-              <h1 className="text-xl font-bold font-heading dark:text-white leading-tight">Live Deployment Map</h1>
-              <p className="text-xs text-gray-500 dark:text-white/60">Lucknow District • Real-time Tracking</p>
+              <h1 className="text-xl font-bold font-heading text-white leading-tight">Live Deployment Map</h1>
+              <p className="text-[11px] text-[#FF9933] font-bold tracking-wider mt-1 uppercase">Lucknow District • Real-time Tracking</p>
             </div>
          </div>
          
-         <div className="bg-white/90 dark:bg-[#001229]/90 backdrop-blur-md p-2 rounded-2xl shadow-lg border border-gray-200 dark:border-white/10 pointer-events-auto flex gap-2">
+         <div className="bg-[#0f172a]/90 backdrop-blur-md p-2 rounded-2xl shadow-2xl border border-white/10 pointer-events-auto flex gap-2">
             {[
               { id: 'all', label: 'All Units', icon: Layers },
               { id: 'vip', label: 'VIP Security', icon: Shield },
@@ -68,7 +69,7 @@ export const LiveDutyMap: React.FC = () => {
               <button 
                 key={f.id}
                 onClick={() => setActiveFilter(f.id)}
-                className={`px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all ${activeFilter === f.id ? 'bg-[#002147] dark:bg-[#FF9933] text-white dark:text-[#001229]' : 'text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/10'}`}
+                className={`px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all ${activeFilter === f.id ? 'bg-[#FF9933] text-[#0a0a0f] shadow-[0_0_15px_rgba(255,153,51,0.4)]' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}
               >
                 <f.icon size={16} /> <span className="hidden sm:inline">{f.label}</span>
               </button>
@@ -129,28 +130,28 @@ export const LiveDutyMap: React.FC = () => {
                  <div className={`absolute inset-0 rounded-full border-2 ${getMarkerColor(marker.type).split(' ')[0].replace('bg-', 'border-')} animate-pulse opacity-40 scale-[2]`}></div>
                  
                  {/* Solid Pin */}
-                 <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-transform duration-300 group-hover:scale-125 z-10 ${getMarkerColor(marker.type)}`}>
-                    <div className="bg-[#020d1a] w-[80%] h-[80%] rounded-full flex items-center justify-center shadow-inner">
-                      {getMarkerIcon(marker.type)}
-                    </div>
+                 <div className={`w-12 h-12 rounded-full border-2 bg-black/50 backdrop-blur-sm flex items-center justify-center transition-all duration-300 ${activeFilter === 'all' || activeFilter === marker.type ? 'scale-100 opacity-100' : 'scale-0 opacity-0'} ${
+                      selectedMarker?.id === marker.id ? 'ring-4 ring-[#FF9933] ring-offset-2 ring-offset-transparent scale-125 z-20' : 'hover:scale-110'
+                    }`}>
+                    {getMarkerIcon(marker.type)}
                  </div>
               </div>
            </div>
          ))}
       </div>
 
-      {/* Floating Controls Right */}
-      <div className="absolute right-4 bottom-8 z-20 flex flex-col gap-2 pointer-events-none">
-         <button className="w-12 h-12 bg-white dark:bg-[#001229] rounded-2xl shadow-lg border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-700 dark:text-white/70 hover:text-[#FF9933] hover:border-[#FF9933] pointer-events-auto transition-colors">
-           <Navigation size={20} />
-         </button>
-         <button className="w-12 h-12 bg-white dark:bg-[#001229] rounded-2xl shadow-lg border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-700 dark:text-white/70 hover:text-[#FF9933] pointer-events-auto transition-colors text-xl font-light">
-           +
-         </button>
-         <button className="w-12 h-12 bg-white dark:bg-[#001229] rounded-2xl shadow-lg border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-700 dark:text-white/70 hover:text-[#FF9933] pointer-events-auto transition-colors text-xl font-light">
-           -
-         </button>
-      </div>
+      {/* Map Controls */}
+         <div className="absolute right-6 bottom-6 flex flex-col gap-2 z-10">
+            <button className="w-12 h-12 bg-[#0f172a]/90 backdrop-blur-md rounded-xl flex items-center justify-center text-white/70 hover:text-[#FF9933] shadow-2xl border border-white/10 transition-colors">
+              <Navigation size={20} />
+            </button>
+            <button className="w-12 h-12 bg-[#0f172a]/90 backdrop-blur-md rounded-xl flex items-center justify-center text-white/70 hover:text-[#FF9933] shadow-2xl border border-white/10 transition-colors mt-2">
+              <span className="font-bold text-xl leading-none">+</span>
+            </button>
+            <button className="w-12 h-12 bg-[#0f172a]/90 backdrop-blur-md rounded-xl flex items-center justify-center text-white/70 hover:text-[#FF9933] shadow-2xl border border-white/10 transition-colors">
+              <span className="font-bold text-xl leading-none">-</span>
+            </button>
+         </div>
 
       {/* Selected Marker Details Panel */}
       {selectedMarker && (
@@ -308,6 +309,7 @@ export const LiveDutyMap: React.FC = () => {
         </div>
       )}
 
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import {
   AlertTriangle, MoreVertical, Shield, ChevronDown, Download, Users, 
   Car, Radio, ArrowRight, ArrowLeft, Target, ShieldAlert, FileText, Check, X,
   ThumbsUp, Eye, ShieldCheck, UserCheck, CheckCircle2, ChevronRight, Settings,
-  Activity, Info, CalendarRange, HelpCircle, Bell, RefreshCw, Layers
+  Activity, Info, CalendarRange, HelpCircle, Bell, RefreshCw, Layers, BarChart2
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -216,41 +216,91 @@ export const DutyManagement: React.FC = () => {
 
   // 15 Modules Sidebar Navigation Config
   const MODULES_MENU = [
-    { id: 1, label: '1. Dashboard (थाना डैशबोर्ड)' },
-    { id: 2, label: '2. Staff Master (बल उपलब्ध)' },
-    { id: 3, label: '3. Duty Types (ड्यूटी प्रकार)' },
-    { id: 4, label: '4. Duty Planning (नियोजन)' },
-    { id: 5, label: '5. AI Assignment (AI आवंटन)' },
-    { id: 6, label: '6. Manual Assignment (मैनुअल)' },
-    { id: 7, label: '7. Duty Approval (अनुमोदन)' },
-    { id: 8, label: '8. Duty Calendar (कैलेंडर)' },
-    { id: 9, label: '9. Conflict Detection (टकराव)' },
-    { id: 10, label: '10. Duty Monitoring (निगरानी)' },
-    { id: 11, label: '11. Reserve Force (रिजर्व बल)' },
-    { id: 12, label: '12. Emergency Duty (आपातकालीन)' },
-    { id: 13, label: '13. AI Suggestions (सिफारिशें)' },
-    { id: 14, label: '14. Search & Filters (खोज/फ़िल्टर)' },
-    { id: 15, label: '15. Reports & Log (रिपोर्ट्स)' }
+    {
+      category: 'CORE CONTROL (मुख्य नियंत्रण)',
+      items: [
+        { id: 1, label: '1. Dashboard (थाना डैशबोर्ड)', icon: BarChart2 },
+        { id: 2, label: '2. Staff Master (बल उपलब्ध)', icon: Users },
+        { id: 3, label: '3. Duty Types (ड्यूटी प्रकार)', icon: Layers }
+      ]
+    },
+    {
+      category: 'PLANNING & AI (नियोजन और एआई)',
+      items: [
+        { id: 4, label: '4. Duty Planning (नियोजन)', icon: CalendarRange },
+        { id: 5, label: '5. AI Assignment (AI आवंटन)', icon: RefreshCw },
+        { id: 6, label: '6. Manual Assignment (मैनुअल)', icon: UserCheck },
+        { id: 7, label: '7. Duty Approval (अनुमोदन)', icon: CheckCircle2 }
+      ]
+    },
+    {
+      category: 'TRACKING & CALENDAR (ट्रैकिंग)',
+      items: [
+        { id: 8, label: '8. Duty Calendar (कैलेंडर)', icon: Calendar },
+        { id: 9, label: '9. Conflict Detection (टकराव)', icon: AlertTriangle },
+        { id: 10, label: '10. Duty Monitoring (निगरानी)', icon: Activity }
+      ]
+    },
+    {
+      category: 'RESERVES & EMERGENCY (रिजर्व बल)',
+      items: [
+        { id: 11, label: '11. Reserve Force (रिजर्व बल)', icon: Shield },
+        { id: 12, label: '12. Emergency Duty (आपातकालीन)', icon: ShieldAlert },
+        { id: 13, label: '13. AI Suggestions (सिफारिशें)', icon: ThumbsUp }
+      ]
+    },
+    {
+      category: 'FILTERS & REPORTS (फिल्टर/रिपोर्ट)',
+      items: [
+        { id: 14, label: '14. Search & Filters (खोज/फ़िल्टर)', icon: Search },
+        { id: 15, label: '15. Reports & Log (रिपोर्ट्स)', icon: FileText }
+      ]
+    }
   ];
+
+  // Helper to find flat label
+  const getActiveModuleLabel = (id: number) => {
+    for (const cat of MODULES_MENU) {
+      const match = cat.items.find(item => item.id === id);
+      if (match) return match.label;
+    }
+    return 'Duty Module';
+  };
 
   return (
     <div className="flex-1 flex overflow-hidden bg-gray-50 dark:bg-[#000a17]">
       
       {/* 15 Modules Sidebar inside the page */}
-      <div className="w-64 bg-[#001229] border-r border-white/10 flex flex-col shrink-0">
+      <div className="w-72 bg-[#001229] border-r border-white/10 flex flex-col shrink-0">
         <div className="p-4 border-b border-white/10 flex items-center gap-2">
           <Layers size={18} className="text-[#FF9933]" />
           <span className="text-white text-xs font-bold uppercase tracking-wider">Thana Duty Modules</span>
         </div>
-        <nav className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
-          {MODULES_MENU.map(mod => (
-            <button
-              key={mod.id}
-              onClick={() => setActiveModule(mod.id)}
-              className={`w-full text-left px-3 py-2 text-xs font-bold rounded-lg transition-all ${activeModule === mod.id ? 'bg-[#FF9933] text-[#001229] shadow-lg shadow-[#FF9933]/20' : 'text-white/70 hover:bg-white/5 hover:text-white'}`}
-            >
-              {mod.label}
-            </button>
+        <nav className="flex-1 overflow-y-auto p-3 space-y-4 custom-scrollbar">
+          {MODULES_MENU.map((cat, catIdx) => (
+            <div key={catIdx} className="space-y-1.5">
+              <p className="px-3 text-[9px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-widest">{cat.category}</p>
+              <div className="space-y-1">
+                {cat.items.map(item => {
+                  const isActive = activeModule === item.id;
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveModule(item.id)}
+                      className={`w-full text-left px-3 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-2.5 ${
+                        isActive 
+                          ? 'bg-[#FF9933] text-[#001229] shadow-lg shadow-[#FF9933]/20 font-black' 
+                          : 'text-white/70 hover:bg-white/5 hover:text-white'
+                      }`}
+                    >
+                      <Icon size={14} className={isActive ? 'text-[#001229]' : 'text-[#FF9933]'} />
+                      <span className="truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           ))}
         </nav>
       </div>
@@ -262,7 +312,7 @@ export const DutyManagement: React.FC = () => {
         <div className="mb-8 border-b border-gray-200 dark:border-white/10 pb-4 flex justify-between items-end">
           <div>
             <h2 className="text-2xl font-bold text-[#001229] dark:text-white">
-              {MODULES_MENU.find(m => m.id === activeModule)?.label}
+              {getActiveModuleLabel(activeModule)}
             </h2>
             <p className="text-sm text-gray-500 dark:text-white/60">
               Station Duty Management Suite • Police Station: {storedThana}
